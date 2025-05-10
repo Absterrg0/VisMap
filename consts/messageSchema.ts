@@ -4,7 +4,7 @@ export const messageSchema = z.object({
   id: z.string(),
   chatHistoryId: z.string(),
   input: z.string(),
-  output: z.string(),
+  output: z.string().optional(),
   createdAt: z.date(),
   updatedAt: z.date(),
 });

@@ -54,20 +54,63 @@ export type Message = $Result.DefaultSelection<Prisma.$MessagePayload>
  */
 export type RoadMap = $Result.DefaultSelection<Prisma.$RoadMapPayload>
 /**
- * Model Node
- * 
- */
-export type Node = $Result.DefaultSelection<Prisma.$NodePayload>
-/**
- * Model CodeSnippet
- * 
- */
-export type CodeSnippet = $Result.DefaultSelection<Prisma.$CodeSnippetPayload>
-/**
  * Model Model
  * 
  */
 export type Model = $Result.DefaultSelection<Prisma.$ModelPayload>
+
+/**
+ * Enums
+ */
+export namespace $Enums {
+  export const ProjectStatus: {
+  ACTIVE: 'ACTIVE',
+  DELETED: 'DELETED'
+};
+
+export type ProjectStatus = (typeof ProjectStatus)[keyof typeof ProjectStatus]
+
+
+export const ChatHistoryStatus: {
+  ACTIVE: 'ACTIVE',
+  DELETED: 'DELETED'
+};
+
+export type ChatHistoryStatus = (typeof ChatHistoryStatus)[keyof typeof ChatHistoryStatus]
+
+
+export const MessageStatus: {
+  ACTIVE: 'ACTIVE',
+  DELETED: 'DELETED'
+};
+
+export type MessageStatus = (typeof MessageStatus)[keyof typeof MessageStatus]
+
+
+export const ChatHistoryVisibility: {
+  PUBLIC: 'PUBLIC',
+  PRIVATE: 'PRIVATE'
+};
+
+export type ChatHistoryVisibility = (typeof ChatHistoryVisibility)[keyof typeof ChatHistoryVisibility]
+
+}
+
+export type ProjectStatus = $Enums.ProjectStatus
+
+export const ProjectStatus: typeof $Enums.ProjectStatus
+
+export type ChatHistoryStatus = $Enums.ChatHistoryStatus
+
+export const ChatHistoryStatus: typeof $Enums.ChatHistoryStatus
+
+export type MessageStatus = $Enums.MessageStatus
+
+export const MessageStatus: typeof $Enums.MessageStatus
+
+export type ChatHistoryVisibility = $Enums.ChatHistoryVisibility
+
+export const ChatHistoryVisibility: typeof $Enums.ChatHistoryVisibility
 
 /**
  * ##  Prisma Client ʲˢ
@@ -273,26 +316,6 @@ export class PrismaClient<
     * ```
     */
   get roadMap(): Prisma.RoadMapDelegate<ExtArgs, ClientOptions>;
-
-  /**
-   * `prisma.node`: Exposes CRUD operations for the **Node** model.
-    * Example usage:
-    * ```ts
-    * // Fetch zero or more Nodes
-    * const nodes = await prisma.node.findMany()
-    * ```
-    */
-  get node(): Prisma.NodeDelegate<ExtArgs, ClientOptions>;
-
-  /**
-   * `prisma.codeSnippet`: Exposes CRUD operations for the **CodeSnippet** model.
-    * Example usage:
-    * ```ts
-    * // Fetch zero or more CodeSnippets
-    * const codeSnippets = await prisma.codeSnippet.findMany()
-    * ```
-    */
-  get codeSnippet(): Prisma.CodeSnippetDelegate<ExtArgs, ClientOptions>;
 
   /**
    * `prisma.model`: Exposes CRUD operations for the **Model** model.
@@ -751,8 +774,6 @@ export namespace Prisma {
     ChatHistory: 'ChatHistory',
     Message: 'Message',
     RoadMap: 'RoadMap',
-    Node: 'Node',
-    CodeSnippet: 'CodeSnippet',
     Model: 'Model'
   };
 
@@ -772,7 +793,7 @@ export namespace Prisma {
       omit: GlobalOmitOptions
     }
     meta: {
-      modelProps: "user" | "session" | "account" | "verification" | "project" | "chatHistory" | "message" | "roadMap" | "node" | "codeSnippet" | "model"
+      modelProps: "user" | "session" | "account" | "verification" | "project" | "chatHistory" | "message" | "roadMap" | "model"
       txIsolationLevel: Prisma.TransactionIsolationLevel
     }
     model: {
@@ -1368,154 +1389,6 @@ export namespace Prisma {
           }
         }
       }
-      Node: {
-        payload: Prisma.$NodePayload<ExtArgs>
-        fields: Prisma.NodeFieldRefs
-        operations: {
-          findUnique: {
-            args: Prisma.NodeFindUniqueArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$NodePayload> | null
-          }
-          findUniqueOrThrow: {
-            args: Prisma.NodeFindUniqueOrThrowArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$NodePayload>
-          }
-          findFirst: {
-            args: Prisma.NodeFindFirstArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$NodePayload> | null
-          }
-          findFirstOrThrow: {
-            args: Prisma.NodeFindFirstOrThrowArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$NodePayload>
-          }
-          findMany: {
-            args: Prisma.NodeFindManyArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$NodePayload>[]
-          }
-          create: {
-            args: Prisma.NodeCreateArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$NodePayload>
-          }
-          createMany: {
-            args: Prisma.NodeCreateManyArgs<ExtArgs>
-            result: BatchPayload
-          }
-          createManyAndReturn: {
-            args: Prisma.NodeCreateManyAndReturnArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$NodePayload>[]
-          }
-          delete: {
-            args: Prisma.NodeDeleteArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$NodePayload>
-          }
-          update: {
-            args: Prisma.NodeUpdateArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$NodePayload>
-          }
-          deleteMany: {
-            args: Prisma.NodeDeleteManyArgs<ExtArgs>
-            result: BatchPayload
-          }
-          updateMany: {
-            args: Prisma.NodeUpdateManyArgs<ExtArgs>
-            result: BatchPayload
-          }
-          updateManyAndReturn: {
-            args: Prisma.NodeUpdateManyAndReturnArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$NodePayload>[]
-          }
-          upsert: {
-            args: Prisma.NodeUpsertArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$NodePayload>
-          }
-          aggregate: {
-            args: Prisma.NodeAggregateArgs<ExtArgs>
-            result: $Utils.Optional<AggregateNode>
-          }
-          groupBy: {
-            args: Prisma.NodeGroupByArgs<ExtArgs>
-            result: $Utils.Optional<NodeGroupByOutputType>[]
-          }
-          count: {
-            args: Prisma.NodeCountArgs<ExtArgs>
-            result: $Utils.Optional<NodeCountAggregateOutputType> | number
-          }
-        }
-      }
-      CodeSnippet: {
-        payload: Prisma.$CodeSnippetPayload<ExtArgs>
-        fields: Prisma.CodeSnippetFieldRefs
-        operations: {
-          findUnique: {
-            args: Prisma.CodeSnippetFindUniqueArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$CodeSnippetPayload> | null
-          }
-          findUniqueOrThrow: {
-            args: Prisma.CodeSnippetFindUniqueOrThrowArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$CodeSnippetPayload>
-          }
-          findFirst: {
-            args: Prisma.CodeSnippetFindFirstArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$CodeSnippetPayload> | null
-          }
-          findFirstOrThrow: {
-            args: Prisma.CodeSnippetFindFirstOrThrowArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$CodeSnippetPayload>
-          }
-          findMany: {
-            args: Prisma.CodeSnippetFindManyArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$CodeSnippetPayload>[]
-          }
-          create: {
-            args: Prisma.CodeSnippetCreateArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$CodeSnippetPayload>
-          }
-          createMany: {
-            args: Prisma.CodeSnippetCreateManyArgs<ExtArgs>
-            result: BatchPayload
-          }
-          createManyAndReturn: {
-            args: Prisma.CodeSnippetCreateManyAndReturnArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$CodeSnippetPayload>[]
-          }
-          delete: {
-            args: Prisma.CodeSnippetDeleteArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$CodeSnippetPayload>
-          }
-          update: {
-            args: Prisma.CodeSnippetUpdateArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$CodeSnippetPayload>
-          }
-          deleteMany: {
-            args: Prisma.CodeSnippetDeleteManyArgs<ExtArgs>
-            result: BatchPayload
-          }
-          updateMany: {
-            args: Prisma.CodeSnippetUpdateManyArgs<ExtArgs>
-            result: BatchPayload
-          }
-          updateManyAndReturn: {
-            args: Prisma.CodeSnippetUpdateManyAndReturnArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$CodeSnippetPayload>[]
-          }
-          upsert: {
-            args: Prisma.CodeSnippetUpsertArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$CodeSnippetPayload>
-          }
-          aggregate: {
-            args: Prisma.CodeSnippetAggregateArgs<ExtArgs>
-            result: $Utils.Optional<AggregateCodeSnippet>
-          }
-          groupBy: {
-            args: Prisma.CodeSnippetGroupByArgs<ExtArgs>
-            result: $Utils.Optional<CodeSnippetGroupByOutputType>[]
-          }
-          count: {
-            args: Prisma.CodeSnippetCountArgs<ExtArgs>
-            result: $Utils.Optional<CodeSnippetCountAggregateOutputType> | number
-          }
-        }
-      }
       Model: {
         payload: Prisma.$ModelPayload<ExtArgs>
         fields: Prisma.ModelFieldRefs
@@ -1682,8 +1555,6 @@ export namespace Prisma {
     chatHistory?: ChatHistoryOmit
     message?: MessageOmit
     roadMap?: RoadMapOmit
-    node?: NodeOmit
-    codeSnippet?: CodeSnippetOmit
     model?: ModelOmit
   }
 
@@ -1829,12 +1700,10 @@ export namespace Prisma {
 
   export type ProjectCountOutputType = {
     chatHistory: number
-    roadmap: number
   }
 
   export type ProjectCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     chatHistory?: boolean | ProjectCountOutputTypeCountChatHistoryArgs
-    roadmap?: boolean | ProjectCountOutputTypeCountRoadmapArgs
   }
 
   // Custom InputTypes
@@ -1855,13 +1724,6 @@ export namespace Prisma {
     where?: ChatHistoryWhereInput
   }
 
-  /**
-   * ProjectCountOutputType without action
-   */
-  export type ProjectCountOutputTypeCountRoadmapArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    where?: RoadMapWhereInput
-  }
-
 
   /**
    * Count Type ChatHistoryCountOutputType
@@ -1869,10 +1731,12 @@ export namespace Prisma {
 
   export type ChatHistoryCountOutputType = {
     messages: number
+    roadMap: number
   }
 
   export type ChatHistoryCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     messages?: boolean | ChatHistoryCountOutputTypeCountMessagesArgs
+    roadMap?: boolean | ChatHistoryCountOutputTypeCountRoadMapArgs
   }
 
   // Custom InputTypes
@@ -1893,66 +1757,11 @@ export namespace Prisma {
     where?: MessageWhereInput
   }
 
-
   /**
-   * Count Type RoadMapCountOutputType
+   * ChatHistoryCountOutputType without action
    */
-
-  export type RoadMapCountOutputType = {
-    nodes: number
-  }
-
-  export type RoadMapCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    nodes?: boolean | RoadMapCountOutputTypeCountNodesArgs
-  }
-
-  // Custom InputTypes
-  /**
-   * RoadMapCountOutputType without action
-   */
-  export type RoadMapCountOutputTypeDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the RoadMapCountOutputType
-     */
-    select?: RoadMapCountOutputTypeSelect<ExtArgs> | null
-  }
-
-  /**
-   * RoadMapCountOutputType without action
-   */
-  export type RoadMapCountOutputTypeCountNodesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    where?: NodeWhereInput
-  }
-
-
-  /**
-   * Count Type NodeCountOutputType
-   */
-
-  export type NodeCountOutputType = {
-    children: number
-  }
-
-  export type NodeCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    children?: boolean | NodeCountOutputTypeCountChildrenArgs
-  }
-
-  // Custom InputTypes
-  /**
-   * NodeCountOutputType without action
-   */
-  export type NodeCountOutputTypeDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the NodeCountOutputType
-     */
-    select?: NodeCountOutputTypeSelect<ExtArgs> | null
-  }
-
-  /**
-   * NodeCountOutputType without action
-   */
-  export type NodeCountOutputTypeCountChildrenArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    where?: NodeWhereInput
+  export type ChatHistoryCountOutputTypeCountRoadMapArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: RoadMapWhereInput
   }
 
 
@@ -6408,6 +6217,7 @@ export namespace Prisma {
     description: string | null
     userId: string | null
     systemPrompt: string | null
+    status: $Enums.ProjectStatus | null
     createdAt: Date | null
     updatedAt: Date | null
   }
@@ -6418,6 +6228,7 @@ export namespace Prisma {
     description: string | null
     userId: string | null
     systemPrompt: string | null
+    status: $Enums.ProjectStatus | null
     createdAt: Date | null
     updatedAt: Date | null
   }
@@ -6428,6 +6239,7 @@ export namespace Prisma {
     description: number
     userId: number
     systemPrompt: number
+    status: number
     createdAt: number
     updatedAt: number
     _all: number
@@ -6440,6 +6252,7 @@ export namespace Prisma {
     description?: true
     userId?: true
     systemPrompt?: true
+    status?: true
     createdAt?: true
     updatedAt?: true
   }
@@ -6450,6 +6263,7 @@ export namespace Prisma {
     description?: true
     userId?: true
     systemPrompt?: true
+    status?: true
     createdAt?: true
     updatedAt?: true
   }
@@ -6460,6 +6274,7 @@ export namespace Prisma {
     description?: true
     userId?: true
     systemPrompt?: true
+    status?: true
     createdAt?: true
     updatedAt?: true
     _all?: true
@@ -6543,6 +6358,7 @@ export namespace Prisma {
     description: string
     userId: string
     systemPrompt: string | null
+    status: $Enums.ProjectStatus
     createdAt: Date
     updatedAt: Date
     _count: ProjectCountAggregateOutputType | null
@@ -6570,11 +6386,11 @@ export namespace Prisma {
     description?: boolean
     userId?: boolean
     systemPrompt?: boolean
+    status?: boolean
     createdAt?: boolean
     updatedAt?: boolean
     user?: boolean | UserDefaultArgs<ExtArgs>
     chatHistory?: boolean | Project$chatHistoryArgs<ExtArgs>
-    roadmap?: boolean | Project$roadmapArgs<ExtArgs>
     _count?: boolean | ProjectCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["project"]>
 
@@ -6584,6 +6400,7 @@ export namespace Prisma {
     description?: boolean
     userId?: boolean
     systemPrompt?: boolean
+    status?: boolean
     createdAt?: boolean
     updatedAt?: boolean
     user?: boolean | UserDefaultArgs<ExtArgs>
@@ -6595,6 +6412,7 @@ export namespace Prisma {
     description?: boolean
     userId?: boolean
     systemPrompt?: boolean
+    status?: boolean
     createdAt?: boolean
     updatedAt?: boolean
     user?: boolean | UserDefaultArgs<ExtArgs>
@@ -6606,15 +6424,15 @@ export namespace Prisma {
     description?: boolean
     userId?: boolean
     systemPrompt?: boolean
+    status?: boolean
     createdAt?: boolean
     updatedAt?: boolean
   }
 
-  export type ProjectOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "name" | "description" | "userId" | "systemPrompt" | "createdAt" | "updatedAt", ExtArgs["result"]["project"]>
+  export type ProjectOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "name" | "description" | "userId" | "systemPrompt" | "status" | "createdAt" | "updatedAt", ExtArgs["result"]["project"]>
   export type ProjectInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     user?: boolean | UserDefaultArgs<ExtArgs>
     chatHistory?: boolean | Project$chatHistoryArgs<ExtArgs>
-    roadmap?: boolean | Project$roadmapArgs<ExtArgs>
     _count?: boolean | ProjectCountOutputTypeDefaultArgs<ExtArgs>
   }
   export type ProjectIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -6629,7 +6447,6 @@ export namespace Prisma {
     objects: {
       user: Prisma.$UserPayload<ExtArgs>
       chatHistory: Prisma.$ChatHistoryPayload<ExtArgs>[]
-      roadmap: Prisma.$RoadMapPayload<ExtArgs>[]
     }
     scalars: $Extensions.GetPayloadResult<{
       id: string
@@ -6637,6 +6454,7 @@ export namespace Prisma {
       description: string
       userId: string
       systemPrompt: string | null
+      status: $Enums.ProjectStatus
       createdAt: Date
       updatedAt: Date
     }, ExtArgs["result"]["project"]>
@@ -7035,7 +6853,6 @@ export namespace Prisma {
     readonly [Symbol.toStringTag]: "PrismaPromise"
     user<T extends UserDefaultArgs<ExtArgs> = {}>(args?: Subset<T, UserDefaultArgs<ExtArgs>>): Prisma__UserClient<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
     chatHistory<T extends Project$chatHistoryArgs<ExtArgs> = {}>(args?: Subset<T, Project$chatHistoryArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ChatHistoryPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
-    roadmap<T extends Project$roadmapArgs<ExtArgs> = {}>(args?: Subset<T, Project$roadmapArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$RoadMapPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -7070,6 +6887,7 @@ export namespace Prisma {
     readonly description: FieldRef<"Project", 'String'>
     readonly userId: FieldRef<"Project", 'String'>
     readonly systemPrompt: FieldRef<"Project", 'String'>
+    readonly status: FieldRef<"Project", 'ProjectStatus'>
     readonly createdAt: FieldRef<"Project", 'DateTime'>
     readonly updatedAt: FieldRef<"Project", 'DateTime'>
   }
@@ -7492,30 +7310,6 @@ export namespace Prisma {
   }
 
   /**
-   * Project.roadmap
-   */
-  export type Project$roadmapArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the RoadMap
-     */
-    select?: RoadMapSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the RoadMap
-     */
-    omit?: RoadMapOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: RoadMapInclude<ExtArgs> | null
-    where?: RoadMapWhereInput
-    orderBy?: RoadMapOrderByWithRelationInput | RoadMapOrderByWithRelationInput[]
-    cursor?: RoadMapWhereUniqueInput
-    take?: number
-    skip?: number
-    distinct?: RoadMapScalarFieldEnum | RoadMapScalarFieldEnum[]
-  }
-
-  /**
    * Project without action
    */
   export type ProjectDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -7547,6 +7341,8 @@ export namespace Prisma {
   export type ChatHistoryMinAggregateOutputType = {
     id: string | null
     projectId: string | null
+    visibility: $Enums.ChatHistoryVisibility | null
+    status: $Enums.ChatHistoryStatus | null
     createdAt: Date | null
     updatedAt: Date | null
   }
@@ -7554,6 +7350,8 @@ export namespace Prisma {
   export type ChatHistoryMaxAggregateOutputType = {
     id: string | null
     projectId: string | null
+    visibility: $Enums.ChatHistoryVisibility | null
+    status: $Enums.ChatHistoryStatus | null
     createdAt: Date | null
     updatedAt: Date | null
   }
@@ -7561,6 +7359,8 @@ export namespace Prisma {
   export type ChatHistoryCountAggregateOutputType = {
     id: number
     projectId: number
+    visibility: number
+    status: number
     createdAt: number
     updatedAt: number
     _all: number
@@ -7570,6 +7370,8 @@ export namespace Prisma {
   export type ChatHistoryMinAggregateInputType = {
     id?: true
     projectId?: true
+    visibility?: true
+    status?: true
     createdAt?: true
     updatedAt?: true
   }
@@ -7577,6 +7379,8 @@ export namespace Prisma {
   export type ChatHistoryMaxAggregateInputType = {
     id?: true
     projectId?: true
+    visibility?: true
+    status?: true
     createdAt?: true
     updatedAt?: true
   }
@@ -7584,6 +7388,8 @@ export namespace Prisma {
   export type ChatHistoryCountAggregateInputType = {
     id?: true
     projectId?: true
+    visibility?: true
+    status?: true
     createdAt?: true
     updatedAt?: true
     _all?: true
@@ -7664,6 +7470,8 @@ export namespace Prisma {
   export type ChatHistoryGroupByOutputType = {
     id: string
     projectId: string
+    visibility: $Enums.ChatHistoryVisibility
+    status: $Enums.ChatHistoryStatus
     createdAt: Date
     updatedAt: Date
     _count: ChatHistoryCountAggregateOutputType | null
@@ -7688,16 +7496,21 @@ export namespace Prisma {
   export type ChatHistorySelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
     projectId?: boolean
+    visibility?: boolean
+    status?: boolean
     createdAt?: boolean
     updatedAt?: boolean
     project?: boolean | ProjectDefaultArgs<ExtArgs>
     messages?: boolean | ChatHistory$messagesArgs<ExtArgs>
+    roadMap?: boolean | ChatHistory$roadMapArgs<ExtArgs>
     _count?: boolean | ChatHistoryCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["chatHistory"]>
 
   export type ChatHistorySelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
     projectId?: boolean
+    visibility?: boolean
+    status?: boolean
     createdAt?: boolean
     updatedAt?: boolean
     project?: boolean | ProjectDefaultArgs<ExtArgs>
@@ -7706,6 +7519,8 @@ export namespace Prisma {
   export type ChatHistorySelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
     projectId?: boolean
+    visibility?: boolean
+    status?: boolean
     createdAt?: boolean
     updatedAt?: boolean
     project?: boolean | ProjectDefaultArgs<ExtArgs>
@@ -7714,14 +7529,17 @@ export namespace Prisma {
   export type ChatHistorySelectScalar = {
     id?: boolean
     projectId?: boolean
+    visibility?: boolean
+    status?: boolean
     createdAt?: boolean
     updatedAt?: boolean
   }
 
-  export type ChatHistoryOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "projectId" | "createdAt" | "updatedAt", ExtArgs["result"]["chatHistory"]>
+  export type ChatHistoryOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "projectId" | "visibility" | "status" | "createdAt" | "updatedAt", ExtArgs["result"]["chatHistory"]>
   export type ChatHistoryInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     project?: boolean | ProjectDefaultArgs<ExtArgs>
     messages?: boolean | ChatHistory$messagesArgs<ExtArgs>
+    roadMap?: boolean | ChatHistory$roadMapArgs<ExtArgs>
     _count?: boolean | ChatHistoryCountOutputTypeDefaultArgs<ExtArgs>
   }
   export type ChatHistoryIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -7736,10 +7554,13 @@ export namespace Prisma {
     objects: {
       project: Prisma.$ProjectPayload<ExtArgs>
       messages: Prisma.$MessagePayload<ExtArgs>[]
+      roadMap: Prisma.$RoadMapPayload<ExtArgs>[]
     }
     scalars: $Extensions.GetPayloadResult<{
       id: string
       projectId: string
+      visibility: $Enums.ChatHistoryVisibility
+      status: $Enums.ChatHistoryStatus
       createdAt: Date
       updatedAt: Date
     }, ExtArgs["result"]["chatHistory"]>
@@ -8138,6 +7959,7 @@ export namespace Prisma {
     readonly [Symbol.toStringTag]: "PrismaPromise"
     project<T extends ProjectDefaultArgs<ExtArgs> = {}>(args?: Subset<T, ProjectDefaultArgs<ExtArgs>>): Prisma__ProjectClient<$Result.GetResult<Prisma.$ProjectPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
     messages<T extends ChatHistory$messagesArgs<ExtArgs> = {}>(args?: Subset<T, ChatHistory$messagesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$MessagePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    roadMap<T extends ChatHistory$roadMapArgs<ExtArgs> = {}>(args?: Subset<T, ChatHistory$roadMapArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$RoadMapPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -8169,6 +7991,8 @@ export namespace Prisma {
   interface ChatHistoryFieldRefs {
     readonly id: FieldRef<"ChatHistory", 'String'>
     readonly projectId: FieldRef<"ChatHistory", 'String'>
+    readonly visibility: FieldRef<"ChatHistory", 'ChatHistoryVisibility'>
+    readonly status: FieldRef<"ChatHistory", 'ChatHistoryStatus'>
     readonly createdAt: FieldRef<"ChatHistory", 'DateTime'>
     readonly updatedAt: FieldRef<"ChatHistory", 'DateTime'>
   }
@@ -8588,6 +8412,30 @@ export namespace Prisma {
     take?: number
     skip?: number
     distinct?: MessageScalarFieldEnum | MessageScalarFieldEnum[]
+  }
+
+  /**
+   * ChatHistory.roadMap
+   */
+  export type ChatHistory$roadMapArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the RoadMap
+     */
+    select?: RoadMapSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the RoadMap
+     */
+    omit?: RoadMapOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: RoadMapInclude<ExtArgs> | null
+    where?: RoadMapWhereInput
+    orderBy?: RoadMapOrderByWithRelationInput | RoadMapOrderByWithRelationInput[]
+    cursor?: RoadMapWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: RoadMapScalarFieldEnum | RoadMapScalarFieldEnum[]
   }
 
   /**
@@ -9686,50 +9534,80 @@ export namespace Prisma {
 
   export type AggregateRoadMap = {
     _count: RoadMapCountAggregateOutputType | null
+    _avg: RoadMapAvgAggregateOutputType | null
+    _sum: RoadMapSumAggregateOutputType | null
     _min: RoadMapMinAggregateOutputType | null
     _max: RoadMapMaxAggregateOutputType | null
   }
 
+  export type RoadMapAvgAggregateOutputType = {
+    version: number | null
+  }
+
+  export type RoadMapSumAggregateOutputType = {
+    version: number | null
+  }
+
   export type RoadMapMinAggregateOutputType = {
     id: string | null
-    projectId: string | null
+    chatHistoryId: string | null
+    content: string | null
+    version: number | null
     createdAt: Date | null
     updatedAt: Date | null
   }
 
   export type RoadMapMaxAggregateOutputType = {
     id: string | null
-    projectId: string | null
+    chatHistoryId: string | null
+    content: string | null
+    version: number | null
     createdAt: Date | null
     updatedAt: Date | null
   }
 
   export type RoadMapCountAggregateOutputType = {
     id: number
-    projectId: number
+    chatHistoryId: number
+    content: number
+    version: number
     createdAt: number
     updatedAt: number
     _all: number
   }
 
 
+  export type RoadMapAvgAggregateInputType = {
+    version?: true
+  }
+
+  export type RoadMapSumAggregateInputType = {
+    version?: true
+  }
+
   export type RoadMapMinAggregateInputType = {
     id?: true
-    projectId?: true
+    chatHistoryId?: true
+    content?: true
+    version?: true
     createdAt?: true
     updatedAt?: true
   }
 
   export type RoadMapMaxAggregateInputType = {
     id?: true
-    projectId?: true
+    chatHistoryId?: true
+    content?: true
+    version?: true
     createdAt?: true
     updatedAt?: true
   }
 
   export type RoadMapCountAggregateInputType = {
     id?: true
-    projectId?: true
+    chatHistoryId?: true
+    content?: true
+    version?: true
     createdAt?: true
     updatedAt?: true
     _all?: true
@@ -9773,6 +9651,18 @@ export namespace Prisma {
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
      * 
+     * Select which fields to average
+    **/
+    _avg?: RoadMapAvgAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to sum
+    **/
+    _sum?: RoadMapSumAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
      * Select which fields to find the minimum value
     **/
     _min?: RoadMapMinAggregateInputType
@@ -9803,16 +9693,22 @@ export namespace Prisma {
     take?: number
     skip?: number
     _count?: RoadMapCountAggregateInputType | true
+    _avg?: RoadMapAvgAggregateInputType
+    _sum?: RoadMapSumAggregateInputType
     _min?: RoadMapMinAggregateInputType
     _max?: RoadMapMaxAggregateInputType
   }
 
   export type RoadMapGroupByOutputType = {
     id: string
-    projectId: string
+    chatHistoryId: string
+    content: string
+    version: number
     createdAt: Date
     updatedAt: Date
     _count: RoadMapCountAggregateOutputType | null
+    _avg: RoadMapAvgAggregateOutputType | null
+    _sum: RoadMapSumAggregateOutputType | null
     _min: RoadMapMinAggregateOutputType | null
     _max: RoadMapMaxAggregateOutputType | null
   }
@@ -9833,59 +9729,64 @@ export namespace Prisma {
 
   export type RoadMapSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
-    projectId?: boolean
+    chatHistoryId?: boolean
+    content?: boolean
+    version?: boolean
     createdAt?: boolean
     updatedAt?: boolean
-    project?: boolean | ProjectDefaultArgs<ExtArgs>
-    nodes?: boolean | RoadMap$nodesArgs<ExtArgs>
-    _count?: boolean | RoadMapCountOutputTypeDefaultArgs<ExtArgs>
+    chatHistory?: boolean | ChatHistoryDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["roadMap"]>
 
   export type RoadMapSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
-    projectId?: boolean
+    chatHistoryId?: boolean
+    content?: boolean
+    version?: boolean
     createdAt?: boolean
     updatedAt?: boolean
-    project?: boolean | ProjectDefaultArgs<ExtArgs>
+    chatHistory?: boolean | ChatHistoryDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["roadMap"]>
 
   export type RoadMapSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
-    projectId?: boolean
+    chatHistoryId?: boolean
+    content?: boolean
+    version?: boolean
     createdAt?: boolean
     updatedAt?: boolean
-    project?: boolean | ProjectDefaultArgs<ExtArgs>
+    chatHistory?: boolean | ChatHistoryDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["roadMap"]>
 
   export type RoadMapSelectScalar = {
     id?: boolean
-    projectId?: boolean
+    chatHistoryId?: boolean
+    content?: boolean
+    version?: boolean
     createdAt?: boolean
     updatedAt?: boolean
   }
 
-  export type RoadMapOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "projectId" | "createdAt" | "updatedAt", ExtArgs["result"]["roadMap"]>
+  export type RoadMapOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "chatHistoryId" | "content" | "version" | "createdAt" | "updatedAt", ExtArgs["result"]["roadMap"]>
   export type RoadMapInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    project?: boolean | ProjectDefaultArgs<ExtArgs>
-    nodes?: boolean | RoadMap$nodesArgs<ExtArgs>
-    _count?: boolean | RoadMapCountOutputTypeDefaultArgs<ExtArgs>
+    chatHistory?: boolean | ChatHistoryDefaultArgs<ExtArgs>
   }
   export type RoadMapIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    project?: boolean | ProjectDefaultArgs<ExtArgs>
+    chatHistory?: boolean | ChatHistoryDefaultArgs<ExtArgs>
   }
   export type RoadMapIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    project?: boolean | ProjectDefaultArgs<ExtArgs>
+    chatHistory?: boolean | ChatHistoryDefaultArgs<ExtArgs>
   }
 
   export type $RoadMapPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     name: "RoadMap"
     objects: {
-      project: Prisma.$ProjectPayload<ExtArgs>
-      nodes: Prisma.$NodePayload<ExtArgs>[]
+      chatHistory: Prisma.$ChatHistoryPayload<ExtArgs>
     }
     scalars: $Extensions.GetPayloadResult<{
       id: string
-      projectId: string
+      chatHistoryId: string
+      content: string
+      version: number
       createdAt: Date
       updatedAt: Date
     }, ExtArgs["result"]["roadMap"]>
@@ -10282,8 +10183,7 @@ export namespace Prisma {
    */
   export interface Prisma__RoadMapClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
     readonly [Symbol.toStringTag]: "PrismaPromise"
-    project<T extends ProjectDefaultArgs<ExtArgs> = {}>(args?: Subset<T, ProjectDefaultArgs<ExtArgs>>): Prisma__ProjectClient<$Result.GetResult<Prisma.$ProjectPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
-    nodes<T extends RoadMap$nodesArgs<ExtArgs> = {}>(args?: Subset<T, RoadMap$nodesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$NodePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    chatHistory<T extends ChatHistoryDefaultArgs<ExtArgs> = {}>(args?: Subset<T, ChatHistoryDefaultArgs<ExtArgs>>): Prisma__ChatHistoryClient<$Result.GetResult<Prisma.$ChatHistoryPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -10314,7 +10214,9 @@ export namespace Prisma {
    */
   interface RoadMapFieldRefs {
     readonly id: FieldRef<"RoadMap", 'String'>
-    readonly projectId: FieldRef<"RoadMap", 'String'>
+    readonly chatHistoryId: FieldRef<"RoadMap", 'String'>
+    readonly content: FieldRef<"RoadMap", 'String'>
+    readonly version: FieldRef<"RoadMap", 'Int'>
     readonly createdAt: FieldRef<"RoadMap", 'DateTime'>
     readonly updatedAt: FieldRef<"RoadMap", 'DateTime'>
   }
@@ -10713,30 +10615,6 @@ export namespace Prisma {
   }
 
   /**
-   * RoadMap.nodes
-   */
-  export type RoadMap$nodesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the Node
-     */
-    select?: NodeSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the Node
-     */
-    omit?: NodeOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: NodeInclude<ExtArgs> | null
-    where?: NodeWhereInput
-    orderBy?: NodeOrderByWithRelationInput | NodeOrderByWithRelationInput[]
-    cursor?: NodeWhereUniqueInput
-    take?: number
-    skip?: number
-    distinct?: NodeScalarFieldEnum | NodeScalarFieldEnum[]
-  }
-
-  /**
    * RoadMap without action
    */
   export type RoadMapDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -10752,2296 +10630,6 @@ export namespace Prisma {
      * Choose, which related nodes to fetch as well
      */
     include?: RoadMapInclude<ExtArgs> | null
-  }
-
-
-  /**
-   * Model Node
-   */
-
-  export type AggregateNode = {
-    _count: NodeCountAggregateOutputType | null
-    _avg: NodeAvgAggregateOutputType | null
-    _sum: NodeSumAggregateOutputType | null
-    _min: NodeMinAggregateOutputType | null
-    _max: NodeMaxAggregateOutputType | null
-  }
-
-  export type NodeAvgAggregateOutputType = {
-    positionX: number | null
-    positionY: number | null
-    positionZ: number | null
-  }
-
-  export type NodeSumAggregateOutputType = {
-    positionX: number | null
-    positionY: number | null
-    positionZ: number | null
-  }
-
-  export type NodeMinAggregateOutputType = {
-    id: string | null
-    roadMapId: string | null
-    title: string | null
-    description: string | null
-    positionX: number | null
-    positionY: number | null
-    positionZ: number | null
-    parentId: string | null
-    createdAt: Date | null
-    updatedAt: Date | null
-  }
-
-  export type NodeMaxAggregateOutputType = {
-    id: string | null
-    roadMapId: string | null
-    title: string | null
-    description: string | null
-    positionX: number | null
-    positionY: number | null
-    positionZ: number | null
-    parentId: string | null
-    createdAt: Date | null
-    updatedAt: Date | null
-  }
-
-  export type NodeCountAggregateOutputType = {
-    id: number
-    roadMapId: number
-    title: number
-    description: number
-    positionX: number
-    positionY: number
-    positionZ: number
-    parentId: number
-    createdAt: number
-    updatedAt: number
-    _all: number
-  }
-
-
-  export type NodeAvgAggregateInputType = {
-    positionX?: true
-    positionY?: true
-    positionZ?: true
-  }
-
-  export type NodeSumAggregateInputType = {
-    positionX?: true
-    positionY?: true
-    positionZ?: true
-  }
-
-  export type NodeMinAggregateInputType = {
-    id?: true
-    roadMapId?: true
-    title?: true
-    description?: true
-    positionX?: true
-    positionY?: true
-    positionZ?: true
-    parentId?: true
-    createdAt?: true
-    updatedAt?: true
-  }
-
-  export type NodeMaxAggregateInputType = {
-    id?: true
-    roadMapId?: true
-    title?: true
-    description?: true
-    positionX?: true
-    positionY?: true
-    positionZ?: true
-    parentId?: true
-    createdAt?: true
-    updatedAt?: true
-  }
-
-  export type NodeCountAggregateInputType = {
-    id?: true
-    roadMapId?: true
-    title?: true
-    description?: true
-    positionX?: true
-    positionY?: true
-    positionZ?: true
-    parentId?: true
-    createdAt?: true
-    updatedAt?: true
-    _all?: true
-  }
-
-  export type NodeAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Filter which Node to aggregate.
-     */
-    where?: NodeWhereInput
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
-     * 
-     * Determine the order of Nodes to fetch.
-     */
-    orderBy?: NodeOrderByWithRelationInput | NodeOrderByWithRelationInput[]
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
-     * 
-     * Sets the start position
-     */
-    cursor?: NodeWhereUniqueInput
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
-     * Take `±n` Nodes from the position of the cursor.
-     */
-    take?: number
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
-     * Skip the first `n` Nodes.
-     */
-    skip?: number
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
-     * 
-     * Count returned Nodes
-    **/
-    _count?: true | NodeCountAggregateInputType
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
-     * 
-     * Select which fields to average
-    **/
-    _avg?: NodeAvgAggregateInputType
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
-     * 
-     * Select which fields to sum
-    **/
-    _sum?: NodeSumAggregateInputType
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
-     * 
-     * Select which fields to find the minimum value
-    **/
-    _min?: NodeMinAggregateInputType
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
-     * 
-     * Select which fields to find the maximum value
-    **/
-    _max?: NodeMaxAggregateInputType
-  }
-
-  export type GetNodeAggregateType<T extends NodeAggregateArgs> = {
-        [P in keyof T & keyof AggregateNode]: P extends '_count' | 'count'
-      ? T[P] extends true
-        ? number
-        : GetScalarType<T[P], AggregateNode[P]>
-      : GetScalarType<T[P], AggregateNode[P]>
-  }
-
-
-
-
-  export type NodeGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    where?: NodeWhereInput
-    orderBy?: NodeOrderByWithAggregationInput | NodeOrderByWithAggregationInput[]
-    by: NodeScalarFieldEnum[] | NodeScalarFieldEnum
-    having?: NodeScalarWhereWithAggregatesInput
-    take?: number
-    skip?: number
-    _count?: NodeCountAggregateInputType | true
-    _avg?: NodeAvgAggregateInputType
-    _sum?: NodeSumAggregateInputType
-    _min?: NodeMinAggregateInputType
-    _max?: NodeMaxAggregateInputType
-  }
-
-  export type NodeGroupByOutputType = {
-    id: string
-    roadMapId: string
-    title: string
-    description: string | null
-    positionX: number
-    positionY: number
-    positionZ: number
-    parentId: string | null
-    createdAt: Date
-    updatedAt: Date
-    _count: NodeCountAggregateOutputType | null
-    _avg: NodeAvgAggregateOutputType | null
-    _sum: NodeSumAggregateOutputType | null
-    _min: NodeMinAggregateOutputType | null
-    _max: NodeMaxAggregateOutputType | null
-  }
-
-  type GetNodeGroupByPayload<T extends NodeGroupByArgs> = Prisma.PrismaPromise<
-    Array<
-      PickEnumerable<NodeGroupByOutputType, T['by']> &
-        {
-          [P in ((keyof T) & (keyof NodeGroupByOutputType))]: P extends '_count'
-            ? T[P] extends boolean
-              ? number
-              : GetScalarType<T[P], NodeGroupByOutputType[P]>
-            : GetScalarType<T[P], NodeGroupByOutputType[P]>
-        }
-      >
-    >
-
-
-  export type NodeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
-    id?: boolean
-    roadMapId?: boolean
-    title?: boolean
-    description?: boolean
-    positionX?: boolean
-    positionY?: boolean
-    positionZ?: boolean
-    parentId?: boolean
-    createdAt?: boolean
-    updatedAt?: boolean
-    roadMap?: boolean | RoadMapDefaultArgs<ExtArgs>
-    parent?: boolean | Node$parentArgs<ExtArgs>
-    children?: boolean | Node$childrenArgs<ExtArgs>
-    codeBlock?: boolean | Node$codeBlockArgs<ExtArgs>
-    _count?: boolean | NodeCountOutputTypeDefaultArgs<ExtArgs>
-  }, ExtArgs["result"]["node"]>
-
-  export type NodeSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
-    id?: boolean
-    roadMapId?: boolean
-    title?: boolean
-    description?: boolean
-    positionX?: boolean
-    positionY?: boolean
-    positionZ?: boolean
-    parentId?: boolean
-    createdAt?: boolean
-    updatedAt?: boolean
-    roadMap?: boolean | RoadMapDefaultArgs<ExtArgs>
-    parent?: boolean | Node$parentArgs<ExtArgs>
-  }, ExtArgs["result"]["node"]>
-
-  export type NodeSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
-    id?: boolean
-    roadMapId?: boolean
-    title?: boolean
-    description?: boolean
-    positionX?: boolean
-    positionY?: boolean
-    positionZ?: boolean
-    parentId?: boolean
-    createdAt?: boolean
-    updatedAt?: boolean
-    roadMap?: boolean | RoadMapDefaultArgs<ExtArgs>
-    parent?: boolean | Node$parentArgs<ExtArgs>
-  }, ExtArgs["result"]["node"]>
-
-  export type NodeSelectScalar = {
-    id?: boolean
-    roadMapId?: boolean
-    title?: boolean
-    description?: boolean
-    positionX?: boolean
-    positionY?: boolean
-    positionZ?: boolean
-    parentId?: boolean
-    createdAt?: boolean
-    updatedAt?: boolean
-  }
-
-  export type NodeOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "roadMapId" | "title" | "description" | "positionX" | "positionY" | "positionZ" | "parentId" | "createdAt" | "updatedAt", ExtArgs["result"]["node"]>
-  export type NodeInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    roadMap?: boolean | RoadMapDefaultArgs<ExtArgs>
-    parent?: boolean | Node$parentArgs<ExtArgs>
-    children?: boolean | Node$childrenArgs<ExtArgs>
-    codeBlock?: boolean | Node$codeBlockArgs<ExtArgs>
-    _count?: boolean | NodeCountOutputTypeDefaultArgs<ExtArgs>
-  }
-  export type NodeIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    roadMap?: boolean | RoadMapDefaultArgs<ExtArgs>
-    parent?: boolean | Node$parentArgs<ExtArgs>
-  }
-  export type NodeIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    roadMap?: boolean | RoadMapDefaultArgs<ExtArgs>
-    parent?: boolean | Node$parentArgs<ExtArgs>
-  }
-
-  export type $NodePayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    name: "Node"
-    objects: {
-      roadMap: Prisma.$RoadMapPayload<ExtArgs>
-      parent: Prisma.$NodePayload<ExtArgs> | null
-      children: Prisma.$NodePayload<ExtArgs>[]
-      codeBlock: Prisma.$CodeSnippetPayload<ExtArgs> | null
-    }
-    scalars: $Extensions.GetPayloadResult<{
-      id: string
-      roadMapId: string
-      title: string
-      description: string | null
-      positionX: number
-      positionY: number
-      positionZ: number
-      parentId: string | null
-      createdAt: Date
-      updatedAt: Date
-    }, ExtArgs["result"]["node"]>
-    composites: {}
-  }
-
-  type NodeGetPayload<S extends boolean | null | undefined | NodeDefaultArgs> = $Result.GetResult<Prisma.$NodePayload, S>
-
-  type NodeCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
-    Omit<NodeFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
-      select?: NodeCountAggregateInputType | true
-    }
-
-  export interface NodeDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
-    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['Node'], meta: { name: 'Node' } }
-    /**
-     * Find zero or one Node that matches the filter.
-     * @param {NodeFindUniqueArgs} args - Arguments to find a Node
-     * @example
-     * // Get one Node
-     * const node = await prisma.node.findUnique({
-     *   where: {
-     *     // ... provide filter here
-     *   }
-     * })
-     */
-    findUnique<T extends NodeFindUniqueArgs>(args: SelectSubset<T, NodeFindUniqueArgs<ExtArgs>>): Prisma__NodeClient<$Result.GetResult<Prisma.$NodePayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
-
-    /**
-     * Find one Node that matches the filter or throw an error with `error.code='P2025'`
-     * if no matches were found.
-     * @param {NodeFindUniqueOrThrowArgs} args - Arguments to find a Node
-     * @example
-     * // Get one Node
-     * const node = await prisma.node.findUniqueOrThrow({
-     *   where: {
-     *     // ... provide filter here
-     *   }
-     * })
-     */
-    findUniqueOrThrow<T extends NodeFindUniqueOrThrowArgs>(args: SelectSubset<T, NodeFindUniqueOrThrowArgs<ExtArgs>>): Prisma__NodeClient<$Result.GetResult<Prisma.$NodePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
-
-    /**
-     * Find the first Node that matches the filter.
-     * Note, that providing `undefined` is treated as the value not being there.
-     * Read more here: https://pris.ly/d/null-undefined
-     * @param {NodeFindFirstArgs} args - Arguments to find a Node
-     * @example
-     * // Get one Node
-     * const node = await prisma.node.findFirst({
-     *   where: {
-     *     // ... provide filter here
-     *   }
-     * })
-     */
-    findFirst<T extends NodeFindFirstArgs>(args?: SelectSubset<T, NodeFindFirstArgs<ExtArgs>>): Prisma__NodeClient<$Result.GetResult<Prisma.$NodePayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
-
-    /**
-     * Find the first Node that matches the filter or
-     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
-     * Note, that providing `undefined` is treated as the value not being there.
-     * Read more here: https://pris.ly/d/null-undefined
-     * @param {NodeFindFirstOrThrowArgs} args - Arguments to find a Node
-     * @example
-     * // Get one Node
-     * const node = await prisma.node.findFirstOrThrow({
-     *   where: {
-     *     // ... provide filter here
-     *   }
-     * })
-     */
-    findFirstOrThrow<T extends NodeFindFirstOrThrowArgs>(args?: SelectSubset<T, NodeFindFirstOrThrowArgs<ExtArgs>>): Prisma__NodeClient<$Result.GetResult<Prisma.$NodePayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
-
-    /**
-     * Find zero or more Nodes that matches the filter.
-     * Note, that providing `undefined` is treated as the value not being there.
-     * Read more here: https://pris.ly/d/null-undefined
-     * @param {NodeFindManyArgs} args - Arguments to filter and select certain fields only.
-     * @example
-     * // Get all Nodes
-     * const nodes = await prisma.node.findMany()
-     * 
-     * // Get first 10 Nodes
-     * const nodes = await prisma.node.findMany({ take: 10 })
-     * 
-     * // Only select the `id`
-     * const nodeWithIdOnly = await prisma.node.findMany({ select: { id: true } })
-     * 
-     */
-    findMany<T extends NodeFindManyArgs>(args?: SelectSubset<T, NodeFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$NodePayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
-
-    /**
-     * Create a Node.
-     * @param {NodeCreateArgs} args - Arguments to create a Node.
-     * @example
-     * // Create one Node
-     * const Node = await prisma.node.create({
-     *   data: {
-     *     // ... data to create a Node
-     *   }
-     * })
-     * 
-     */
-    create<T extends NodeCreateArgs>(args: SelectSubset<T, NodeCreateArgs<ExtArgs>>): Prisma__NodeClient<$Result.GetResult<Prisma.$NodePayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
-
-    /**
-     * Create many Nodes.
-     * @param {NodeCreateManyArgs} args - Arguments to create many Nodes.
-     * @example
-     * // Create many Nodes
-     * const node = await prisma.node.createMany({
-     *   data: [
-     *     // ... provide data here
-     *   ]
-     * })
-     *     
-     */
-    createMany<T extends NodeCreateManyArgs>(args?: SelectSubset<T, NodeCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
-
-    /**
-     * Create many Nodes and returns the data saved in the database.
-     * @param {NodeCreateManyAndReturnArgs} args - Arguments to create many Nodes.
-     * @example
-     * // Create many Nodes
-     * const node = await prisma.node.createManyAndReturn({
-     *   data: [
-     *     // ... provide data here
-     *   ]
-     * })
-     * 
-     * // Create many Nodes and only return the `id`
-     * const nodeWithIdOnly = await prisma.node.createManyAndReturn({
-     *   select: { id: true },
-     *   data: [
-     *     // ... provide data here
-     *   ]
-     * })
-     * Note, that providing `undefined` is treated as the value not being there.
-     * Read more here: https://pris.ly/d/null-undefined
-     * 
-     */
-    createManyAndReturn<T extends NodeCreateManyAndReturnArgs>(args?: SelectSubset<T, NodeCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$NodePayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
-
-    /**
-     * Delete a Node.
-     * @param {NodeDeleteArgs} args - Arguments to delete one Node.
-     * @example
-     * // Delete one Node
-     * const Node = await prisma.node.delete({
-     *   where: {
-     *     // ... filter to delete one Node
-     *   }
-     * })
-     * 
-     */
-    delete<T extends NodeDeleteArgs>(args: SelectSubset<T, NodeDeleteArgs<ExtArgs>>): Prisma__NodeClient<$Result.GetResult<Prisma.$NodePayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
-
-    /**
-     * Update one Node.
-     * @param {NodeUpdateArgs} args - Arguments to update one Node.
-     * @example
-     * // Update one Node
-     * const node = await prisma.node.update({
-     *   where: {
-     *     // ... provide filter here
-     *   },
-     *   data: {
-     *     // ... provide data here
-     *   }
-     * })
-     * 
-     */
-    update<T extends NodeUpdateArgs>(args: SelectSubset<T, NodeUpdateArgs<ExtArgs>>): Prisma__NodeClient<$Result.GetResult<Prisma.$NodePayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
-
-    /**
-     * Delete zero or more Nodes.
-     * @param {NodeDeleteManyArgs} args - Arguments to filter Nodes to delete.
-     * @example
-     * // Delete a few Nodes
-     * const { count } = await prisma.node.deleteMany({
-     *   where: {
-     *     // ... provide filter here
-     *   }
-     * })
-     * 
-     */
-    deleteMany<T extends NodeDeleteManyArgs>(args?: SelectSubset<T, NodeDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
-
-    /**
-     * Update zero or more Nodes.
-     * Note, that providing `undefined` is treated as the value not being there.
-     * Read more here: https://pris.ly/d/null-undefined
-     * @param {NodeUpdateManyArgs} args - Arguments to update one or more rows.
-     * @example
-     * // Update many Nodes
-     * const node = await prisma.node.updateMany({
-     *   where: {
-     *     // ... provide filter here
-     *   },
-     *   data: {
-     *     // ... provide data here
-     *   }
-     * })
-     * 
-     */
-    updateMany<T extends NodeUpdateManyArgs>(args: SelectSubset<T, NodeUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
-
-    /**
-     * Update zero or more Nodes and returns the data updated in the database.
-     * @param {NodeUpdateManyAndReturnArgs} args - Arguments to update many Nodes.
-     * @example
-     * // Update many Nodes
-     * const node = await prisma.node.updateManyAndReturn({
-     *   where: {
-     *     // ... provide filter here
-     *   },
-     *   data: [
-     *     // ... provide data here
-     *   ]
-     * })
-     * 
-     * // Update zero or more Nodes and only return the `id`
-     * const nodeWithIdOnly = await prisma.node.updateManyAndReturn({
-     *   select: { id: true },
-     *   where: {
-     *     // ... provide filter here
-     *   },
-     *   data: [
-     *     // ... provide data here
-     *   ]
-     * })
-     * Note, that providing `undefined` is treated as the value not being there.
-     * Read more here: https://pris.ly/d/null-undefined
-     * 
-     */
-    updateManyAndReturn<T extends NodeUpdateManyAndReturnArgs>(args: SelectSubset<T, NodeUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$NodePayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
-
-    /**
-     * Create or update one Node.
-     * @param {NodeUpsertArgs} args - Arguments to update or create a Node.
-     * @example
-     * // Update or create a Node
-     * const node = await prisma.node.upsert({
-     *   create: {
-     *     // ... data to create a Node
-     *   },
-     *   update: {
-     *     // ... in case it already exists, update
-     *   },
-     *   where: {
-     *     // ... the filter for the Node we want to update
-     *   }
-     * })
-     */
-    upsert<T extends NodeUpsertArgs>(args: SelectSubset<T, NodeUpsertArgs<ExtArgs>>): Prisma__NodeClient<$Result.GetResult<Prisma.$NodePayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
-
-
-    /**
-     * Count the number of Nodes.
-     * Note, that providing `undefined` is treated as the value not being there.
-     * Read more here: https://pris.ly/d/null-undefined
-     * @param {NodeCountArgs} args - Arguments to filter Nodes to count.
-     * @example
-     * // Count the number of Nodes
-     * const count = await prisma.node.count({
-     *   where: {
-     *     // ... the filter for the Nodes we want to count
-     *   }
-     * })
-    **/
-    count<T extends NodeCountArgs>(
-      args?: Subset<T, NodeCountArgs>,
-    ): Prisma.PrismaPromise<
-      T extends $Utils.Record<'select', any>
-        ? T['select'] extends true
-          ? number
-          : GetScalarType<T['select'], NodeCountAggregateOutputType>
-        : number
-    >
-
-    /**
-     * Allows you to perform aggregations operations on a Node.
-     * Note, that providing `undefined` is treated as the value not being there.
-     * Read more here: https://pris.ly/d/null-undefined
-     * @param {NodeAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
-     * @example
-     * // Ordered by age ascending
-     * // Where email contains prisma.io
-     * // Limited to the 10 users
-     * const aggregations = await prisma.user.aggregate({
-     *   _avg: {
-     *     age: true,
-     *   },
-     *   where: {
-     *     email: {
-     *       contains: "prisma.io",
-     *     },
-     *   },
-     *   orderBy: {
-     *     age: "asc",
-     *   },
-     *   take: 10,
-     * })
-    **/
-    aggregate<T extends NodeAggregateArgs>(args: Subset<T, NodeAggregateArgs>): Prisma.PrismaPromise<GetNodeAggregateType<T>>
-
-    /**
-     * Group by Node.
-     * Note, that providing `undefined` is treated as the value not being there.
-     * Read more here: https://pris.ly/d/null-undefined
-     * @param {NodeGroupByArgs} args - Group by arguments.
-     * @example
-     * // Group by city, order by createdAt, get count
-     * const result = await prisma.user.groupBy({
-     *   by: ['city', 'createdAt'],
-     *   orderBy: {
-     *     createdAt: true
-     *   },
-     *   _count: {
-     *     _all: true
-     *   },
-     * })
-     * 
-    **/
-    groupBy<
-      T extends NodeGroupByArgs,
-      HasSelectOrTake extends Or<
-        Extends<'skip', Keys<T>>,
-        Extends<'take', Keys<T>>
-      >,
-      OrderByArg extends True extends HasSelectOrTake
-        ? { orderBy: NodeGroupByArgs['orderBy'] }
-        : { orderBy?: NodeGroupByArgs['orderBy'] },
-      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
-      ByFields extends MaybeTupleToUnion<T['by']>,
-      ByValid extends Has<ByFields, OrderFields>,
-      HavingFields extends GetHavingFields<T['having']>,
-      HavingValid extends Has<ByFields, HavingFields>,
-      ByEmpty extends T['by'] extends never[] ? True : False,
-      InputErrors extends ByEmpty extends True
-      ? `Error: "by" must not be empty.`
-      : HavingValid extends False
-      ? {
-          [P in HavingFields]: P extends ByFields
-            ? never
-            : P extends string
-            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
-            : [
-                Error,
-                'Field ',
-                P,
-                ` in "having" needs to be provided in "by"`,
-              ]
-        }[HavingFields]
-      : 'take' extends Keys<T>
-      ? 'orderBy' extends Keys<T>
-        ? ByValid extends True
-          ? {}
-          : {
-              [P in OrderFields]: P extends ByFields
-                ? never
-                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
-            }[OrderFields]
-        : 'Error: If you provide "take", you also need to provide "orderBy"'
-      : 'skip' extends Keys<T>
-      ? 'orderBy' extends Keys<T>
-        ? ByValid extends True
-          ? {}
-          : {
-              [P in OrderFields]: P extends ByFields
-                ? never
-                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
-            }[OrderFields]
-        : 'Error: If you provide "skip", you also need to provide "orderBy"'
-      : ByValid extends True
-      ? {}
-      : {
-          [P in OrderFields]: P extends ByFields
-            ? never
-            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
-        }[OrderFields]
-    >(args: SubsetIntersection<T, NodeGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetNodeGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
-  /**
-   * Fields of the Node model
-   */
-  readonly fields: NodeFieldRefs;
-  }
-
-  /**
-   * The delegate class that acts as a "Promise-like" for Node.
-   * Why is this prefixed with `Prisma__`?
-   * Because we want to prevent naming conflicts as mentioned in
-   * https://github.com/prisma/prisma-client-js/issues/707
-   */
-  export interface Prisma__NodeClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
-    readonly [Symbol.toStringTag]: "PrismaPromise"
-    roadMap<T extends RoadMapDefaultArgs<ExtArgs> = {}>(args?: Subset<T, RoadMapDefaultArgs<ExtArgs>>): Prisma__RoadMapClient<$Result.GetResult<Prisma.$RoadMapPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
-    parent<T extends Node$parentArgs<ExtArgs> = {}>(args?: Subset<T, Node$parentArgs<ExtArgs>>): Prisma__NodeClient<$Result.GetResult<Prisma.$NodePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
-    children<T extends Node$childrenArgs<ExtArgs> = {}>(args?: Subset<T, Node$childrenArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$NodePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
-    codeBlock<T extends Node$codeBlockArgs<ExtArgs> = {}>(args?: Subset<T, Node$codeBlockArgs<ExtArgs>>): Prisma__CodeSnippetClient<$Result.GetResult<Prisma.$CodeSnippetPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
-    /**
-     * Attaches callbacks for the resolution and/or rejection of the Promise.
-     * @param onfulfilled The callback to execute when the Promise is resolved.
-     * @param onrejected The callback to execute when the Promise is rejected.
-     * @returns A Promise for the completion of which ever callback is executed.
-     */
-    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
-    /**
-     * Attaches a callback for only the rejection of the Promise.
-     * @param onrejected The callback to execute when the Promise is rejected.
-     * @returns A Promise for the completion of the callback.
-     */
-    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
-    /**
-     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
-     * resolved value cannot be modified from the callback.
-     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
-     * @returns A Promise for the completion of the callback.
-     */
-    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
-  }
-
-
-
-
-  /**
-   * Fields of the Node model
-   */
-  interface NodeFieldRefs {
-    readonly id: FieldRef<"Node", 'String'>
-    readonly roadMapId: FieldRef<"Node", 'String'>
-    readonly title: FieldRef<"Node", 'String'>
-    readonly description: FieldRef<"Node", 'String'>
-    readonly positionX: FieldRef<"Node", 'Float'>
-    readonly positionY: FieldRef<"Node", 'Float'>
-    readonly positionZ: FieldRef<"Node", 'Float'>
-    readonly parentId: FieldRef<"Node", 'String'>
-    readonly createdAt: FieldRef<"Node", 'DateTime'>
-    readonly updatedAt: FieldRef<"Node", 'DateTime'>
-  }
-    
-
-  // Custom InputTypes
-  /**
-   * Node findUnique
-   */
-  export type NodeFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the Node
-     */
-    select?: NodeSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the Node
-     */
-    omit?: NodeOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: NodeInclude<ExtArgs> | null
-    /**
-     * Filter, which Node to fetch.
-     */
-    where: NodeWhereUniqueInput
-  }
-
-  /**
-   * Node findUniqueOrThrow
-   */
-  export type NodeFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the Node
-     */
-    select?: NodeSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the Node
-     */
-    omit?: NodeOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: NodeInclude<ExtArgs> | null
-    /**
-     * Filter, which Node to fetch.
-     */
-    where: NodeWhereUniqueInput
-  }
-
-  /**
-   * Node findFirst
-   */
-  export type NodeFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the Node
-     */
-    select?: NodeSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the Node
-     */
-    omit?: NodeOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: NodeInclude<ExtArgs> | null
-    /**
-     * Filter, which Node to fetch.
-     */
-    where?: NodeWhereInput
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
-     * 
-     * Determine the order of Nodes to fetch.
-     */
-    orderBy?: NodeOrderByWithRelationInput | NodeOrderByWithRelationInput[]
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
-     * 
-     * Sets the position for searching for Nodes.
-     */
-    cursor?: NodeWhereUniqueInput
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
-     * Take `±n` Nodes from the position of the cursor.
-     */
-    take?: number
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
-     * Skip the first `n` Nodes.
-     */
-    skip?: number
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
-     * 
-     * Filter by unique combinations of Nodes.
-     */
-    distinct?: NodeScalarFieldEnum | NodeScalarFieldEnum[]
-  }
-
-  /**
-   * Node findFirstOrThrow
-   */
-  export type NodeFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the Node
-     */
-    select?: NodeSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the Node
-     */
-    omit?: NodeOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: NodeInclude<ExtArgs> | null
-    /**
-     * Filter, which Node to fetch.
-     */
-    where?: NodeWhereInput
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
-     * 
-     * Determine the order of Nodes to fetch.
-     */
-    orderBy?: NodeOrderByWithRelationInput | NodeOrderByWithRelationInput[]
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
-     * 
-     * Sets the position for searching for Nodes.
-     */
-    cursor?: NodeWhereUniqueInput
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
-     * Take `±n` Nodes from the position of the cursor.
-     */
-    take?: number
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
-     * Skip the first `n` Nodes.
-     */
-    skip?: number
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
-     * 
-     * Filter by unique combinations of Nodes.
-     */
-    distinct?: NodeScalarFieldEnum | NodeScalarFieldEnum[]
-  }
-
-  /**
-   * Node findMany
-   */
-  export type NodeFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the Node
-     */
-    select?: NodeSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the Node
-     */
-    omit?: NodeOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: NodeInclude<ExtArgs> | null
-    /**
-     * Filter, which Nodes to fetch.
-     */
-    where?: NodeWhereInput
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
-     * 
-     * Determine the order of Nodes to fetch.
-     */
-    orderBy?: NodeOrderByWithRelationInput | NodeOrderByWithRelationInput[]
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
-     * 
-     * Sets the position for listing Nodes.
-     */
-    cursor?: NodeWhereUniqueInput
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
-     * Take `±n` Nodes from the position of the cursor.
-     */
-    take?: number
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
-     * Skip the first `n` Nodes.
-     */
-    skip?: number
-    distinct?: NodeScalarFieldEnum | NodeScalarFieldEnum[]
-  }
-
-  /**
-   * Node create
-   */
-  export type NodeCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the Node
-     */
-    select?: NodeSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the Node
-     */
-    omit?: NodeOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: NodeInclude<ExtArgs> | null
-    /**
-     * The data needed to create a Node.
-     */
-    data: XOR<NodeCreateInput, NodeUncheckedCreateInput>
-  }
-
-  /**
-   * Node createMany
-   */
-  export type NodeCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * The data used to create many Nodes.
-     */
-    data: NodeCreateManyInput | NodeCreateManyInput[]
-    skipDuplicates?: boolean
-  }
-
-  /**
-   * Node createManyAndReturn
-   */
-  export type NodeCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the Node
-     */
-    select?: NodeSelectCreateManyAndReturn<ExtArgs> | null
-    /**
-     * Omit specific fields from the Node
-     */
-    omit?: NodeOmit<ExtArgs> | null
-    /**
-     * The data used to create many Nodes.
-     */
-    data: NodeCreateManyInput | NodeCreateManyInput[]
-    skipDuplicates?: boolean
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: NodeIncludeCreateManyAndReturn<ExtArgs> | null
-  }
-
-  /**
-   * Node update
-   */
-  export type NodeUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the Node
-     */
-    select?: NodeSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the Node
-     */
-    omit?: NodeOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: NodeInclude<ExtArgs> | null
-    /**
-     * The data needed to update a Node.
-     */
-    data: XOR<NodeUpdateInput, NodeUncheckedUpdateInput>
-    /**
-     * Choose, which Node to update.
-     */
-    where: NodeWhereUniqueInput
-  }
-
-  /**
-   * Node updateMany
-   */
-  export type NodeUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * The data used to update Nodes.
-     */
-    data: XOR<NodeUpdateManyMutationInput, NodeUncheckedUpdateManyInput>
-    /**
-     * Filter which Nodes to update
-     */
-    where?: NodeWhereInput
-    /**
-     * Limit how many Nodes to update.
-     */
-    limit?: number
-  }
-
-  /**
-   * Node updateManyAndReturn
-   */
-  export type NodeUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the Node
-     */
-    select?: NodeSelectUpdateManyAndReturn<ExtArgs> | null
-    /**
-     * Omit specific fields from the Node
-     */
-    omit?: NodeOmit<ExtArgs> | null
-    /**
-     * The data used to update Nodes.
-     */
-    data: XOR<NodeUpdateManyMutationInput, NodeUncheckedUpdateManyInput>
-    /**
-     * Filter which Nodes to update
-     */
-    where?: NodeWhereInput
-    /**
-     * Limit how many Nodes to update.
-     */
-    limit?: number
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: NodeIncludeUpdateManyAndReturn<ExtArgs> | null
-  }
-
-  /**
-   * Node upsert
-   */
-  export type NodeUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the Node
-     */
-    select?: NodeSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the Node
-     */
-    omit?: NodeOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: NodeInclude<ExtArgs> | null
-    /**
-     * The filter to search for the Node to update in case it exists.
-     */
-    where: NodeWhereUniqueInput
-    /**
-     * In case the Node found by the `where` argument doesn't exist, create a new Node with this data.
-     */
-    create: XOR<NodeCreateInput, NodeUncheckedCreateInput>
-    /**
-     * In case the Node was found with the provided `where` argument, update it with this data.
-     */
-    update: XOR<NodeUpdateInput, NodeUncheckedUpdateInput>
-  }
-
-  /**
-   * Node delete
-   */
-  export type NodeDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the Node
-     */
-    select?: NodeSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the Node
-     */
-    omit?: NodeOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: NodeInclude<ExtArgs> | null
-    /**
-     * Filter which Node to delete.
-     */
-    where: NodeWhereUniqueInput
-  }
-
-  /**
-   * Node deleteMany
-   */
-  export type NodeDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Filter which Nodes to delete
-     */
-    where?: NodeWhereInput
-    /**
-     * Limit how many Nodes to delete.
-     */
-    limit?: number
-  }
-
-  /**
-   * Node.parent
-   */
-  export type Node$parentArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the Node
-     */
-    select?: NodeSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the Node
-     */
-    omit?: NodeOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: NodeInclude<ExtArgs> | null
-    where?: NodeWhereInput
-  }
-
-  /**
-   * Node.children
-   */
-  export type Node$childrenArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the Node
-     */
-    select?: NodeSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the Node
-     */
-    omit?: NodeOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: NodeInclude<ExtArgs> | null
-    where?: NodeWhereInput
-    orderBy?: NodeOrderByWithRelationInput | NodeOrderByWithRelationInput[]
-    cursor?: NodeWhereUniqueInput
-    take?: number
-    skip?: number
-    distinct?: NodeScalarFieldEnum | NodeScalarFieldEnum[]
-  }
-
-  /**
-   * Node.codeBlock
-   */
-  export type Node$codeBlockArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the CodeSnippet
-     */
-    select?: CodeSnippetSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the CodeSnippet
-     */
-    omit?: CodeSnippetOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: CodeSnippetInclude<ExtArgs> | null
-    where?: CodeSnippetWhereInput
-  }
-
-  /**
-   * Node without action
-   */
-  export type NodeDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the Node
-     */
-    select?: NodeSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the Node
-     */
-    omit?: NodeOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: NodeInclude<ExtArgs> | null
-  }
-
-
-  /**
-   * Model CodeSnippet
-   */
-
-  export type AggregateCodeSnippet = {
-    _count: CodeSnippetCountAggregateOutputType | null
-    _min: CodeSnippetMinAggregateOutputType | null
-    _max: CodeSnippetMaxAggregateOutputType | null
-  }
-
-  export type CodeSnippetMinAggregateOutputType = {
-    id: string | null
-    content: string | null
-    nodeId: string | null
-    createdAt: Date | null
-  }
-
-  export type CodeSnippetMaxAggregateOutputType = {
-    id: string | null
-    content: string | null
-    nodeId: string | null
-    createdAt: Date | null
-  }
-
-  export type CodeSnippetCountAggregateOutputType = {
-    id: number
-    content: number
-    nodeId: number
-    createdAt: number
-    _all: number
-  }
-
-
-  export type CodeSnippetMinAggregateInputType = {
-    id?: true
-    content?: true
-    nodeId?: true
-    createdAt?: true
-  }
-
-  export type CodeSnippetMaxAggregateInputType = {
-    id?: true
-    content?: true
-    nodeId?: true
-    createdAt?: true
-  }
-
-  export type CodeSnippetCountAggregateInputType = {
-    id?: true
-    content?: true
-    nodeId?: true
-    createdAt?: true
-    _all?: true
-  }
-
-  export type CodeSnippetAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Filter which CodeSnippet to aggregate.
-     */
-    where?: CodeSnippetWhereInput
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
-     * 
-     * Determine the order of CodeSnippets to fetch.
-     */
-    orderBy?: CodeSnippetOrderByWithRelationInput | CodeSnippetOrderByWithRelationInput[]
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
-     * 
-     * Sets the start position
-     */
-    cursor?: CodeSnippetWhereUniqueInput
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
-     * Take `±n` CodeSnippets from the position of the cursor.
-     */
-    take?: number
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
-     * Skip the first `n` CodeSnippets.
-     */
-    skip?: number
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
-     * 
-     * Count returned CodeSnippets
-    **/
-    _count?: true | CodeSnippetCountAggregateInputType
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
-     * 
-     * Select which fields to find the minimum value
-    **/
-    _min?: CodeSnippetMinAggregateInputType
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
-     * 
-     * Select which fields to find the maximum value
-    **/
-    _max?: CodeSnippetMaxAggregateInputType
-  }
-
-  export type GetCodeSnippetAggregateType<T extends CodeSnippetAggregateArgs> = {
-        [P in keyof T & keyof AggregateCodeSnippet]: P extends '_count' | 'count'
-      ? T[P] extends true
-        ? number
-        : GetScalarType<T[P], AggregateCodeSnippet[P]>
-      : GetScalarType<T[P], AggregateCodeSnippet[P]>
-  }
-
-
-
-
-  export type CodeSnippetGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    where?: CodeSnippetWhereInput
-    orderBy?: CodeSnippetOrderByWithAggregationInput | CodeSnippetOrderByWithAggregationInput[]
-    by: CodeSnippetScalarFieldEnum[] | CodeSnippetScalarFieldEnum
-    having?: CodeSnippetScalarWhereWithAggregatesInput
-    take?: number
-    skip?: number
-    _count?: CodeSnippetCountAggregateInputType | true
-    _min?: CodeSnippetMinAggregateInputType
-    _max?: CodeSnippetMaxAggregateInputType
-  }
-
-  export type CodeSnippetGroupByOutputType = {
-    id: string
-    content: string
-    nodeId: string
-    createdAt: Date
-    _count: CodeSnippetCountAggregateOutputType | null
-    _min: CodeSnippetMinAggregateOutputType | null
-    _max: CodeSnippetMaxAggregateOutputType | null
-  }
-
-  type GetCodeSnippetGroupByPayload<T extends CodeSnippetGroupByArgs> = Prisma.PrismaPromise<
-    Array<
-      PickEnumerable<CodeSnippetGroupByOutputType, T['by']> &
-        {
-          [P in ((keyof T) & (keyof CodeSnippetGroupByOutputType))]: P extends '_count'
-            ? T[P] extends boolean
-              ? number
-              : GetScalarType<T[P], CodeSnippetGroupByOutputType[P]>
-            : GetScalarType<T[P], CodeSnippetGroupByOutputType[P]>
-        }
-      >
-    >
-
-
-  export type CodeSnippetSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
-    id?: boolean
-    content?: boolean
-    nodeId?: boolean
-    createdAt?: boolean
-    node?: boolean | NodeDefaultArgs<ExtArgs>
-  }, ExtArgs["result"]["codeSnippet"]>
-
-  export type CodeSnippetSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
-    id?: boolean
-    content?: boolean
-    nodeId?: boolean
-    createdAt?: boolean
-    node?: boolean | NodeDefaultArgs<ExtArgs>
-  }, ExtArgs["result"]["codeSnippet"]>
-
-  export type CodeSnippetSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
-    id?: boolean
-    content?: boolean
-    nodeId?: boolean
-    createdAt?: boolean
-    node?: boolean | NodeDefaultArgs<ExtArgs>
-  }, ExtArgs["result"]["codeSnippet"]>
-
-  export type CodeSnippetSelectScalar = {
-    id?: boolean
-    content?: boolean
-    nodeId?: boolean
-    createdAt?: boolean
-  }
-
-  export type CodeSnippetOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "content" | "nodeId" | "createdAt", ExtArgs["result"]["codeSnippet"]>
-  export type CodeSnippetInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    node?: boolean | NodeDefaultArgs<ExtArgs>
-  }
-  export type CodeSnippetIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    node?: boolean | NodeDefaultArgs<ExtArgs>
-  }
-  export type CodeSnippetIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    node?: boolean | NodeDefaultArgs<ExtArgs>
-  }
-
-  export type $CodeSnippetPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    name: "CodeSnippet"
-    objects: {
-      node: Prisma.$NodePayload<ExtArgs>
-    }
-    scalars: $Extensions.GetPayloadResult<{
-      id: string
-      content: string
-      nodeId: string
-      createdAt: Date
-    }, ExtArgs["result"]["codeSnippet"]>
-    composites: {}
-  }
-
-  type CodeSnippetGetPayload<S extends boolean | null | undefined | CodeSnippetDefaultArgs> = $Result.GetResult<Prisma.$CodeSnippetPayload, S>
-
-  type CodeSnippetCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
-    Omit<CodeSnippetFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
-      select?: CodeSnippetCountAggregateInputType | true
-    }
-
-  export interface CodeSnippetDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
-    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['CodeSnippet'], meta: { name: 'CodeSnippet' } }
-    /**
-     * Find zero or one CodeSnippet that matches the filter.
-     * @param {CodeSnippetFindUniqueArgs} args - Arguments to find a CodeSnippet
-     * @example
-     * // Get one CodeSnippet
-     * const codeSnippet = await prisma.codeSnippet.findUnique({
-     *   where: {
-     *     // ... provide filter here
-     *   }
-     * })
-     */
-    findUnique<T extends CodeSnippetFindUniqueArgs>(args: SelectSubset<T, CodeSnippetFindUniqueArgs<ExtArgs>>): Prisma__CodeSnippetClient<$Result.GetResult<Prisma.$CodeSnippetPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
-
-    /**
-     * Find one CodeSnippet that matches the filter or throw an error with `error.code='P2025'`
-     * if no matches were found.
-     * @param {CodeSnippetFindUniqueOrThrowArgs} args - Arguments to find a CodeSnippet
-     * @example
-     * // Get one CodeSnippet
-     * const codeSnippet = await prisma.codeSnippet.findUniqueOrThrow({
-     *   where: {
-     *     // ... provide filter here
-     *   }
-     * })
-     */
-    findUniqueOrThrow<T extends CodeSnippetFindUniqueOrThrowArgs>(args: SelectSubset<T, CodeSnippetFindUniqueOrThrowArgs<ExtArgs>>): Prisma__CodeSnippetClient<$Result.GetResult<Prisma.$CodeSnippetPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
-
-    /**
-     * Find the first CodeSnippet that matches the filter.
-     * Note, that providing `undefined` is treated as the value not being there.
-     * Read more here: https://pris.ly/d/null-undefined
-     * @param {CodeSnippetFindFirstArgs} args - Arguments to find a CodeSnippet
-     * @example
-     * // Get one CodeSnippet
-     * const codeSnippet = await prisma.codeSnippet.findFirst({
-     *   where: {
-     *     // ... provide filter here
-     *   }
-     * })
-     */
-    findFirst<T extends CodeSnippetFindFirstArgs>(args?: SelectSubset<T, CodeSnippetFindFirstArgs<ExtArgs>>): Prisma__CodeSnippetClient<$Result.GetResult<Prisma.$CodeSnippetPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
-
-    /**
-     * Find the first CodeSnippet that matches the filter or
-     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
-     * Note, that providing `undefined` is treated as the value not being there.
-     * Read more here: https://pris.ly/d/null-undefined
-     * @param {CodeSnippetFindFirstOrThrowArgs} args - Arguments to find a CodeSnippet
-     * @example
-     * // Get one CodeSnippet
-     * const codeSnippet = await prisma.codeSnippet.findFirstOrThrow({
-     *   where: {
-     *     // ... provide filter here
-     *   }
-     * })
-     */
-    findFirstOrThrow<T extends CodeSnippetFindFirstOrThrowArgs>(args?: SelectSubset<T, CodeSnippetFindFirstOrThrowArgs<ExtArgs>>): Prisma__CodeSnippetClient<$Result.GetResult<Prisma.$CodeSnippetPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
-
-    /**
-     * Find zero or more CodeSnippets that matches the filter.
-     * Note, that providing `undefined` is treated as the value not being there.
-     * Read more here: https://pris.ly/d/null-undefined
-     * @param {CodeSnippetFindManyArgs} args - Arguments to filter and select certain fields only.
-     * @example
-     * // Get all CodeSnippets
-     * const codeSnippets = await prisma.codeSnippet.findMany()
-     * 
-     * // Get first 10 CodeSnippets
-     * const codeSnippets = await prisma.codeSnippet.findMany({ take: 10 })
-     * 
-     * // Only select the `id`
-     * const codeSnippetWithIdOnly = await prisma.codeSnippet.findMany({ select: { id: true } })
-     * 
-     */
-    findMany<T extends CodeSnippetFindManyArgs>(args?: SelectSubset<T, CodeSnippetFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$CodeSnippetPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
-
-    /**
-     * Create a CodeSnippet.
-     * @param {CodeSnippetCreateArgs} args - Arguments to create a CodeSnippet.
-     * @example
-     * // Create one CodeSnippet
-     * const CodeSnippet = await prisma.codeSnippet.create({
-     *   data: {
-     *     // ... data to create a CodeSnippet
-     *   }
-     * })
-     * 
-     */
-    create<T extends CodeSnippetCreateArgs>(args: SelectSubset<T, CodeSnippetCreateArgs<ExtArgs>>): Prisma__CodeSnippetClient<$Result.GetResult<Prisma.$CodeSnippetPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
-
-    /**
-     * Create many CodeSnippets.
-     * @param {CodeSnippetCreateManyArgs} args - Arguments to create many CodeSnippets.
-     * @example
-     * // Create many CodeSnippets
-     * const codeSnippet = await prisma.codeSnippet.createMany({
-     *   data: [
-     *     // ... provide data here
-     *   ]
-     * })
-     *     
-     */
-    createMany<T extends CodeSnippetCreateManyArgs>(args?: SelectSubset<T, CodeSnippetCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
-
-    /**
-     * Create many CodeSnippets and returns the data saved in the database.
-     * @param {CodeSnippetCreateManyAndReturnArgs} args - Arguments to create many CodeSnippets.
-     * @example
-     * // Create many CodeSnippets
-     * const codeSnippet = await prisma.codeSnippet.createManyAndReturn({
-     *   data: [
-     *     // ... provide data here
-     *   ]
-     * })
-     * 
-     * // Create many CodeSnippets and only return the `id`
-     * const codeSnippetWithIdOnly = await prisma.codeSnippet.createManyAndReturn({
-     *   select: { id: true },
-     *   data: [
-     *     // ... provide data here
-     *   ]
-     * })
-     * Note, that providing `undefined` is treated as the value not being there.
-     * Read more here: https://pris.ly/d/null-undefined
-     * 
-     */
-    createManyAndReturn<T extends CodeSnippetCreateManyAndReturnArgs>(args?: SelectSubset<T, CodeSnippetCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$CodeSnippetPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
-
-    /**
-     * Delete a CodeSnippet.
-     * @param {CodeSnippetDeleteArgs} args - Arguments to delete one CodeSnippet.
-     * @example
-     * // Delete one CodeSnippet
-     * const CodeSnippet = await prisma.codeSnippet.delete({
-     *   where: {
-     *     // ... filter to delete one CodeSnippet
-     *   }
-     * })
-     * 
-     */
-    delete<T extends CodeSnippetDeleteArgs>(args: SelectSubset<T, CodeSnippetDeleteArgs<ExtArgs>>): Prisma__CodeSnippetClient<$Result.GetResult<Prisma.$CodeSnippetPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
-
-    /**
-     * Update one CodeSnippet.
-     * @param {CodeSnippetUpdateArgs} args - Arguments to update one CodeSnippet.
-     * @example
-     * // Update one CodeSnippet
-     * const codeSnippet = await prisma.codeSnippet.update({
-     *   where: {
-     *     // ... provide filter here
-     *   },
-     *   data: {
-     *     // ... provide data here
-     *   }
-     * })
-     * 
-     */
-    update<T extends CodeSnippetUpdateArgs>(args: SelectSubset<T, CodeSnippetUpdateArgs<ExtArgs>>): Prisma__CodeSnippetClient<$Result.GetResult<Prisma.$CodeSnippetPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
-
-    /**
-     * Delete zero or more CodeSnippets.
-     * @param {CodeSnippetDeleteManyArgs} args - Arguments to filter CodeSnippets to delete.
-     * @example
-     * // Delete a few CodeSnippets
-     * const { count } = await prisma.codeSnippet.deleteMany({
-     *   where: {
-     *     // ... provide filter here
-     *   }
-     * })
-     * 
-     */
-    deleteMany<T extends CodeSnippetDeleteManyArgs>(args?: SelectSubset<T, CodeSnippetDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
-
-    /**
-     * Update zero or more CodeSnippets.
-     * Note, that providing `undefined` is treated as the value not being there.
-     * Read more here: https://pris.ly/d/null-undefined
-     * @param {CodeSnippetUpdateManyArgs} args - Arguments to update one or more rows.
-     * @example
-     * // Update many CodeSnippets
-     * const codeSnippet = await prisma.codeSnippet.updateMany({
-     *   where: {
-     *     // ... provide filter here
-     *   },
-     *   data: {
-     *     // ... provide data here
-     *   }
-     * })
-     * 
-     */
-    updateMany<T extends CodeSnippetUpdateManyArgs>(args: SelectSubset<T, CodeSnippetUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
-
-    /**
-     * Update zero or more CodeSnippets and returns the data updated in the database.
-     * @param {CodeSnippetUpdateManyAndReturnArgs} args - Arguments to update many CodeSnippets.
-     * @example
-     * // Update many CodeSnippets
-     * const codeSnippet = await prisma.codeSnippet.updateManyAndReturn({
-     *   where: {
-     *     // ... provide filter here
-     *   },
-     *   data: [
-     *     // ... provide data here
-     *   ]
-     * })
-     * 
-     * // Update zero or more CodeSnippets and only return the `id`
-     * const codeSnippetWithIdOnly = await prisma.codeSnippet.updateManyAndReturn({
-     *   select: { id: true },
-     *   where: {
-     *     // ... provide filter here
-     *   },
-     *   data: [
-     *     // ... provide data here
-     *   ]
-     * })
-     * Note, that providing `undefined` is treated as the value not being there.
-     * Read more here: https://pris.ly/d/null-undefined
-     * 
-     */
-    updateManyAndReturn<T extends CodeSnippetUpdateManyAndReturnArgs>(args: SelectSubset<T, CodeSnippetUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$CodeSnippetPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
-
-    /**
-     * Create or update one CodeSnippet.
-     * @param {CodeSnippetUpsertArgs} args - Arguments to update or create a CodeSnippet.
-     * @example
-     * // Update or create a CodeSnippet
-     * const codeSnippet = await prisma.codeSnippet.upsert({
-     *   create: {
-     *     // ... data to create a CodeSnippet
-     *   },
-     *   update: {
-     *     // ... in case it already exists, update
-     *   },
-     *   where: {
-     *     // ... the filter for the CodeSnippet we want to update
-     *   }
-     * })
-     */
-    upsert<T extends CodeSnippetUpsertArgs>(args: SelectSubset<T, CodeSnippetUpsertArgs<ExtArgs>>): Prisma__CodeSnippetClient<$Result.GetResult<Prisma.$CodeSnippetPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
-
-
-    /**
-     * Count the number of CodeSnippets.
-     * Note, that providing `undefined` is treated as the value not being there.
-     * Read more here: https://pris.ly/d/null-undefined
-     * @param {CodeSnippetCountArgs} args - Arguments to filter CodeSnippets to count.
-     * @example
-     * // Count the number of CodeSnippets
-     * const count = await prisma.codeSnippet.count({
-     *   where: {
-     *     // ... the filter for the CodeSnippets we want to count
-     *   }
-     * })
-    **/
-    count<T extends CodeSnippetCountArgs>(
-      args?: Subset<T, CodeSnippetCountArgs>,
-    ): Prisma.PrismaPromise<
-      T extends $Utils.Record<'select', any>
-        ? T['select'] extends true
-          ? number
-          : GetScalarType<T['select'], CodeSnippetCountAggregateOutputType>
-        : number
-    >
-
-    /**
-     * Allows you to perform aggregations operations on a CodeSnippet.
-     * Note, that providing `undefined` is treated as the value not being there.
-     * Read more here: https://pris.ly/d/null-undefined
-     * @param {CodeSnippetAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
-     * @example
-     * // Ordered by age ascending
-     * // Where email contains prisma.io
-     * // Limited to the 10 users
-     * const aggregations = await prisma.user.aggregate({
-     *   _avg: {
-     *     age: true,
-     *   },
-     *   where: {
-     *     email: {
-     *       contains: "prisma.io",
-     *     },
-     *   },
-     *   orderBy: {
-     *     age: "asc",
-     *   },
-     *   take: 10,
-     * })
-    **/
-    aggregate<T extends CodeSnippetAggregateArgs>(args: Subset<T, CodeSnippetAggregateArgs>): Prisma.PrismaPromise<GetCodeSnippetAggregateType<T>>
-
-    /**
-     * Group by CodeSnippet.
-     * Note, that providing `undefined` is treated as the value not being there.
-     * Read more here: https://pris.ly/d/null-undefined
-     * @param {CodeSnippetGroupByArgs} args - Group by arguments.
-     * @example
-     * // Group by city, order by createdAt, get count
-     * const result = await prisma.user.groupBy({
-     *   by: ['city', 'createdAt'],
-     *   orderBy: {
-     *     createdAt: true
-     *   },
-     *   _count: {
-     *     _all: true
-     *   },
-     * })
-     * 
-    **/
-    groupBy<
-      T extends CodeSnippetGroupByArgs,
-      HasSelectOrTake extends Or<
-        Extends<'skip', Keys<T>>,
-        Extends<'take', Keys<T>>
-      >,
-      OrderByArg extends True extends HasSelectOrTake
-        ? { orderBy: CodeSnippetGroupByArgs['orderBy'] }
-        : { orderBy?: CodeSnippetGroupByArgs['orderBy'] },
-      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
-      ByFields extends MaybeTupleToUnion<T['by']>,
-      ByValid extends Has<ByFields, OrderFields>,
-      HavingFields extends GetHavingFields<T['having']>,
-      HavingValid extends Has<ByFields, HavingFields>,
-      ByEmpty extends T['by'] extends never[] ? True : False,
-      InputErrors extends ByEmpty extends True
-      ? `Error: "by" must not be empty.`
-      : HavingValid extends False
-      ? {
-          [P in HavingFields]: P extends ByFields
-            ? never
-            : P extends string
-            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
-            : [
-                Error,
-                'Field ',
-                P,
-                ` in "having" needs to be provided in "by"`,
-              ]
-        }[HavingFields]
-      : 'take' extends Keys<T>
-      ? 'orderBy' extends Keys<T>
-        ? ByValid extends True
-          ? {}
-          : {
-              [P in OrderFields]: P extends ByFields
-                ? never
-                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
-            }[OrderFields]
-        : 'Error: If you provide "take", you also need to provide "orderBy"'
-      : 'skip' extends Keys<T>
-      ? 'orderBy' extends Keys<T>
-        ? ByValid extends True
-          ? {}
-          : {
-              [P in OrderFields]: P extends ByFields
-                ? never
-                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
-            }[OrderFields]
-        : 'Error: If you provide "skip", you also need to provide "orderBy"'
-      : ByValid extends True
-      ? {}
-      : {
-          [P in OrderFields]: P extends ByFields
-            ? never
-            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
-        }[OrderFields]
-    >(args: SubsetIntersection<T, CodeSnippetGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetCodeSnippetGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
-  /**
-   * Fields of the CodeSnippet model
-   */
-  readonly fields: CodeSnippetFieldRefs;
-  }
-
-  /**
-   * The delegate class that acts as a "Promise-like" for CodeSnippet.
-   * Why is this prefixed with `Prisma__`?
-   * Because we want to prevent naming conflicts as mentioned in
-   * https://github.com/prisma/prisma-client-js/issues/707
-   */
-  export interface Prisma__CodeSnippetClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
-    readonly [Symbol.toStringTag]: "PrismaPromise"
-    node<T extends NodeDefaultArgs<ExtArgs> = {}>(args?: Subset<T, NodeDefaultArgs<ExtArgs>>): Prisma__NodeClient<$Result.GetResult<Prisma.$NodePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
-    /**
-     * Attaches callbacks for the resolution and/or rejection of the Promise.
-     * @param onfulfilled The callback to execute when the Promise is resolved.
-     * @param onrejected The callback to execute when the Promise is rejected.
-     * @returns A Promise for the completion of which ever callback is executed.
-     */
-    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
-    /**
-     * Attaches a callback for only the rejection of the Promise.
-     * @param onrejected The callback to execute when the Promise is rejected.
-     * @returns A Promise for the completion of the callback.
-     */
-    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
-    /**
-     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
-     * resolved value cannot be modified from the callback.
-     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
-     * @returns A Promise for the completion of the callback.
-     */
-    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
-  }
-
-
-
-
-  /**
-   * Fields of the CodeSnippet model
-   */
-  interface CodeSnippetFieldRefs {
-    readonly id: FieldRef<"CodeSnippet", 'String'>
-    readonly content: FieldRef<"CodeSnippet", 'String'>
-    readonly nodeId: FieldRef<"CodeSnippet", 'String'>
-    readonly createdAt: FieldRef<"CodeSnippet", 'DateTime'>
-  }
-    
-
-  // Custom InputTypes
-  /**
-   * CodeSnippet findUnique
-   */
-  export type CodeSnippetFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the CodeSnippet
-     */
-    select?: CodeSnippetSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the CodeSnippet
-     */
-    omit?: CodeSnippetOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: CodeSnippetInclude<ExtArgs> | null
-    /**
-     * Filter, which CodeSnippet to fetch.
-     */
-    where: CodeSnippetWhereUniqueInput
-  }
-
-  /**
-   * CodeSnippet findUniqueOrThrow
-   */
-  export type CodeSnippetFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the CodeSnippet
-     */
-    select?: CodeSnippetSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the CodeSnippet
-     */
-    omit?: CodeSnippetOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: CodeSnippetInclude<ExtArgs> | null
-    /**
-     * Filter, which CodeSnippet to fetch.
-     */
-    where: CodeSnippetWhereUniqueInput
-  }
-
-  /**
-   * CodeSnippet findFirst
-   */
-  export type CodeSnippetFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the CodeSnippet
-     */
-    select?: CodeSnippetSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the CodeSnippet
-     */
-    omit?: CodeSnippetOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: CodeSnippetInclude<ExtArgs> | null
-    /**
-     * Filter, which CodeSnippet to fetch.
-     */
-    where?: CodeSnippetWhereInput
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
-     * 
-     * Determine the order of CodeSnippets to fetch.
-     */
-    orderBy?: CodeSnippetOrderByWithRelationInput | CodeSnippetOrderByWithRelationInput[]
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
-     * 
-     * Sets the position for searching for CodeSnippets.
-     */
-    cursor?: CodeSnippetWhereUniqueInput
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
-     * Take `±n` CodeSnippets from the position of the cursor.
-     */
-    take?: number
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
-     * Skip the first `n` CodeSnippets.
-     */
-    skip?: number
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
-     * 
-     * Filter by unique combinations of CodeSnippets.
-     */
-    distinct?: CodeSnippetScalarFieldEnum | CodeSnippetScalarFieldEnum[]
-  }
-
-  /**
-   * CodeSnippet findFirstOrThrow
-   */
-  export type CodeSnippetFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the CodeSnippet
-     */
-    select?: CodeSnippetSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the CodeSnippet
-     */
-    omit?: CodeSnippetOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: CodeSnippetInclude<ExtArgs> | null
-    /**
-     * Filter, which CodeSnippet to fetch.
-     */
-    where?: CodeSnippetWhereInput
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
-     * 
-     * Determine the order of CodeSnippets to fetch.
-     */
-    orderBy?: CodeSnippetOrderByWithRelationInput | CodeSnippetOrderByWithRelationInput[]
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
-     * 
-     * Sets the position for searching for CodeSnippets.
-     */
-    cursor?: CodeSnippetWhereUniqueInput
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
-     * Take `±n` CodeSnippets from the position of the cursor.
-     */
-    take?: number
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
-     * Skip the first `n` CodeSnippets.
-     */
-    skip?: number
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
-     * 
-     * Filter by unique combinations of CodeSnippets.
-     */
-    distinct?: CodeSnippetScalarFieldEnum | CodeSnippetScalarFieldEnum[]
-  }
-
-  /**
-   * CodeSnippet findMany
-   */
-  export type CodeSnippetFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the CodeSnippet
-     */
-    select?: CodeSnippetSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the CodeSnippet
-     */
-    omit?: CodeSnippetOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: CodeSnippetInclude<ExtArgs> | null
-    /**
-     * Filter, which CodeSnippets to fetch.
-     */
-    where?: CodeSnippetWhereInput
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
-     * 
-     * Determine the order of CodeSnippets to fetch.
-     */
-    orderBy?: CodeSnippetOrderByWithRelationInput | CodeSnippetOrderByWithRelationInput[]
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
-     * 
-     * Sets the position for listing CodeSnippets.
-     */
-    cursor?: CodeSnippetWhereUniqueInput
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
-     * Take `±n` CodeSnippets from the position of the cursor.
-     */
-    take?: number
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
-     * Skip the first `n` CodeSnippets.
-     */
-    skip?: number
-    distinct?: CodeSnippetScalarFieldEnum | CodeSnippetScalarFieldEnum[]
-  }
-
-  /**
-   * CodeSnippet create
-   */
-  export type CodeSnippetCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the CodeSnippet
-     */
-    select?: CodeSnippetSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the CodeSnippet
-     */
-    omit?: CodeSnippetOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: CodeSnippetInclude<ExtArgs> | null
-    /**
-     * The data needed to create a CodeSnippet.
-     */
-    data: XOR<CodeSnippetCreateInput, CodeSnippetUncheckedCreateInput>
-  }
-
-  /**
-   * CodeSnippet createMany
-   */
-  export type CodeSnippetCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * The data used to create many CodeSnippets.
-     */
-    data: CodeSnippetCreateManyInput | CodeSnippetCreateManyInput[]
-    skipDuplicates?: boolean
-  }
-
-  /**
-   * CodeSnippet createManyAndReturn
-   */
-  export type CodeSnippetCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the CodeSnippet
-     */
-    select?: CodeSnippetSelectCreateManyAndReturn<ExtArgs> | null
-    /**
-     * Omit specific fields from the CodeSnippet
-     */
-    omit?: CodeSnippetOmit<ExtArgs> | null
-    /**
-     * The data used to create many CodeSnippets.
-     */
-    data: CodeSnippetCreateManyInput | CodeSnippetCreateManyInput[]
-    skipDuplicates?: boolean
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: CodeSnippetIncludeCreateManyAndReturn<ExtArgs> | null
-  }
-
-  /**
-   * CodeSnippet update
-   */
-  export type CodeSnippetUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the CodeSnippet
-     */
-    select?: CodeSnippetSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the CodeSnippet
-     */
-    omit?: CodeSnippetOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: CodeSnippetInclude<ExtArgs> | null
-    /**
-     * The data needed to update a CodeSnippet.
-     */
-    data: XOR<CodeSnippetUpdateInput, CodeSnippetUncheckedUpdateInput>
-    /**
-     * Choose, which CodeSnippet to update.
-     */
-    where: CodeSnippetWhereUniqueInput
-  }
-
-  /**
-   * CodeSnippet updateMany
-   */
-  export type CodeSnippetUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * The data used to update CodeSnippets.
-     */
-    data: XOR<CodeSnippetUpdateManyMutationInput, CodeSnippetUncheckedUpdateManyInput>
-    /**
-     * Filter which CodeSnippets to update
-     */
-    where?: CodeSnippetWhereInput
-    /**
-     * Limit how many CodeSnippets to update.
-     */
-    limit?: number
-  }
-
-  /**
-   * CodeSnippet updateManyAndReturn
-   */
-  export type CodeSnippetUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the CodeSnippet
-     */
-    select?: CodeSnippetSelectUpdateManyAndReturn<ExtArgs> | null
-    /**
-     * Omit specific fields from the CodeSnippet
-     */
-    omit?: CodeSnippetOmit<ExtArgs> | null
-    /**
-     * The data used to update CodeSnippets.
-     */
-    data: XOR<CodeSnippetUpdateManyMutationInput, CodeSnippetUncheckedUpdateManyInput>
-    /**
-     * Filter which CodeSnippets to update
-     */
-    where?: CodeSnippetWhereInput
-    /**
-     * Limit how many CodeSnippets to update.
-     */
-    limit?: number
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: CodeSnippetIncludeUpdateManyAndReturn<ExtArgs> | null
-  }
-
-  /**
-   * CodeSnippet upsert
-   */
-  export type CodeSnippetUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the CodeSnippet
-     */
-    select?: CodeSnippetSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the CodeSnippet
-     */
-    omit?: CodeSnippetOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: CodeSnippetInclude<ExtArgs> | null
-    /**
-     * The filter to search for the CodeSnippet to update in case it exists.
-     */
-    where: CodeSnippetWhereUniqueInput
-    /**
-     * In case the CodeSnippet found by the `where` argument doesn't exist, create a new CodeSnippet with this data.
-     */
-    create: XOR<CodeSnippetCreateInput, CodeSnippetUncheckedCreateInput>
-    /**
-     * In case the CodeSnippet was found with the provided `where` argument, update it with this data.
-     */
-    update: XOR<CodeSnippetUpdateInput, CodeSnippetUncheckedUpdateInput>
-  }
-
-  /**
-   * CodeSnippet delete
-   */
-  export type CodeSnippetDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the CodeSnippet
-     */
-    select?: CodeSnippetSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the CodeSnippet
-     */
-    omit?: CodeSnippetOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: CodeSnippetInclude<ExtArgs> | null
-    /**
-     * Filter which CodeSnippet to delete.
-     */
-    where: CodeSnippetWhereUniqueInput
-  }
-
-  /**
-   * CodeSnippet deleteMany
-   */
-  export type CodeSnippetDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Filter which CodeSnippets to delete
-     */
-    where?: CodeSnippetWhereInput
-    /**
-     * Limit how many CodeSnippets to delete.
-     */
-    limit?: number
-  }
-
-  /**
-   * CodeSnippet without action
-   */
-  export type CodeSnippetDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the CodeSnippet
-     */
-    select?: CodeSnippetSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the CodeSnippet
-     */
-    omit?: CodeSnippetOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: CodeSnippetInclude<ExtArgs> | null
   }
 
 
@@ -14119,6 +11707,7 @@ export namespace Prisma {
     description: 'description',
     userId: 'userId',
     systemPrompt: 'systemPrompt',
+    status: 'status',
     createdAt: 'createdAt',
     updatedAt: 'updatedAt'
   };
@@ -14129,6 +11718,8 @@ export namespace Prisma {
   export const ChatHistoryScalarFieldEnum: {
     id: 'id',
     projectId: 'projectId',
+    visibility: 'visibility',
+    status: 'status',
     createdAt: 'createdAt',
     updatedAt: 'updatedAt'
   };
@@ -14150,38 +11741,14 @@ export namespace Prisma {
 
   export const RoadMapScalarFieldEnum: {
     id: 'id',
-    projectId: 'projectId',
+    chatHistoryId: 'chatHistoryId',
+    content: 'content',
+    version: 'version',
     createdAt: 'createdAt',
     updatedAt: 'updatedAt'
   };
 
   export type RoadMapScalarFieldEnum = (typeof RoadMapScalarFieldEnum)[keyof typeof RoadMapScalarFieldEnum]
-
-
-  export const NodeScalarFieldEnum: {
-    id: 'id',
-    roadMapId: 'roadMapId',
-    title: 'title',
-    description: 'description',
-    positionX: 'positionX',
-    positionY: 'positionY',
-    positionZ: 'positionZ',
-    parentId: 'parentId',
-    createdAt: 'createdAt',
-    updatedAt: 'updatedAt'
-  };
-
-  export type NodeScalarFieldEnum = (typeof NodeScalarFieldEnum)[keyof typeof NodeScalarFieldEnum]
-
-
-  export const CodeSnippetScalarFieldEnum: {
-    id: 'id',
-    content: 'content',
-    nodeId: 'nodeId',
-    createdAt: 'createdAt'
-  };
-
-  export type CodeSnippetScalarFieldEnum = (typeof CodeSnippetScalarFieldEnum)[keyof typeof CodeSnippetScalarFieldEnum]
 
 
   export const ModelScalarFieldEnum: {
@@ -14260,16 +11827,44 @@ export namespace Prisma {
 
 
   /**
-   * Reference to a field of type 'Float'
+   * Reference to a field of type 'ProjectStatus'
    */
-  export type FloatFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Float'>
+  export type EnumProjectStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'ProjectStatus'>
     
 
 
   /**
-   * Reference to a field of type 'Float[]'
+   * Reference to a field of type 'ProjectStatus[]'
    */
-  export type ListFloatFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Float[]'>
+  export type ListEnumProjectStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'ProjectStatus[]'>
+    
+
+
+  /**
+   * Reference to a field of type 'ChatHistoryVisibility'
+   */
+  export type EnumChatHistoryVisibilityFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'ChatHistoryVisibility'>
+    
+
+
+  /**
+   * Reference to a field of type 'ChatHistoryVisibility[]'
+   */
+  export type ListEnumChatHistoryVisibilityFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'ChatHistoryVisibility[]'>
+    
+
+
+  /**
+   * Reference to a field of type 'ChatHistoryStatus'
+   */
+  export type EnumChatHistoryStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'ChatHistoryStatus'>
+    
+
+
+  /**
+   * Reference to a field of type 'ChatHistoryStatus[]'
+   */
+  export type ListEnumChatHistoryStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'ChatHistoryStatus[]'>
     
 
 
@@ -14284,6 +11879,20 @@ export namespace Prisma {
    * Reference to a field of type 'Int[]'
    */
   export type ListIntFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Int[]'>
+    
+
+
+  /**
+   * Reference to a field of type 'Float'
+   */
+  export type FloatFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Float'>
+    
+
+
+  /**
+   * Reference to a field of type 'Float[]'
+   */
+  export type ListFloatFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Float[]'>
     
   /**
    * Deep Input Types
@@ -14597,11 +12206,11 @@ export namespace Prisma {
     description?: StringFilter<"Project"> | string
     userId?: StringFilter<"Project"> | string
     systemPrompt?: StringNullableFilter<"Project"> | string | null
+    status?: EnumProjectStatusFilter<"Project"> | $Enums.ProjectStatus
     createdAt?: DateTimeFilter<"Project"> | Date | string
     updatedAt?: DateTimeFilter<"Project"> | Date | string
     user?: XOR<UserScalarRelationFilter, UserWhereInput>
     chatHistory?: ChatHistoryListRelationFilter
-    roadmap?: RoadMapListRelationFilter
   }
 
   export type ProjectOrderByWithRelationInput = {
@@ -14610,11 +12219,11 @@ export namespace Prisma {
     description?: SortOrder
     userId?: SortOrder
     systemPrompt?: SortOrderInput | SortOrder
+    status?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
     user?: UserOrderByWithRelationInput
     chatHistory?: ChatHistoryOrderByRelationAggregateInput
-    roadmap?: RoadMapOrderByRelationAggregateInput
   }
 
   export type ProjectWhereUniqueInput = Prisma.AtLeast<{
@@ -14626,11 +12235,11 @@ export namespace Prisma {
     description?: StringFilter<"Project"> | string
     userId?: StringFilter<"Project"> | string
     systemPrompt?: StringNullableFilter<"Project"> | string | null
+    status?: EnumProjectStatusFilter<"Project"> | $Enums.ProjectStatus
     createdAt?: DateTimeFilter<"Project"> | Date | string
     updatedAt?: DateTimeFilter<"Project"> | Date | string
     user?: XOR<UserScalarRelationFilter, UserWhereInput>
     chatHistory?: ChatHistoryListRelationFilter
-    roadmap?: RoadMapListRelationFilter
   }, "id">
 
   export type ProjectOrderByWithAggregationInput = {
@@ -14639,6 +12248,7 @@ export namespace Prisma {
     description?: SortOrder
     userId?: SortOrder
     systemPrompt?: SortOrderInput | SortOrder
+    status?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
     _count?: ProjectCountOrderByAggregateInput
@@ -14655,6 +12265,7 @@ export namespace Prisma {
     description?: StringWithAggregatesFilter<"Project"> | string
     userId?: StringWithAggregatesFilter<"Project"> | string
     systemPrompt?: StringNullableWithAggregatesFilter<"Project"> | string | null
+    status?: EnumProjectStatusWithAggregatesFilter<"Project"> | $Enums.ProjectStatus
     createdAt?: DateTimeWithAggregatesFilter<"Project"> | Date | string
     updatedAt?: DateTimeWithAggregatesFilter<"Project"> | Date | string
   }
@@ -14665,19 +12276,25 @@ export namespace Prisma {
     NOT?: ChatHistoryWhereInput | ChatHistoryWhereInput[]
     id?: StringFilter<"ChatHistory"> | string
     projectId?: StringFilter<"ChatHistory"> | string
+    visibility?: EnumChatHistoryVisibilityFilter<"ChatHistory"> | $Enums.ChatHistoryVisibility
+    status?: EnumChatHistoryStatusFilter<"ChatHistory"> | $Enums.ChatHistoryStatus
     createdAt?: DateTimeFilter<"ChatHistory"> | Date | string
     updatedAt?: DateTimeFilter<"ChatHistory"> | Date | string
     project?: XOR<ProjectScalarRelationFilter, ProjectWhereInput>
     messages?: MessageListRelationFilter
+    roadMap?: RoadMapListRelationFilter
   }
 
   export type ChatHistoryOrderByWithRelationInput = {
     id?: SortOrder
     projectId?: SortOrder
+    visibility?: SortOrder
+    status?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
     project?: ProjectOrderByWithRelationInput
     messages?: MessageOrderByRelationAggregateInput
+    roadMap?: RoadMapOrderByRelationAggregateInput
   }
 
   export type ChatHistoryWhereUniqueInput = Prisma.AtLeast<{
@@ -14686,15 +12303,20 @@ export namespace Prisma {
     OR?: ChatHistoryWhereInput[]
     NOT?: ChatHistoryWhereInput | ChatHistoryWhereInput[]
     projectId?: StringFilter<"ChatHistory"> | string
+    visibility?: EnumChatHistoryVisibilityFilter<"ChatHistory"> | $Enums.ChatHistoryVisibility
+    status?: EnumChatHistoryStatusFilter<"ChatHistory"> | $Enums.ChatHistoryStatus
     createdAt?: DateTimeFilter<"ChatHistory"> | Date | string
     updatedAt?: DateTimeFilter<"ChatHistory"> | Date | string
     project?: XOR<ProjectScalarRelationFilter, ProjectWhereInput>
     messages?: MessageListRelationFilter
+    roadMap?: RoadMapListRelationFilter
   }, "id">
 
   export type ChatHistoryOrderByWithAggregationInput = {
     id?: SortOrder
     projectId?: SortOrder
+    visibility?: SortOrder
+    status?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
     _count?: ChatHistoryCountOrderByAggregateInput
@@ -14708,6 +12330,8 @@ export namespace Prisma {
     NOT?: ChatHistoryScalarWhereWithAggregatesInput | ChatHistoryScalarWhereWithAggregatesInput[]
     id?: StringWithAggregatesFilter<"ChatHistory"> | string
     projectId?: StringWithAggregatesFilter<"ChatHistory"> | string
+    visibility?: EnumChatHistoryVisibilityWithAggregatesFilter<"ChatHistory"> | $Enums.ChatHistoryVisibility
+    status?: EnumChatHistoryStatusWithAggregatesFilter<"ChatHistory"> | $Enums.ChatHistoryStatus
     createdAt?: DateTimeWithAggregatesFilter<"ChatHistory"> | Date | string
     updatedAt?: DateTimeWithAggregatesFilter<"ChatHistory"> | Date | string
   }
@@ -14777,20 +12401,22 @@ export namespace Prisma {
     OR?: RoadMapWhereInput[]
     NOT?: RoadMapWhereInput | RoadMapWhereInput[]
     id?: StringFilter<"RoadMap"> | string
-    projectId?: StringFilter<"RoadMap"> | string
+    chatHistoryId?: StringFilter<"RoadMap"> | string
+    content?: StringFilter<"RoadMap"> | string
+    version?: IntFilter<"RoadMap"> | number
     createdAt?: DateTimeFilter<"RoadMap"> | Date | string
     updatedAt?: DateTimeFilter<"RoadMap"> | Date | string
-    project?: XOR<ProjectScalarRelationFilter, ProjectWhereInput>
-    nodes?: NodeListRelationFilter
+    chatHistory?: XOR<ChatHistoryScalarRelationFilter, ChatHistoryWhereInput>
   }
 
   export type RoadMapOrderByWithRelationInput = {
     id?: SortOrder
-    projectId?: SortOrder
+    chatHistoryId?: SortOrder
+    content?: SortOrder
+    version?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
-    project?: ProjectOrderByWithRelationInput
-    nodes?: NodeOrderByRelationAggregateInput
+    chatHistory?: ChatHistoryOrderByWithRelationInput
   }
 
   export type RoadMapWhereUniqueInput = Prisma.AtLeast<{
@@ -14798,21 +12424,26 @@ export namespace Prisma {
     AND?: RoadMapWhereInput | RoadMapWhereInput[]
     OR?: RoadMapWhereInput[]
     NOT?: RoadMapWhereInput | RoadMapWhereInput[]
-    projectId?: StringFilter<"RoadMap"> | string
+    chatHistoryId?: StringFilter<"RoadMap"> | string
+    content?: StringFilter<"RoadMap"> | string
+    version?: IntFilter<"RoadMap"> | number
     createdAt?: DateTimeFilter<"RoadMap"> | Date | string
     updatedAt?: DateTimeFilter<"RoadMap"> | Date | string
-    project?: XOR<ProjectScalarRelationFilter, ProjectWhereInput>
-    nodes?: NodeListRelationFilter
+    chatHistory?: XOR<ChatHistoryScalarRelationFilter, ChatHistoryWhereInput>
   }, "id">
 
   export type RoadMapOrderByWithAggregationInput = {
     id?: SortOrder
-    projectId?: SortOrder
+    chatHistoryId?: SortOrder
+    content?: SortOrder
+    version?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
     _count?: RoadMapCountOrderByAggregateInput
+    _avg?: RoadMapAvgOrderByAggregateInput
     _max?: RoadMapMaxOrderByAggregateInput
     _min?: RoadMapMinOrderByAggregateInput
+    _sum?: RoadMapSumOrderByAggregateInput
   }
 
   export type RoadMapScalarWhereWithAggregatesInput = {
@@ -14820,150 +12451,11 @@ export namespace Prisma {
     OR?: RoadMapScalarWhereWithAggregatesInput[]
     NOT?: RoadMapScalarWhereWithAggregatesInput | RoadMapScalarWhereWithAggregatesInput[]
     id?: StringWithAggregatesFilter<"RoadMap"> | string
-    projectId?: StringWithAggregatesFilter<"RoadMap"> | string
+    chatHistoryId?: StringWithAggregatesFilter<"RoadMap"> | string
+    content?: StringWithAggregatesFilter<"RoadMap"> | string
+    version?: IntWithAggregatesFilter<"RoadMap"> | number
     createdAt?: DateTimeWithAggregatesFilter<"RoadMap"> | Date | string
     updatedAt?: DateTimeWithAggregatesFilter<"RoadMap"> | Date | string
-  }
-
-  export type NodeWhereInput = {
-    AND?: NodeWhereInput | NodeWhereInput[]
-    OR?: NodeWhereInput[]
-    NOT?: NodeWhereInput | NodeWhereInput[]
-    id?: StringFilter<"Node"> | string
-    roadMapId?: StringFilter<"Node"> | string
-    title?: StringFilter<"Node"> | string
-    description?: StringNullableFilter<"Node"> | string | null
-    positionX?: FloatFilter<"Node"> | number
-    positionY?: FloatFilter<"Node"> | number
-    positionZ?: FloatFilter<"Node"> | number
-    parentId?: StringNullableFilter<"Node"> | string | null
-    createdAt?: DateTimeFilter<"Node"> | Date | string
-    updatedAt?: DateTimeFilter<"Node"> | Date | string
-    roadMap?: XOR<RoadMapScalarRelationFilter, RoadMapWhereInput>
-    parent?: XOR<NodeNullableScalarRelationFilter, NodeWhereInput> | null
-    children?: NodeListRelationFilter
-    codeBlock?: XOR<CodeSnippetNullableScalarRelationFilter, CodeSnippetWhereInput> | null
-  }
-
-  export type NodeOrderByWithRelationInput = {
-    id?: SortOrder
-    roadMapId?: SortOrder
-    title?: SortOrder
-    description?: SortOrderInput | SortOrder
-    positionX?: SortOrder
-    positionY?: SortOrder
-    positionZ?: SortOrder
-    parentId?: SortOrderInput | SortOrder
-    createdAt?: SortOrder
-    updatedAt?: SortOrder
-    roadMap?: RoadMapOrderByWithRelationInput
-    parent?: NodeOrderByWithRelationInput
-    children?: NodeOrderByRelationAggregateInput
-    codeBlock?: CodeSnippetOrderByWithRelationInput
-  }
-
-  export type NodeWhereUniqueInput = Prisma.AtLeast<{
-    id?: string
-    AND?: NodeWhereInput | NodeWhereInput[]
-    OR?: NodeWhereInput[]
-    NOT?: NodeWhereInput | NodeWhereInput[]
-    roadMapId?: StringFilter<"Node"> | string
-    title?: StringFilter<"Node"> | string
-    description?: StringNullableFilter<"Node"> | string | null
-    positionX?: FloatFilter<"Node"> | number
-    positionY?: FloatFilter<"Node"> | number
-    positionZ?: FloatFilter<"Node"> | number
-    parentId?: StringNullableFilter<"Node"> | string | null
-    createdAt?: DateTimeFilter<"Node"> | Date | string
-    updatedAt?: DateTimeFilter<"Node"> | Date | string
-    roadMap?: XOR<RoadMapScalarRelationFilter, RoadMapWhereInput>
-    parent?: XOR<NodeNullableScalarRelationFilter, NodeWhereInput> | null
-    children?: NodeListRelationFilter
-    codeBlock?: XOR<CodeSnippetNullableScalarRelationFilter, CodeSnippetWhereInput> | null
-  }, "id">
-
-  export type NodeOrderByWithAggregationInput = {
-    id?: SortOrder
-    roadMapId?: SortOrder
-    title?: SortOrder
-    description?: SortOrderInput | SortOrder
-    positionX?: SortOrder
-    positionY?: SortOrder
-    positionZ?: SortOrder
-    parentId?: SortOrderInput | SortOrder
-    createdAt?: SortOrder
-    updatedAt?: SortOrder
-    _count?: NodeCountOrderByAggregateInput
-    _avg?: NodeAvgOrderByAggregateInput
-    _max?: NodeMaxOrderByAggregateInput
-    _min?: NodeMinOrderByAggregateInput
-    _sum?: NodeSumOrderByAggregateInput
-  }
-
-  export type NodeScalarWhereWithAggregatesInput = {
-    AND?: NodeScalarWhereWithAggregatesInput | NodeScalarWhereWithAggregatesInput[]
-    OR?: NodeScalarWhereWithAggregatesInput[]
-    NOT?: NodeScalarWhereWithAggregatesInput | NodeScalarWhereWithAggregatesInput[]
-    id?: StringWithAggregatesFilter<"Node"> | string
-    roadMapId?: StringWithAggregatesFilter<"Node"> | string
-    title?: StringWithAggregatesFilter<"Node"> | string
-    description?: StringNullableWithAggregatesFilter<"Node"> | string | null
-    positionX?: FloatWithAggregatesFilter<"Node"> | number
-    positionY?: FloatWithAggregatesFilter<"Node"> | number
-    positionZ?: FloatWithAggregatesFilter<"Node"> | number
-    parentId?: StringNullableWithAggregatesFilter<"Node"> | string | null
-    createdAt?: DateTimeWithAggregatesFilter<"Node"> | Date | string
-    updatedAt?: DateTimeWithAggregatesFilter<"Node"> | Date | string
-  }
-
-  export type CodeSnippetWhereInput = {
-    AND?: CodeSnippetWhereInput | CodeSnippetWhereInput[]
-    OR?: CodeSnippetWhereInput[]
-    NOT?: CodeSnippetWhereInput | CodeSnippetWhereInput[]
-    id?: StringFilter<"CodeSnippet"> | string
-    content?: StringFilter<"CodeSnippet"> | string
-    nodeId?: StringFilter<"CodeSnippet"> | string
-    createdAt?: DateTimeFilter<"CodeSnippet"> | Date | string
-    node?: XOR<NodeScalarRelationFilter, NodeWhereInput>
-  }
-
-  export type CodeSnippetOrderByWithRelationInput = {
-    id?: SortOrder
-    content?: SortOrder
-    nodeId?: SortOrder
-    createdAt?: SortOrder
-    node?: NodeOrderByWithRelationInput
-  }
-
-  export type CodeSnippetWhereUniqueInput = Prisma.AtLeast<{
-    id?: string
-    nodeId?: string
-    AND?: CodeSnippetWhereInput | CodeSnippetWhereInput[]
-    OR?: CodeSnippetWhereInput[]
-    NOT?: CodeSnippetWhereInput | CodeSnippetWhereInput[]
-    content?: StringFilter<"CodeSnippet"> | string
-    createdAt?: DateTimeFilter<"CodeSnippet"> | Date | string
-    node?: XOR<NodeScalarRelationFilter, NodeWhereInput>
-  }, "id" | "nodeId">
-
-  export type CodeSnippetOrderByWithAggregationInput = {
-    id?: SortOrder
-    content?: SortOrder
-    nodeId?: SortOrder
-    createdAt?: SortOrder
-    _count?: CodeSnippetCountOrderByAggregateInput
-    _max?: CodeSnippetMaxOrderByAggregateInput
-    _min?: CodeSnippetMinOrderByAggregateInput
-  }
-
-  export type CodeSnippetScalarWhereWithAggregatesInput = {
-    AND?: CodeSnippetScalarWhereWithAggregatesInput | CodeSnippetScalarWhereWithAggregatesInput[]
-    OR?: CodeSnippetScalarWhereWithAggregatesInput[]
-    NOT?: CodeSnippetScalarWhereWithAggregatesInput | CodeSnippetScalarWhereWithAggregatesInput[]
-    id?: StringWithAggregatesFilter<"CodeSnippet"> | string
-    content?: StringWithAggregatesFilter<"CodeSnippet"> | string
-    nodeId?: StringWithAggregatesFilter<"CodeSnippet"> | string
-    createdAt?: DateTimeWithAggregatesFilter<"CodeSnippet"> | Date | string
   }
 
   export type ModelWhereInput = {
@@ -15362,11 +12854,11 @@ export namespace Prisma {
     name: string
     description: string
     systemPrompt?: string | null
+    status?: $Enums.ProjectStatus
     createdAt?: Date | string
     updatedAt?: Date | string
     user: UserCreateNestedOneWithoutProjectsInput
     chatHistory?: ChatHistoryCreateNestedManyWithoutProjectInput
-    roadmap?: RoadMapCreateNestedManyWithoutProjectInput
   }
 
   export type ProjectUncheckedCreateInput = {
@@ -15375,10 +12867,10 @@ export namespace Prisma {
     description: string
     userId: string
     systemPrompt?: string | null
+    status?: $Enums.ProjectStatus
     createdAt?: Date | string
     updatedAt?: Date | string
     chatHistory?: ChatHistoryUncheckedCreateNestedManyWithoutProjectInput
-    roadmap?: RoadMapUncheckedCreateNestedManyWithoutProjectInput
   }
 
   export type ProjectUpdateInput = {
@@ -15386,11 +12878,11 @@ export namespace Prisma {
     name?: StringFieldUpdateOperationsInput | string
     description?: StringFieldUpdateOperationsInput | string
     systemPrompt?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: EnumProjectStatusFieldUpdateOperationsInput | $Enums.ProjectStatus
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     user?: UserUpdateOneRequiredWithoutProjectsNestedInput
     chatHistory?: ChatHistoryUpdateManyWithoutProjectNestedInput
-    roadmap?: RoadMapUpdateManyWithoutProjectNestedInput
   }
 
   export type ProjectUncheckedUpdateInput = {
@@ -15399,10 +12891,10 @@ export namespace Prisma {
     description?: StringFieldUpdateOperationsInput | string
     userId?: StringFieldUpdateOperationsInput | string
     systemPrompt?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: EnumProjectStatusFieldUpdateOperationsInput | $Enums.ProjectStatus
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     chatHistory?: ChatHistoryUncheckedUpdateManyWithoutProjectNestedInput
-    roadmap?: RoadMapUncheckedUpdateManyWithoutProjectNestedInput
   }
 
   export type ProjectCreateManyInput = {
@@ -15411,6 +12903,7 @@ export namespace Prisma {
     description: string
     userId: string
     systemPrompt?: string | null
+    status?: $Enums.ProjectStatus
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -15420,6 +12913,7 @@ export namespace Prisma {
     name?: StringFieldUpdateOperationsInput | string
     description?: StringFieldUpdateOperationsInput | string
     systemPrompt?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: EnumProjectStatusFieldUpdateOperationsInput | $Enums.ProjectStatus
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -15430,51 +12924,68 @@ export namespace Prisma {
     description?: StringFieldUpdateOperationsInput | string
     userId?: StringFieldUpdateOperationsInput | string
     systemPrompt?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: EnumProjectStatusFieldUpdateOperationsInput | $Enums.ProjectStatus
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type ChatHistoryCreateInput = {
     id?: string
+    visibility?: $Enums.ChatHistoryVisibility
+    status?: $Enums.ChatHistoryStatus
     createdAt?: Date | string
     updatedAt?: Date | string
     project: ProjectCreateNestedOneWithoutChatHistoryInput
     messages?: MessageCreateNestedManyWithoutChatHistoryInput
+    roadMap?: RoadMapCreateNestedManyWithoutChatHistoryInput
   }
 
   export type ChatHistoryUncheckedCreateInput = {
     id?: string
     projectId: string
+    visibility?: $Enums.ChatHistoryVisibility
+    status?: $Enums.ChatHistoryStatus
     createdAt?: Date | string
     updatedAt?: Date | string
     messages?: MessageUncheckedCreateNestedManyWithoutChatHistoryInput
+    roadMap?: RoadMapUncheckedCreateNestedManyWithoutChatHistoryInput
   }
 
   export type ChatHistoryUpdateInput = {
     id?: StringFieldUpdateOperationsInput | string
+    visibility?: EnumChatHistoryVisibilityFieldUpdateOperationsInput | $Enums.ChatHistoryVisibility
+    status?: EnumChatHistoryStatusFieldUpdateOperationsInput | $Enums.ChatHistoryStatus
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     project?: ProjectUpdateOneRequiredWithoutChatHistoryNestedInput
     messages?: MessageUpdateManyWithoutChatHistoryNestedInput
+    roadMap?: RoadMapUpdateManyWithoutChatHistoryNestedInput
   }
 
   export type ChatHistoryUncheckedUpdateInput = {
     id?: StringFieldUpdateOperationsInput | string
     projectId?: StringFieldUpdateOperationsInput | string
+    visibility?: EnumChatHistoryVisibilityFieldUpdateOperationsInput | $Enums.ChatHistoryVisibility
+    status?: EnumChatHistoryStatusFieldUpdateOperationsInput | $Enums.ChatHistoryStatus
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     messages?: MessageUncheckedUpdateManyWithoutChatHistoryNestedInput
+    roadMap?: RoadMapUncheckedUpdateManyWithoutChatHistoryNestedInput
   }
 
   export type ChatHistoryCreateManyInput = {
     id?: string
     projectId: string
+    visibility?: $Enums.ChatHistoryVisibility
+    status?: $Enums.ChatHistoryStatus
     createdAt?: Date | string
     updatedAt?: Date | string
   }
 
   export type ChatHistoryUpdateManyMutationInput = {
     id?: StringFieldUpdateOperationsInput | string
+    visibility?: EnumChatHistoryVisibilityFieldUpdateOperationsInput | $Enums.ChatHistoryVisibility
+    status?: EnumChatHistoryStatusFieldUpdateOperationsInput | $Enums.ChatHistoryStatus
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -15482,6 +12993,8 @@ export namespace Prisma {
   export type ChatHistoryUncheckedUpdateManyInput = {
     id?: StringFieldUpdateOperationsInput | string
     projectId?: StringFieldUpdateOperationsInput | string
+    visibility?: EnumChatHistoryVisibilityFieldUpdateOperationsInput | $Enums.ChatHistoryVisibility
+    status?: EnumChatHistoryStatusFieldUpdateOperationsInput | $Enums.ChatHistoryStatus
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -15550,199 +13063,64 @@ export namespace Prisma {
 
   export type RoadMapCreateInput = {
     id?: string
+    content: string
+    version?: number
     createdAt?: Date | string
     updatedAt?: Date | string
-    project: ProjectCreateNestedOneWithoutRoadmapInput
-    nodes?: NodeCreateNestedManyWithoutRoadMapInput
+    chatHistory: ChatHistoryCreateNestedOneWithoutRoadMapInput
   }
 
   export type RoadMapUncheckedCreateInput = {
     id?: string
-    projectId: string
+    chatHistoryId: string
+    content: string
+    version?: number
     createdAt?: Date | string
     updatedAt?: Date | string
-    nodes?: NodeUncheckedCreateNestedManyWithoutRoadMapInput
   }
 
   export type RoadMapUpdateInput = {
     id?: StringFieldUpdateOperationsInput | string
+    content?: StringFieldUpdateOperationsInput | string
+    version?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    project?: ProjectUpdateOneRequiredWithoutRoadmapNestedInput
-    nodes?: NodeUpdateManyWithoutRoadMapNestedInput
+    chatHistory?: ChatHistoryUpdateOneRequiredWithoutRoadMapNestedInput
   }
 
   export type RoadMapUncheckedUpdateInput = {
     id?: StringFieldUpdateOperationsInput | string
-    projectId?: StringFieldUpdateOperationsInput | string
+    chatHistoryId?: StringFieldUpdateOperationsInput | string
+    content?: StringFieldUpdateOperationsInput | string
+    version?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    nodes?: NodeUncheckedUpdateManyWithoutRoadMapNestedInput
   }
 
   export type RoadMapCreateManyInput = {
     id?: string
-    projectId: string
+    chatHistoryId: string
+    content: string
+    version?: number
     createdAt?: Date | string
     updatedAt?: Date | string
   }
 
   export type RoadMapUpdateManyMutationInput = {
     id?: StringFieldUpdateOperationsInput | string
+    content?: StringFieldUpdateOperationsInput | string
+    version?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type RoadMapUncheckedUpdateManyInput = {
     id?: StringFieldUpdateOperationsInput | string
-    projectId?: StringFieldUpdateOperationsInput | string
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-  }
-
-  export type NodeCreateInput = {
-    id?: string
-    title: string
-    description?: string | null
-    positionX: number
-    positionY: number
-    positionZ: number
-    createdAt?: Date | string
-    updatedAt?: Date | string
-    roadMap: RoadMapCreateNestedOneWithoutNodesInput
-    parent?: NodeCreateNestedOneWithoutChildrenInput
-    children?: NodeCreateNestedManyWithoutParentInput
-    codeBlock?: CodeSnippetCreateNestedOneWithoutNodeInput
-  }
-
-  export type NodeUncheckedCreateInput = {
-    id?: string
-    roadMapId: string
-    title: string
-    description?: string | null
-    positionX: number
-    positionY: number
-    positionZ: number
-    parentId?: string | null
-    createdAt?: Date | string
-    updatedAt?: Date | string
-    children?: NodeUncheckedCreateNestedManyWithoutParentInput
-    codeBlock?: CodeSnippetUncheckedCreateNestedOneWithoutNodeInput
-  }
-
-  export type NodeUpdateInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    title?: StringFieldUpdateOperationsInput | string
-    description?: NullableStringFieldUpdateOperationsInput | string | null
-    positionX?: FloatFieldUpdateOperationsInput | number
-    positionY?: FloatFieldUpdateOperationsInput | number
-    positionZ?: FloatFieldUpdateOperationsInput | number
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    roadMap?: RoadMapUpdateOneRequiredWithoutNodesNestedInput
-    parent?: NodeUpdateOneWithoutChildrenNestedInput
-    children?: NodeUpdateManyWithoutParentNestedInput
-    codeBlock?: CodeSnippetUpdateOneWithoutNodeNestedInput
-  }
-
-  export type NodeUncheckedUpdateInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    roadMapId?: StringFieldUpdateOperationsInput | string
-    title?: StringFieldUpdateOperationsInput | string
-    description?: NullableStringFieldUpdateOperationsInput | string | null
-    positionX?: FloatFieldUpdateOperationsInput | number
-    positionY?: FloatFieldUpdateOperationsInput | number
-    positionZ?: FloatFieldUpdateOperationsInput | number
-    parentId?: NullableStringFieldUpdateOperationsInput | string | null
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    children?: NodeUncheckedUpdateManyWithoutParentNestedInput
-    codeBlock?: CodeSnippetUncheckedUpdateOneWithoutNodeNestedInput
-  }
-
-  export type NodeCreateManyInput = {
-    id?: string
-    roadMapId: string
-    title: string
-    description?: string | null
-    positionX: number
-    positionY: number
-    positionZ: number
-    parentId?: string | null
-    createdAt?: Date | string
-    updatedAt?: Date | string
-  }
-
-  export type NodeUpdateManyMutationInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    title?: StringFieldUpdateOperationsInput | string
-    description?: NullableStringFieldUpdateOperationsInput | string | null
-    positionX?: FloatFieldUpdateOperationsInput | number
-    positionY?: FloatFieldUpdateOperationsInput | number
-    positionZ?: FloatFieldUpdateOperationsInput | number
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-  }
-
-  export type NodeUncheckedUpdateManyInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    roadMapId?: StringFieldUpdateOperationsInput | string
-    title?: StringFieldUpdateOperationsInput | string
-    description?: NullableStringFieldUpdateOperationsInput | string | null
-    positionX?: FloatFieldUpdateOperationsInput | number
-    positionY?: FloatFieldUpdateOperationsInput | number
-    positionZ?: FloatFieldUpdateOperationsInput | number
-    parentId?: NullableStringFieldUpdateOperationsInput | string | null
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-  }
-
-  export type CodeSnippetCreateInput = {
-    id?: string
-    content: string
-    createdAt?: Date | string
-    node: NodeCreateNestedOneWithoutCodeBlockInput
-  }
-
-  export type CodeSnippetUncheckedCreateInput = {
-    id?: string
-    content: string
-    nodeId: string
-    createdAt?: Date | string
-  }
-
-  export type CodeSnippetUpdateInput = {
-    id?: StringFieldUpdateOperationsInput | string
+    chatHistoryId?: StringFieldUpdateOperationsInput | string
     content?: StringFieldUpdateOperationsInput | string
+    version?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    node?: NodeUpdateOneRequiredWithoutCodeBlockNestedInput
-  }
-
-  export type CodeSnippetUncheckedUpdateInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    content?: StringFieldUpdateOperationsInput | string
-    nodeId?: StringFieldUpdateOperationsInput | string
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-  }
-
-  export type CodeSnippetCreateManyInput = {
-    id?: string
-    content: string
-    nodeId: string
-    createdAt?: Date | string
-  }
-
-  export type CodeSnippetUpdateManyMutationInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    content?: StringFieldUpdateOperationsInput | string
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-  }
-
-  export type CodeSnippetUncheckedUpdateManyInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    content?: StringFieldUpdateOperationsInput | string
-    nodeId?: StringFieldUpdateOperationsInput | string
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type ModelCreateInput = {
@@ -16111,23 +13489,20 @@ export namespace Prisma {
     updatedAt?: SortOrder
   }
 
+  export type EnumProjectStatusFilter<$PrismaModel = never> = {
+    equals?: $Enums.ProjectStatus | EnumProjectStatusFieldRefInput<$PrismaModel>
+    in?: $Enums.ProjectStatus[] | ListEnumProjectStatusFieldRefInput<$PrismaModel>
+    notIn?: $Enums.ProjectStatus[] | ListEnumProjectStatusFieldRefInput<$PrismaModel>
+    not?: NestedEnumProjectStatusFilter<$PrismaModel> | $Enums.ProjectStatus
+  }
+
   export type ChatHistoryListRelationFilter = {
     every?: ChatHistoryWhereInput
     some?: ChatHistoryWhereInput
     none?: ChatHistoryWhereInput
   }
 
-  export type RoadMapListRelationFilter = {
-    every?: RoadMapWhereInput
-    some?: RoadMapWhereInput
-    none?: RoadMapWhereInput
-  }
-
   export type ChatHistoryOrderByRelationAggregateInput = {
-    _count?: SortOrder
-  }
-
-  export type RoadMapOrderByRelationAggregateInput = {
     _count?: SortOrder
   }
 
@@ -16137,6 +13512,7 @@ export namespace Prisma {
     description?: SortOrder
     userId?: SortOrder
     systemPrompt?: SortOrder
+    status?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
   }
@@ -16147,6 +13523,7 @@ export namespace Prisma {
     description?: SortOrder
     userId?: SortOrder
     systemPrompt?: SortOrder
+    status?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
   }
@@ -16157,8 +13534,33 @@ export namespace Prisma {
     description?: SortOrder
     userId?: SortOrder
     systemPrompt?: SortOrder
+    status?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
+  }
+
+  export type EnumProjectStatusWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.ProjectStatus | EnumProjectStatusFieldRefInput<$PrismaModel>
+    in?: $Enums.ProjectStatus[] | ListEnumProjectStatusFieldRefInput<$PrismaModel>
+    notIn?: $Enums.ProjectStatus[] | ListEnumProjectStatusFieldRefInput<$PrismaModel>
+    not?: NestedEnumProjectStatusWithAggregatesFilter<$PrismaModel> | $Enums.ProjectStatus
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumProjectStatusFilter<$PrismaModel>
+    _max?: NestedEnumProjectStatusFilter<$PrismaModel>
+  }
+
+  export type EnumChatHistoryVisibilityFilter<$PrismaModel = never> = {
+    equals?: $Enums.ChatHistoryVisibility | EnumChatHistoryVisibilityFieldRefInput<$PrismaModel>
+    in?: $Enums.ChatHistoryVisibility[] | ListEnumChatHistoryVisibilityFieldRefInput<$PrismaModel>
+    notIn?: $Enums.ChatHistoryVisibility[] | ListEnumChatHistoryVisibilityFieldRefInput<$PrismaModel>
+    not?: NestedEnumChatHistoryVisibilityFilter<$PrismaModel> | $Enums.ChatHistoryVisibility
+  }
+
+  export type EnumChatHistoryStatusFilter<$PrismaModel = never> = {
+    equals?: $Enums.ChatHistoryStatus | EnumChatHistoryStatusFieldRefInput<$PrismaModel>
+    in?: $Enums.ChatHistoryStatus[] | ListEnumChatHistoryStatusFieldRefInput<$PrismaModel>
+    notIn?: $Enums.ChatHistoryStatus[] | ListEnumChatHistoryStatusFieldRefInput<$PrismaModel>
+    not?: NestedEnumChatHistoryStatusFilter<$PrismaModel> | $Enums.ChatHistoryStatus
   }
 
   export type ProjectScalarRelationFilter = {
@@ -16172,13 +13574,25 @@ export namespace Prisma {
     none?: MessageWhereInput
   }
 
+  export type RoadMapListRelationFilter = {
+    every?: RoadMapWhereInput
+    some?: RoadMapWhereInput
+    none?: RoadMapWhereInput
+  }
+
   export type MessageOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
+  export type RoadMapOrderByRelationAggregateInput = {
     _count?: SortOrder
   }
 
   export type ChatHistoryCountOrderByAggregateInput = {
     id?: SortOrder
     projectId?: SortOrder
+    visibility?: SortOrder
+    status?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
   }
@@ -16186,6 +13600,8 @@ export namespace Prisma {
   export type ChatHistoryMaxOrderByAggregateInput = {
     id?: SortOrder
     projectId?: SortOrder
+    visibility?: SortOrder
+    status?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
   }
@@ -16193,8 +13609,30 @@ export namespace Prisma {
   export type ChatHistoryMinOrderByAggregateInput = {
     id?: SortOrder
     projectId?: SortOrder
+    visibility?: SortOrder
+    status?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
+  }
+
+  export type EnumChatHistoryVisibilityWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.ChatHistoryVisibility | EnumChatHistoryVisibilityFieldRefInput<$PrismaModel>
+    in?: $Enums.ChatHistoryVisibility[] | ListEnumChatHistoryVisibilityFieldRefInput<$PrismaModel>
+    notIn?: $Enums.ChatHistoryVisibility[] | ListEnumChatHistoryVisibilityFieldRefInput<$PrismaModel>
+    not?: NestedEnumChatHistoryVisibilityWithAggregatesFilter<$PrismaModel> | $Enums.ChatHistoryVisibility
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumChatHistoryVisibilityFilter<$PrismaModel>
+    _max?: NestedEnumChatHistoryVisibilityFilter<$PrismaModel>
+  }
+
+  export type EnumChatHistoryStatusWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.ChatHistoryStatus | EnumChatHistoryStatusFieldRefInput<$PrismaModel>
+    in?: $Enums.ChatHistoryStatus[] | ListEnumChatHistoryStatusFieldRefInput<$PrismaModel>
+    notIn?: $Enums.ChatHistoryStatus[] | ListEnumChatHistoryStatusFieldRefInput<$PrismaModel>
+    not?: NestedEnumChatHistoryStatusWithAggregatesFilter<$PrismaModel> | $Enums.ChatHistoryStatus
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumChatHistoryStatusFilter<$PrismaModel>
+    _max?: NestedEnumChatHistoryStatusFilter<$PrismaModel>
   }
 
   export type ChatHistoryScalarRelationFilter = {
@@ -16229,154 +13667,66 @@ export namespace Prisma {
     updatedAt?: SortOrder
   }
 
-  export type NodeListRelationFilter = {
-    every?: NodeWhereInput
-    some?: NodeWhereInput
-    none?: NodeWhereInput
-  }
-
-  export type NodeOrderByRelationAggregateInput = {
-    _count?: SortOrder
+  export type IntFilter<$PrismaModel = never> = {
+    equals?: number | IntFieldRefInput<$PrismaModel>
+    in?: number[] | ListIntFieldRefInput<$PrismaModel>
+    notIn?: number[] | ListIntFieldRefInput<$PrismaModel>
+    lt?: number | IntFieldRefInput<$PrismaModel>
+    lte?: number | IntFieldRefInput<$PrismaModel>
+    gt?: number | IntFieldRefInput<$PrismaModel>
+    gte?: number | IntFieldRefInput<$PrismaModel>
+    not?: NestedIntFilter<$PrismaModel> | number
   }
 
   export type RoadMapCountOrderByAggregateInput = {
     id?: SortOrder
-    projectId?: SortOrder
+    chatHistoryId?: SortOrder
+    content?: SortOrder
+    version?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
   }
 
+  export type RoadMapAvgOrderByAggregateInput = {
+    version?: SortOrder
+  }
+
   export type RoadMapMaxOrderByAggregateInput = {
     id?: SortOrder
-    projectId?: SortOrder
+    chatHistoryId?: SortOrder
+    content?: SortOrder
+    version?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
   }
 
   export type RoadMapMinOrderByAggregateInput = {
     id?: SortOrder
-    projectId?: SortOrder
+    chatHistoryId?: SortOrder
+    content?: SortOrder
+    version?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
   }
 
-  export type FloatFilter<$PrismaModel = never> = {
-    equals?: number | FloatFieldRefInput<$PrismaModel>
-    in?: number[] | ListFloatFieldRefInput<$PrismaModel>
-    notIn?: number[] | ListFloatFieldRefInput<$PrismaModel>
-    lt?: number | FloatFieldRefInput<$PrismaModel>
-    lte?: number | FloatFieldRefInput<$PrismaModel>
-    gt?: number | FloatFieldRefInput<$PrismaModel>
-    gte?: number | FloatFieldRefInput<$PrismaModel>
-    not?: NestedFloatFilter<$PrismaModel> | number
+  export type RoadMapSumOrderByAggregateInput = {
+    version?: SortOrder
   }
 
-  export type RoadMapScalarRelationFilter = {
-    is?: RoadMapWhereInput
-    isNot?: RoadMapWhereInput
-  }
-
-  export type NodeNullableScalarRelationFilter = {
-    is?: NodeWhereInput | null
-    isNot?: NodeWhereInput | null
-  }
-
-  export type CodeSnippetNullableScalarRelationFilter = {
-    is?: CodeSnippetWhereInput | null
-    isNot?: CodeSnippetWhereInput | null
-  }
-
-  export type NodeCountOrderByAggregateInput = {
-    id?: SortOrder
-    roadMapId?: SortOrder
-    title?: SortOrder
-    description?: SortOrder
-    positionX?: SortOrder
-    positionY?: SortOrder
-    positionZ?: SortOrder
-    parentId?: SortOrder
-    createdAt?: SortOrder
-    updatedAt?: SortOrder
-  }
-
-  export type NodeAvgOrderByAggregateInput = {
-    positionX?: SortOrder
-    positionY?: SortOrder
-    positionZ?: SortOrder
-  }
-
-  export type NodeMaxOrderByAggregateInput = {
-    id?: SortOrder
-    roadMapId?: SortOrder
-    title?: SortOrder
-    description?: SortOrder
-    positionX?: SortOrder
-    positionY?: SortOrder
-    positionZ?: SortOrder
-    parentId?: SortOrder
-    createdAt?: SortOrder
-    updatedAt?: SortOrder
-  }
-
-  export type NodeMinOrderByAggregateInput = {
-    id?: SortOrder
-    roadMapId?: SortOrder
-    title?: SortOrder
-    description?: SortOrder
-    positionX?: SortOrder
-    positionY?: SortOrder
-    positionZ?: SortOrder
-    parentId?: SortOrder
-    createdAt?: SortOrder
-    updatedAt?: SortOrder
-  }
-
-  export type NodeSumOrderByAggregateInput = {
-    positionX?: SortOrder
-    positionY?: SortOrder
-    positionZ?: SortOrder
-  }
-
-  export type FloatWithAggregatesFilter<$PrismaModel = never> = {
-    equals?: number | FloatFieldRefInput<$PrismaModel>
-    in?: number[] | ListFloatFieldRefInput<$PrismaModel>
-    notIn?: number[] | ListFloatFieldRefInput<$PrismaModel>
-    lt?: number | FloatFieldRefInput<$PrismaModel>
-    lte?: number | FloatFieldRefInput<$PrismaModel>
-    gt?: number | FloatFieldRefInput<$PrismaModel>
-    gte?: number | FloatFieldRefInput<$PrismaModel>
-    not?: NestedFloatWithAggregatesFilter<$PrismaModel> | number
+  export type IntWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: number | IntFieldRefInput<$PrismaModel>
+    in?: number[] | ListIntFieldRefInput<$PrismaModel>
+    notIn?: number[] | ListIntFieldRefInput<$PrismaModel>
+    lt?: number | IntFieldRefInput<$PrismaModel>
+    lte?: number | IntFieldRefInput<$PrismaModel>
+    gt?: number | IntFieldRefInput<$PrismaModel>
+    gte?: number | IntFieldRefInput<$PrismaModel>
+    not?: NestedIntWithAggregatesFilter<$PrismaModel> | number
     _count?: NestedIntFilter<$PrismaModel>
     _avg?: NestedFloatFilter<$PrismaModel>
-    _sum?: NestedFloatFilter<$PrismaModel>
-    _min?: NestedFloatFilter<$PrismaModel>
-    _max?: NestedFloatFilter<$PrismaModel>
-  }
-
-  export type NodeScalarRelationFilter = {
-    is?: NodeWhereInput
-    isNot?: NodeWhereInput
-  }
-
-  export type CodeSnippetCountOrderByAggregateInput = {
-    id?: SortOrder
-    content?: SortOrder
-    nodeId?: SortOrder
-    createdAt?: SortOrder
-  }
-
-  export type CodeSnippetMaxOrderByAggregateInput = {
-    id?: SortOrder
-    content?: SortOrder
-    nodeId?: SortOrder
-    createdAt?: SortOrder
-  }
-
-  export type CodeSnippetMinOrderByAggregateInput = {
-    id?: SortOrder
-    content?: SortOrder
-    nodeId?: SortOrder
-    createdAt?: SortOrder
+    _sum?: NestedIntFilter<$PrismaModel>
+    _min?: NestedIntFilter<$PrismaModel>
+    _max?: NestedIntFilter<$PrismaModel>
   }
 
   export type ModelCountOrderByAggregateInput = {
@@ -16590,13 +13940,6 @@ export namespace Prisma {
     connect?: ChatHistoryWhereUniqueInput | ChatHistoryWhereUniqueInput[]
   }
 
-  export type RoadMapCreateNestedManyWithoutProjectInput = {
-    create?: XOR<RoadMapCreateWithoutProjectInput, RoadMapUncheckedCreateWithoutProjectInput> | RoadMapCreateWithoutProjectInput[] | RoadMapUncheckedCreateWithoutProjectInput[]
-    connectOrCreate?: RoadMapCreateOrConnectWithoutProjectInput | RoadMapCreateOrConnectWithoutProjectInput[]
-    createMany?: RoadMapCreateManyProjectInputEnvelope
-    connect?: RoadMapWhereUniqueInput | RoadMapWhereUniqueInput[]
-  }
-
   export type ChatHistoryUncheckedCreateNestedManyWithoutProjectInput = {
     create?: XOR<ChatHistoryCreateWithoutProjectInput, ChatHistoryUncheckedCreateWithoutProjectInput> | ChatHistoryCreateWithoutProjectInput[] | ChatHistoryUncheckedCreateWithoutProjectInput[]
     connectOrCreate?: ChatHistoryCreateOrConnectWithoutProjectInput | ChatHistoryCreateOrConnectWithoutProjectInput[]
@@ -16604,11 +13947,8 @@ export namespace Prisma {
     connect?: ChatHistoryWhereUniqueInput | ChatHistoryWhereUniqueInput[]
   }
 
-  export type RoadMapUncheckedCreateNestedManyWithoutProjectInput = {
-    create?: XOR<RoadMapCreateWithoutProjectInput, RoadMapUncheckedCreateWithoutProjectInput> | RoadMapCreateWithoutProjectInput[] | RoadMapUncheckedCreateWithoutProjectInput[]
-    connectOrCreate?: RoadMapCreateOrConnectWithoutProjectInput | RoadMapCreateOrConnectWithoutProjectInput[]
-    createMany?: RoadMapCreateManyProjectInputEnvelope
-    connect?: RoadMapWhereUniqueInput | RoadMapWhereUniqueInput[]
+  export type EnumProjectStatusFieldUpdateOperationsInput = {
+    set?: $Enums.ProjectStatus
   }
 
   export type UserUpdateOneRequiredWithoutProjectsNestedInput = {
@@ -16633,20 +13973,6 @@ export namespace Prisma {
     deleteMany?: ChatHistoryScalarWhereInput | ChatHistoryScalarWhereInput[]
   }
 
-  export type RoadMapUpdateManyWithoutProjectNestedInput = {
-    create?: XOR<RoadMapCreateWithoutProjectInput, RoadMapUncheckedCreateWithoutProjectInput> | RoadMapCreateWithoutProjectInput[] | RoadMapUncheckedCreateWithoutProjectInput[]
-    connectOrCreate?: RoadMapCreateOrConnectWithoutProjectInput | RoadMapCreateOrConnectWithoutProjectInput[]
-    upsert?: RoadMapUpsertWithWhereUniqueWithoutProjectInput | RoadMapUpsertWithWhereUniqueWithoutProjectInput[]
-    createMany?: RoadMapCreateManyProjectInputEnvelope
-    set?: RoadMapWhereUniqueInput | RoadMapWhereUniqueInput[]
-    disconnect?: RoadMapWhereUniqueInput | RoadMapWhereUniqueInput[]
-    delete?: RoadMapWhereUniqueInput | RoadMapWhereUniqueInput[]
-    connect?: RoadMapWhereUniqueInput | RoadMapWhereUniqueInput[]
-    update?: RoadMapUpdateWithWhereUniqueWithoutProjectInput | RoadMapUpdateWithWhereUniqueWithoutProjectInput[]
-    updateMany?: RoadMapUpdateManyWithWhereWithoutProjectInput | RoadMapUpdateManyWithWhereWithoutProjectInput[]
-    deleteMany?: RoadMapScalarWhereInput | RoadMapScalarWhereInput[]
-  }
-
   export type ChatHistoryUncheckedUpdateManyWithoutProjectNestedInput = {
     create?: XOR<ChatHistoryCreateWithoutProjectInput, ChatHistoryUncheckedCreateWithoutProjectInput> | ChatHistoryCreateWithoutProjectInput[] | ChatHistoryUncheckedCreateWithoutProjectInput[]
     connectOrCreate?: ChatHistoryCreateOrConnectWithoutProjectInput | ChatHistoryCreateOrConnectWithoutProjectInput[]
@@ -16659,20 +13985,6 @@ export namespace Prisma {
     update?: ChatHistoryUpdateWithWhereUniqueWithoutProjectInput | ChatHistoryUpdateWithWhereUniqueWithoutProjectInput[]
     updateMany?: ChatHistoryUpdateManyWithWhereWithoutProjectInput | ChatHistoryUpdateManyWithWhereWithoutProjectInput[]
     deleteMany?: ChatHistoryScalarWhereInput | ChatHistoryScalarWhereInput[]
-  }
-
-  export type RoadMapUncheckedUpdateManyWithoutProjectNestedInput = {
-    create?: XOR<RoadMapCreateWithoutProjectInput, RoadMapUncheckedCreateWithoutProjectInput> | RoadMapCreateWithoutProjectInput[] | RoadMapUncheckedCreateWithoutProjectInput[]
-    connectOrCreate?: RoadMapCreateOrConnectWithoutProjectInput | RoadMapCreateOrConnectWithoutProjectInput[]
-    upsert?: RoadMapUpsertWithWhereUniqueWithoutProjectInput | RoadMapUpsertWithWhereUniqueWithoutProjectInput[]
-    createMany?: RoadMapCreateManyProjectInputEnvelope
-    set?: RoadMapWhereUniqueInput | RoadMapWhereUniqueInput[]
-    disconnect?: RoadMapWhereUniqueInput | RoadMapWhereUniqueInput[]
-    delete?: RoadMapWhereUniqueInput | RoadMapWhereUniqueInput[]
-    connect?: RoadMapWhereUniqueInput | RoadMapWhereUniqueInput[]
-    update?: RoadMapUpdateWithWhereUniqueWithoutProjectInput | RoadMapUpdateWithWhereUniqueWithoutProjectInput[]
-    updateMany?: RoadMapUpdateManyWithWhereWithoutProjectInput | RoadMapUpdateManyWithWhereWithoutProjectInput[]
-    deleteMany?: RoadMapScalarWhereInput | RoadMapScalarWhereInput[]
   }
 
   export type ProjectCreateNestedOneWithoutChatHistoryInput = {
@@ -16688,11 +14000,33 @@ export namespace Prisma {
     connect?: MessageWhereUniqueInput | MessageWhereUniqueInput[]
   }
 
+  export type RoadMapCreateNestedManyWithoutChatHistoryInput = {
+    create?: XOR<RoadMapCreateWithoutChatHistoryInput, RoadMapUncheckedCreateWithoutChatHistoryInput> | RoadMapCreateWithoutChatHistoryInput[] | RoadMapUncheckedCreateWithoutChatHistoryInput[]
+    connectOrCreate?: RoadMapCreateOrConnectWithoutChatHistoryInput | RoadMapCreateOrConnectWithoutChatHistoryInput[]
+    createMany?: RoadMapCreateManyChatHistoryInputEnvelope
+    connect?: RoadMapWhereUniqueInput | RoadMapWhereUniqueInput[]
+  }
+
   export type MessageUncheckedCreateNestedManyWithoutChatHistoryInput = {
     create?: XOR<MessageCreateWithoutChatHistoryInput, MessageUncheckedCreateWithoutChatHistoryInput> | MessageCreateWithoutChatHistoryInput[] | MessageUncheckedCreateWithoutChatHistoryInput[]
     connectOrCreate?: MessageCreateOrConnectWithoutChatHistoryInput | MessageCreateOrConnectWithoutChatHistoryInput[]
     createMany?: MessageCreateManyChatHistoryInputEnvelope
     connect?: MessageWhereUniqueInput | MessageWhereUniqueInput[]
+  }
+
+  export type RoadMapUncheckedCreateNestedManyWithoutChatHistoryInput = {
+    create?: XOR<RoadMapCreateWithoutChatHistoryInput, RoadMapUncheckedCreateWithoutChatHistoryInput> | RoadMapCreateWithoutChatHistoryInput[] | RoadMapUncheckedCreateWithoutChatHistoryInput[]
+    connectOrCreate?: RoadMapCreateOrConnectWithoutChatHistoryInput | RoadMapCreateOrConnectWithoutChatHistoryInput[]
+    createMany?: RoadMapCreateManyChatHistoryInputEnvelope
+    connect?: RoadMapWhereUniqueInput | RoadMapWhereUniqueInput[]
+  }
+
+  export type EnumChatHistoryVisibilityFieldUpdateOperationsInput = {
+    set?: $Enums.ChatHistoryVisibility
+  }
+
+  export type EnumChatHistoryStatusFieldUpdateOperationsInput = {
+    set?: $Enums.ChatHistoryStatus
   }
 
   export type ProjectUpdateOneRequiredWithoutChatHistoryNestedInput = {
@@ -16717,6 +14051,20 @@ export namespace Prisma {
     deleteMany?: MessageScalarWhereInput | MessageScalarWhereInput[]
   }
 
+  export type RoadMapUpdateManyWithoutChatHistoryNestedInput = {
+    create?: XOR<RoadMapCreateWithoutChatHistoryInput, RoadMapUncheckedCreateWithoutChatHistoryInput> | RoadMapCreateWithoutChatHistoryInput[] | RoadMapUncheckedCreateWithoutChatHistoryInput[]
+    connectOrCreate?: RoadMapCreateOrConnectWithoutChatHistoryInput | RoadMapCreateOrConnectWithoutChatHistoryInput[]
+    upsert?: RoadMapUpsertWithWhereUniqueWithoutChatHistoryInput | RoadMapUpsertWithWhereUniqueWithoutChatHistoryInput[]
+    createMany?: RoadMapCreateManyChatHistoryInputEnvelope
+    set?: RoadMapWhereUniqueInput | RoadMapWhereUniqueInput[]
+    disconnect?: RoadMapWhereUniqueInput | RoadMapWhereUniqueInput[]
+    delete?: RoadMapWhereUniqueInput | RoadMapWhereUniqueInput[]
+    connect?: RoadMapWhereUniqueInput | RoadMapWhereUniqueInput[]
+    update?: RoadMapUpdateWithWhereUniqueWithoutChatHistoryInput | RoadMapUpdateWithWhereUniqueWithoutChatHistoryInput[]
+    updateMany?: RoadMapUpdateManyWithWhereWithoutChatHistoryInput | RoadMapUpdateManyWithWhereWithoutChatHistoryInput[]
+    deleteMany?: RoadMapScalarWhereInput | RoadMapScalarWhereInput[]
+  }
+
   export type MessageUncheckedUpdateManyWithoutChatHistoryNestedInput = {
     create?: XOR<MessageCreateWithoutChatHistoryInput, MessageUncheckedCreateWithoutChatHistoryInput> | MessageCreateWithoutChatHistoryInput[] | MessageUncheckedCreateWithoutChatHistoryInput[]
     connectOrCreate?: MessageCreateOrConnectWithoutChatHistoryInput | MessageCreateOrConnectWithoutChatHistoryInput[]
@@ -16729,6 +14077,20 @@ export namespace Prisma {
     update?: MessageUpdateWithWhereUniqueWithoutChatHistoryInput | MessageUpdateWithWhereUniqueWithoutChatHistoryInput[]
     updateMany?: MessageUpdateManyWithWhereWithoutChatHistoryInput | MessageUpdateManyWithWhereWithoutChatHistoryInput[]
     deleteMany?: MessageScalarWhereInput | MessageScalarWhereInput[]
+  }
+
+  export type RoadMapUncheckedUpdateManyWithoutChatHistoryNestedInput = {
+    create?: XOR<RoadMapCreateWithoutChatHistoryInput, RoadMapUncheckedCreateWithoutChatHistoryInput> | RoadMapCreateWithoutChatHistoryInput[] | RoadMapUncheckedCreateWithoutChatHistoryInput[]
+    connectOrCreate?: RoadMapCreateOrConnectWithoutChatHistoryInput | RoadMapCreateOrConnectWithoutChatHistoryInput[]
+    upsert?: RoadMapUpsertWithWhereUniqueWithoutChatHistoryInput | RoadMapUpsertWithWhereUniqueWithoutChatHistoryInput[]
+    createMany?: RoadMapCreateManyChatHistoryInputEnvelope
+    set?: RoadMapWhereUniqueInput | RoadMapWhereUniqueInput[]
+    disconnect?: RoadMapWhereUniqueInput | RoadMapWhereUniqueInput[]
+    delete?: RoadMapWhereUniqueInput | RoadMapWhereUniqueInput[]
+    connect?: RoadMapWhereUniqueInput | RoadMapWhereUniqueInput[]
+    update?: RoadMapUpdateWithWhereUniqueWithoutChatHistoryInput | RoadMapUpdateWithWhereUniqueWithoutChatHistoryInput[]
+    updateMany?: RoadMapUpdateManyWithWhereWithoutChatHistoryInput | RoadMapUpdateManyWithWhereWithoutChatHistoryInput[]
+    deleteMany?: RoadMapScalarWhereInput | RoadMapScalarWhereInput[]
   }
 
   export type ChatHistoryCreateNestedOneWithoutMessagesInput = {
@@ -16745,101 +14107,13 @@ export namespace Prisma {
     update?: XOR<XOR<ChatHistoryUpdateToOneWithWhereWithoutMessagesInput, ChatHistoryUpdateWithoutMessagesInput>, ChatHistoryUncheckedUpdateWithoutMessagesInput>
   }
 
-  export type ProjectCreateNestedOneWithoutRoadmapInput = {
-    create?: XOR<ProjectCreateWithoutRoadmapInput, ProjectUncheckedCreateWithoutRoadmapInput>
-    connectOrCreate?: ProjectCreateOrConnectWithoutRoadmapInput
-    connect?: ProjectWhereUniqueInput
+  export type ChatHistoryCreateNestedOneWithoutRoadMapInput = {
+    create?: XOR<ChatHistoryCreateWithoutRoadMapInput, ChatHistoryUncheckedCreateWithoutRoadMapInput>
+    connectOrCreate?: ChatHistoryCreateOrConnectWithoutRoadMapInput
+    connect?: ChatHistoryWhereUniqueInput
   }
 
-  export type NodeCreateNestedManyWithoutRoadMapInput = {
-    create?: XOR<NodeCreateWithoutRoadMapInput, NodeUncheckedCreateWithoutRoadMapInput> | NodeCreateWithoutRoadMapInput[] | NodeUncheckedCreateWithoutRoadMapInput[]
-    connectOrCreate?: NodeCreateOrConnectWithoutRoadMapInput | NodeCreateOrConnectWithoutRoadMapInput[]
-    createMany?: NodeCreateManyRoadMapInputEnvelope
-    connect?: NodeWhereUniqueInput | NodeWhereUniqueInput[]
-  }
-
-  export type NodeUncheckedCreateNestedManyWithoutRoadMapInput = {
-    create?: XOR<NodeCreateWithoutRoadMapInput, NodeUncheckedCreateWithoutRoadMapInput> | NodeCreateWithoutRoadMapInput[] | NodeUncheckedCreateWithoutRoadMapInput[]
-    connectOrCreate?: NodeCreateOrConnectWithoutRoadMapInput | NodeCreateOrConnectWithoutRoadMapInput[]
-    createMany?: NodeCreateManyRoadMapInputEnvelope
-    connect?: NodeWhereUniqueInput | NodeWhereUniqueInput[]
-  }
-
-  export type ProjectUpdateOneRequiredWithoutRoadmapNestedInput = {
-    create?: XOR<ProjectCreateWithoutRoadmapInput, ProjectUncheckedCreateWithoutRoadmapInput>
-    connectOrCreate?: ProjectCreateOrConnectWithoutRoadmapInput
-    upsert?: ProjectUpsertWithoutRoadmapInput
-    connect?: ProjectWhereUniqueInput
-    update?: XOR<XOR<ProjectUpdateToOneWithWhereWithoutRoadmapInput, ProjectUpdateWithoutRoadmapInput>, ProjectUncheckedUpdateWithoutRoadmapInput>
-  }
-
-  export type NodeUpdateManyWithoutRoadMapNestedInput = {
-    create?: XOR<NodeCreateWithoutRoadMapInput, NodeUncheckedCreateWithoutRoadMapInput> | NodeCreateWithoutRoadMapInput[] | NodeUncheckedCreateWithoutRoadMapInput[]
-    connectOrCreate?: NodeCreateOrConnectWithoutRoadMapInput | NodeCreateOrConnectWithoutRoadMapInput[]
-    upsert?: NodeUpsertWithWhereUniqueWithoutRoadMapInput | NodeUpsertWithWhereUniqueWithoutRoadMapInput[]
-    createMany?: NodeCreateManyRoadMapInputEnvelope
-    set?: NodeWhereUniqueInput | NodeWhereUniqueInput[]
-    disconnect?: NodeWhereUniqueInput | NodeWhereUniqueInput[]
-    delete?: NodeWhereUniqueInput | NodeWhereUniqueInput[]
-    connect?: NodeWhereUniqueInput | NodeWhereUniqueInput[]
-    update?: NodeUpdateWithWhereUniqueWithoutRoadMapInput | NodeUpdateWithWhereUniqueWithoutRoadMapInput[]
-    updateMany?: NodeUpdateManyWithWhereWithoutRoadMapInput | NodeUpdateManyWithWhereWithoutRoadMapInput[]
-    deleteMany?: NodeScalarWhereInput | NodeScalarWhereInput[]
-  }
-
-  export type NodeUncheckedUpdateManyWithoutRoadMapNestedInput = {
-    create?: XOR<NodeCreateWithoutRoadMapInput, NodeUncheckedCreateWithoutRoadMapInput> | NodeCreateWithoutRoadMapInput[] | NodeUncheckedCreateWithoutRoadMapInput[]
-    connectOrCreate?: NodeCreateOrConnectWithoutRoadMapInput | NodeCreateOrConnectWithoutRoadMapInput[]
-    upsert?: NodeUpsertWithWhereUniqueWithoutRoadMapInput | NodeUpsertWithWhereUniqueWithoutRoadMapInput[]
-    createMany?: NodeCreateManyRoadMapInputEnvelope
-    set?: NodeWhereUniqueInput | NodeWhereUniqueInput[]
-    disconnect?: NodeWhereUniqueInput | NodeWhereUniqueInput[]
-    delete?: NodeWhereUniqueInput | NodeWhereUniqueInput[]
-    connect?: NodeWhereUniqueInput | NodeWhereUniqueInput[]
-    update?: NodeUpdateWithWhereUniqueWithoutRoadMapInput | NodeUpdateWithWhereUniqueWithoutRoadMapInput[]
-    updateMany?: NodeUpdateManyWithWhereWithoutRoadMapInput | NodeUpdateManyWithWhereWithoutRoadMapInput[]
-    deleteMany?: NodeScalarWhereInput | NodeScalarWhereInput[]
-  }
-
-  export type RoadMapCreateNestedOneWithoutNodesInput = {
-    create?: XOR<RoadMapCreateWithoutNodesInput, RoadMapUncheckedCreateWithoutNodesInput>
-    connectOrCreate?: RoadMapCreateOrConnectWithoutNodesInput
-    connect?: RoadMapWhereUniqueInput
-  }
-
-  export type NodeCreateNestedOneWithoutChildrenInput = {
-    create?: XOR<NodeCreateWithoutChildrenInput, NodeUncheckedCreateWithoutChildrenInput>
-    connectOrCreate?: NodeCreateOrConnectWithoutChildrenInput
-    connect?: NodeWhereUniqueInput
-  }
-
-  export type NodeCreateNestedManyWithoutParentInput = {
-    create?: XOR<NodeCreateWithoutParentInput, NodeUncheckedCreateWithoutParentInput> | NodeCreateWithoutParentInput[] | NodeUncheckedCreateWithoutParentInput[]
-    connectOrCreate?: NodeCreateOrConnectWithoutParentInput | NodeCreateOrConnectWithoutParentInput[]
-    createMany?: NodeCreateManyParentInputEnvelope
-    connect?: NodeWhereUniqueInput | NodeWhereUniqueInput[]
-  }
-
-  export type CodeSnippetCreateNestedOneWithoutNodeInput = {
-    create?: XOR<CodeSnippetCreateWithoutNodeInput, CodeSnippetUncheckedCreateWithoutNodeInput>
-    connectOrCreate?: CodeSnippetCreateOrConnectWithoutNodeInput
-    connect?: CodeSnippetWhereUniqueInput
-  }
-
-  export type NodeUncheckedCreateNestedManyWithoutParentInput = {
-    create?: XOR<NodeCreateWithoutParentInput, NodeUncheckedCreateWithoutParentInput> | NodeCreateWithoutParentInput[] | NodeUncheckedCreateWithoutParentInput[]
-    connectOrCreate?: NodeCreateOrConnectWithoutParentInput | NodeCreateOrConnectWithoutParentInput[]
-    createMany?: NodeCreateManyParentInputEnvelope
-    connect?: NodeWhereUniqueInput | NodeWhereUniqueInput[]
-  }
-
-  export type CodeSnippetUncheckedCreateNestedOneWithoutNodeInput = {
-    create?: XOR<CodeSnippetCreateWithoutNodeInput, CodeSnippetUncheckedCreateWithoutNodeInput>
-    connectOrCreate?: CodeSnippetCreateOrConnectWithoutNodeInput
-    connect?: CodeSnippetWhereUniqueInput
-  }
-
-  export type FloatFieldUpdateOperationsInput = {
+  export type IntFieldUpdateOperationsInput = {
     set?: number
     increment?: number
     decrement?: number
@@ -16847,84 +14121,12 @@ export namespace Prisma {
     divide?: number
   }
 
-  export type RoadMapUpdateOneRequiredWithoutNodesNestedInput = {
-    create?: XOR<RoadMapCreateWithoutNodesInput, RoadMapUncheckedCreateWithoutNodesInput>
-    connectOrCreate?: RoadMapCreateOrConnectWithoutNodesInput
-    upsert?: RoadMapUpsertWithoutNodesInput
-    connect?: RoadMapWhereUniqueInput
-    update?: XOR<XOR<RoadMapUpdateToOneWithWhereWithoutNodesInput, RoadMapUpdateWithoutNodesInput>, RoadMapUncheckedUpdateWithoutNodesInput>
-  }
-
-  export type NodeUpdateOneWithoutChildrenNestedInput = {
-    create?: XOR<NodeCreateWithoutChildrenInput, NodeUncheckedCreateWithoutChildrenInput>
-    connectOrCreate?: NodeCreateOrConnectWithoutChildrenInput
-    upsert?: NodeUpsertWithoutChildrenInput
-    disconnect?: NodeWhereInput | boolean
-    delete?: NodeWhereInput | boolean
-    connect?: NodeWhereUniqueInput
-    update?: XOR<XOR<NodeUpdateToOneWithWhereWithoutChildrenInput, NodeUpdateWithoutChildrenInput>, NodeUncheckedUpdateWithoutChildrenInput>
-  }
-
-  export type NodeUpdateManyWithoutParentNestedInput = {
-    create?: XOR<NodeCreateWithoutParentInput, NodeUncheckedCreateWithoutParentInput> | NodeCreateWithoutParentInput[] | NodeUncheckedCreateWithoutParentInput[]
-    connectOrCreate?: NodeCreateOrConnectWithoutParentInput | NodeCreateOrConnectWithoutParentInput[]
-    upsert?: NodeUpsertWithWhereUniqueWithoutParentInput | NodeUpsertWithWhereUniqueWithoutParentInput[]
-    createMany?: NodeCreateManyParentInputEnvelope
-    set?: NodeWhereUniqueInput | NodeWhereUniqueInput[]
-    disconnect?: NodeWhereUniqueInput | NodeWhereUniqueInput[]
-    delete?: NodeWhereUniqueInput | NodeWhereUniqueInput[]
-    connect?: NodeWhereUniqueInput | NodeWhereUniqueInput[]
-    update?: NodeUpdateWithWhereUniqueWithoutParentInput | NodeUpdateWithWhereUniqueWithoutParentInput[]
-    updateMany?: NodeUpdateManyWithWhereWithoutParentInput | NodeUpdateManyWithWhereWithoutParentInput[]
-    deleteMany?: NodeScalarWhereInput | NodeScalarWhereInput[]
-  }
-
-  export type CodeSnippetUpdateOneWithoutNodeNestedInput = {
-    create?: XOR<CodeSnippetCreateWithoutNodeInput, CodeSnippetUncheckedCreateWithoutNodeInput>
-    connectOrCreate?: CodeSnippetCreateOrConnectWithoutNodeInput
-    upsert?: CodeSnippetUpsertWithoutNodeInput
-    disconnect?: CodeSnippetWhereInput | boolean
-    delete?: CodeSnippetWhereInput | boolean
-    connect?: CodeSnippetWhereUniqueInput
-    update?: XOR<XOR<CodeSnippetUpdateToOneWithWhereWithoutNodeInput, CodeSnippetUpdateWithoutNodeInput>, CodeSnippetUncheckedUpdateWithoutNodeInput>
-  }
-
-  export type NodeUncheckedUpdateManyWithoutParentNestedInput = {
-    create?: XOR<NodeCreateWithoutParentInput, NodeUncheckedCreateWithoutParentInput> | NodeCreateWithoutParentInput[] | NodeUncheckedCreateWithoutParentInput[]
-    connectOrCreate?: NodeCreateOrConnectWithoutParentInput | NodeCreateOrConnectWithoutParentInput[]
-    upsert?: NodeUpsertWithWhereUniqueWithoutParentInput | NodeUpsertWithWhereUniqueWithoutParentInput[]
-    createMany?: NodeCreateManyParentInputEnvelope
-    set?: NodeWhereUniqueInput | NodeWhereUniqueInput[]
-    disconnect?: NodeWhereUniqueInput | NodeWhereUniqueInput[]
-    delete?: NodeWhereUniqueInput | NodeWhereUniqueInput[]
-    connect?: NodeWhereUniqueInput | NodeWhereUniqueInput[]
-    update?: NodeUpdateWithWhereUniqueWithoutParentInput | NodeUpdateWithWhereUniqueWithoutParentInput[]
-    updateMany?: NodeUpdateManyWithWhereWithoutParentInput | NodeUpdateManyWithWhereWithoutParentInput[]
-    deleteMany?: NodeScalarWhereInput | NodeScalarWhereInput[]
-  }
-
-  export type CodeSnippetUncheckedUpdateOneWithoutNodeNestedInput = {
-    create?: XOR<CodeSnippetCreateWithoutNodeInput, CodeSnippetUncheckedCreateWithoutNodeInput>
-    connectOrCreate?: CodeSnippetCreateOrConnectWithoutNodeInput
-    upsert?: CodeSnippetUpsertWithoutNodeInput
-    disconnect?: CodeSnippetWhereInput | boolean
-    delete?: CodeSnippetWhereInput | boolean
-    connect?: CodeSnippetWhereUniqueInput
-    update?: XOR<XOR<CodeSnippetUpdateToOneWithWhereWithoutNodeInput, CodeSnippetUpdateWithoutNodeInput>, CodeSnippetUncheckedUpdateWithoutNodeInput>
-  }
-
-  export type NodeCreateNestedOneWithoutCodeBlockInput = {
-    create?: XOR<NodeCreateWithoutCodeBlockInput, NodeUncheckedCreateWithoutCodeBlockInput>
-    connectOrCreate?: NodeCreateOrConnectWithoutCodeBlockInput
-    connect?: NodeWhereUniqueInput
-  }
-
-  export type NodeUpdateOneRequiredWithoutCodeBlockNestedInput = {
-    create?: XOR<NodeCreateWithoutCodeBlockInput, NodeUncheckedCreateWithoutCodeBlockInput>
-    connectOrCreate?: NodeCreateOrConnectWithoutCodeBlockInput
-    upsert?: NodeUpsertWithoutCodeBlockInput
-    connect?: NodeWhereUniqueInput
-    update?: XOR<XOR<NodeUpdateToOneWithWhereWithoutCodeBlockInput, NodeUpdateWithoutCodeBlockInput>, NodeUncheckedUpdateWithoutCodeBlockInput>
+  export type ChatHistoryUpdateOneRequiredWithoutRoadMapNestedInput = {
+    create?: XOR<ChatHistoryCreateWithoutRoadMapInput, ChatHistoryUncheckedCreateWithoutRoadMapInput>
+    connectOrCreate?: ChatHistoryCreateOrConnectWithoutRoadMapInput
+    upsert?: ChatHistoryUpsertWithoutRoadMapInput
+    connect?: ChatHistoryWhereUniqueInput
+    update?: XOR<XOR<ChatHistoryUpdateToOneWithWhereWithoutRoadMapInput, ChatHistoryUpdateWithoutRoadMapInput>, ChatHistoryUncheckedUpdateWithoutRoadMapInput>
   }
 
   export type NestedStringFilter<$PrismaModel = never> = {
@@ -17074,6 +14276,73 @@ export namespace Prisma {
     _max?: NestedDateTimeNullableFilter<$PrismaModel>
   }
 
+  export type NestedEnumProjectStatusFilter<$PrismaModel = never> = {
+    equals?: $Enums.ProjectStatus | EnumProjectStatusFieldRefInput<$PrismaModel>
+    in?: $Enums.ProjectStatus[] | ListEnumProjectStatusFieldRefInput<$PrismaModel>
+    notIn?: $Enums.ProjectStatus[] | ListEnumProjectStatusFieldRefInput<$PrismaModel>
+    not?: NestedEnumProjectStatusFilter<$PrismaModel> | $Enums.ProjectStatus
+  }
+
+  export type NestedEnumProjectStatusWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.ProjectStatus | EnumProjectStatusFieldRefInput<$PrismaModel>
+    in?: $Enums.ProjectStatus[] | ListEnumProjectStatusFieldRefInput<$PrismaModel>
+    notIn?: $Enums.ProjectStatus[] | ListEnumProjectStatusFieldRefInput<$PrismaModel>
+    not?: NestedEnumProjectStatusWithAggregatesFilter<$PrismaModel> | $Enums.ProjectStatus
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumProjectStatusFilter<$PrismaModel>
+    _max?: NestedEnumProjectStatusFilter<$PrismaModel>
+  }
+
+  export type NestedEnumChatHistoryVisibilityFilter<$PrismaModel = never> = {
+    equals?: $Enums.ChatHistoryVisibility | EnumChatHistoryVisibilityFieldRefInput<$PrismaModel>
+    in?: $Enums.ChatHistoryVisibility[] | ListEnumChatHistoryVisibilityFieldRefInput<$PrismaModel>
+    notIn?: $Enums.ChatHistoryVisibility[] | ListEnumChatHistoryVisibilityFieldRefInput<$PrismaModel>
+    not?: NestedEnumChatHistoryVisibilityFilter<$PrismaModel> | $Enums.ChatHistoryVisibility
+  }
+
+  export type NestedEnumChatHistoryStatusFilter<$PrismaModel = never> = {
+    equals?: $Enums.ChatHistoryStatus | EnumChatHistoryStatusFieldRefInput<$PrismaModel>
+    in?: $Enums.ChatHistoryStatus[] | ListEnumChatHistoryStatusFieldRefInput<$PrismaModel>
+    notIn?: $Enums.ChatHistoryStatus[] | ListEnumChatHistoryStatusFieldRefInput<$PrismaModel>
+    not?: NestedEnumChatHistoryStatusFilter<$PrismaModel> | $Enums.ChatHistoryStatus
+  }
+
+  export type NestedEnumChatHistoryVisibilityWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.ChatHistoryVisibility | EnumChatHistoryVisibilityFieldRefInput<$PrismaModel>
+    in?: $Enums.ChatHistoryVisibility[] | ListEnumChatHistoryVisibilityFieldRefInput<$PrismaModel>
+    notIn?: $Enums.ChatHistoryVisibility[] | ListEnumChatHistoryVisibilityFieldRefInput<$PrismaModel>
+    not?: NestedEnumChatHistoryVisibilityWithAggregatesFilter<$PrismaModel> | $Enums.ChatHistoryVisibility
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumChatHistoryVisibilityFilter<$PrismaModel>
+    _max?: NestedEnumChatHistoryVisibilityFilter<$PrismaModel>
+  }
+
+  export type NestedEnumChatHistoryStatusWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.ChatHistoryStatus | EnumChatHistoryStatusFieldRefInput<$PrismaModel>
+    in?: $Enums.ChatHistoryStatus[] | ListEnumChatHistoryStatusFieldRefInput<$PrismaModel>
+    notIn?: $Enums.ChatHistoryStatus[] | ListEnumChatHistoryStatusFieldRefInput<$PrismaModel>
+    not?: NestedEnumChatHistoryStatusWithAggregatesFilter<$PrismaModel> | $Enums.ChatHistoryStatus
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumChatHistoryStatusFilter<$PrismaModel>
+    _max?: NestedEnumChatHistoryStatusFilter<$PrismaModel>
+  }
+
+  export type NestedIntWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: number | IntFieldRefInput<$PrismaModel>
+    in?: number[] | ListIntFieldRefInput<$PrismaModel>
+    notIn?: number[] | ListIntFieldRefInput<$PrismaModel>
+    lt?: number | IntFieldRefInput<$PrismaModel>
+    lte?: number | IntFieldRefInput<$PrismaModel>
+    gt?: number | IntFieldRefInput<$PrismaModel>
+    gte?: number | IntFieldRefInput<$PrismaModel>
+    not?: NestedIntWithAggregatesFilter<$PrismaModel> | number
+    _count?: NestedIntFilter<$PrismaModel>
+    _avg?: NestedFloatFilter<$PrismaModel>
+    _sum?: NestedIntFilter<$PrismaModel>
+    _min?: NestedIntFilter<$PrismaModel>
+    _max?: NestedIntFilter<$PrismaModel>
+  }
+
   export type NestedFloatFilter<$PrismaModel = never> = {
     equals?: number | FloatFieldRefInput<$PrismaModel>
     in?: number[] | ListFloatFieldRefInput<$PrismaModel>
@@ -17085,31 +14354,15 @@ export namespace Prisma {
     not?: NestedFloatFilter<$PrismaModel> | number
   }
 
-  export type NestedFloatWithAggregatesFilter<$PrismaModel = never> = {
-    equals?: number | FloatFieldRefInput<$PrismaModel>
-    in?: number[] | ListFloatFieldRefInput<$PrismaModel>
-    notIn?: number[] | ListFloatFieldRefInput<$PrismaModel>
-    lt?: number | FloatFieldRefInput<$PrismaModel>
-    lte?: number | FloatFieldRefInput<$PrismaModel>
-    gt?: number | FloatFieldRefInput<$PrismaModel>
-    gte?: number | FloatFieldRefInput<$PrismaModel>
-    not?: NestedFloatWithAggregatesFilter<$PrismaModel> | number
-    _count?: NestedIntFilter<$PrismaModel>
-    _avg?: NestedFloatFilter<$PrismaModel>
-    _sum?: NestedFloatFilter<$PrismaModel>
-    _min?: NestedFloatFilter<$PrismaModel>
-    _max?: NestedFloatFilter<$PrismaModel>
-  }
-
   export type ProjectCreateWithoutUserInput = {
     id?: string
     name: string
     description: string
     systemPrompt?: string | null
+    status?: $Enums.ProjectStatus
     createdAt?: Date | string
     updatedAt?: Date | string
     chatHistory?: ChatHistoryCreateNestedManyWithoutProjectInput
-    roadmap?: RoadMapCreateNestedManyWithoutProjectInput
   }
 
   export type ProjectUncheckedCreateWithoutUserInput = {
@@ -17117,10 +14370,10 @@ export namespace Prisma {
     name: string
     description: string
     systemPrompt?: string | null
+    status?: $Enums.ProjectStatus
     createdAt?: Date | string
     updatedAt?: Date | string
     chatHistory?: ChatHistoryUncheckedCreateNestedManyWithoutProjectInput
-    roadmap?: RoadMapUncheckedCreateNestedManyWithoutProjectInput
   }
 
   export type ProjectCreateOrConnectWithoutUserInput = {
@@ -17228,6 +14481,7 @@ export namespace Prisma {
     description?: StringFilter<"Project"> | string
     userId?: StringFilter<"Project"> | string
     systemPrompt?: StringNullableFilter<"Project"> | string | null
+    status?: EnumProjectStatusFilter<"Project"> | $Enums.ProjectStatus
     createdAt?: DateTimeFilter<"Project"> | Date | string
     updatedAt?: DateTimeFilter<"Project"> | Date | string
   }
@@ -17466,16 +14720,22 @@ export namespace Prisma {
 
   export type ChatHistoryCreateWithoutProjectInput = {
     id?: string
+    visibility?: $Enums.ChatHistoryVisibility
+    status?: $Enums.ChatHistoryStatus
     createdAt?: Date | string
     updatedAt?: Date | string
     messages?: MessageCreateNestedManyWithoutChatHistoryInput
+    roadMap?: RoadMapCreateNestedManyWithoutChatHistoryInput
   }
 
   export type ChatHistoryUncheckedCreateWithoutProjectInput = {
     id?: string
+    visibility?: $Enums.ChatHistoryVisibility
+    status?: $Enums.ChatHistoryStatus
     createdAt?: Date | string
     updatedAt?: Date | string
     messages?: MessageUncheckedCreateNestedManyWithoutChatHistoryInput
+    roadMap?: RoadMapUncheckedCreateNestedManyWithoutChatHistoryInput
   }
 
   export type ChatHistoryCreateOrConnectWithoutProjectInput = {
@@ -17485,30 +14745,6 @@ export namespace Prisma {
 
   export type ChatHistoryCreateManyProjectInputEnvelope = {
     data: ChatHistoryCreateManyProjectInput | ChatHistoryCreateManyProjectInput[]
-    skipDuplicates?: boolean
-  }
-
-  export type RoadMapCreateWithoutProjectInput = {
-    id?: string
-    createdAt?: Date | string
-    updatedAt?: Date | string
-    nodes?: NodeCreateNestedManyWithoutRoadMapInput
-  }
-
-  export type RoadMapUncheckedCreateWithoutProjectInput = {
-    id?: string
-    createdAt?: Date | string
-    updatedAt?: Date | string
-    nodes?: NodeUncheckedCreateNestedManyWithoutRoadMapInput
-  }
-
-  export type RoadMapCreateOrConnectWithoutProjectInput = {
-    where: RoadMapWhereUniqueInput
-    create: XOR<RoadMapCreateWithoutProjectInput, RoadMapUncheckedCreateWithoutProjectInput>
-  }
-
-  export type RoadMapCreateManyProjectInputEnvelope = {
-    data: RoadMapCreateManyProjectInput | RoadMapCreateManyProjectInput[]
     skipDuplicates?: boolean
   }
 
@@ -17571,34 +14807,10 @@ export namespace Prisma {
     NOT?: ChatHistoryScalarWhereInput | ChatHistoryScalarWhereInput[]
     id?: StringFilter<"ChatHistory"> | string
     projectId?: StringFilter<"ChatHistory"> | string
+    visibility?: EnumChatHistoryVisibilityFilter<"ChatHistory"> | $Enums.ChatHistoryVisibility
+    status?: EnumChatHistoryStatusFilter<"ChatHistory"> | $Enums.ChatHistoryStatus
     createdAt?: DateTimeFilter<"ChatHistory"> | Date | string
     updatedAt?: DateTimeFilter<"ChatHistory"> | Date | string
-  }
-
-  export type RoadMapUpsertWithWhereUniqueWithoutProjectInput = {
-    where: RoadMapWhereUniqueInput
-    update: XOR<RoadMapUpdateWithoutProjectInput, RoadMapUncheckedUpdateWithoutProjectInput>
-    create: XOR<RoadMapCreateWithoutProjectInput, RoadMapUncheckedCreateWithoutProjectInput>
-  }
-
-  export type RoadMapUpdateWithWhereUniqueWithoutProjectInput = {
-    where: RoadMapWhereUniqueInput
-    data: XOR<RoadMapUpdateWithoutProjectInput, RoadMapUncheckedUpdateWithoutProjectInput>
-  }
-
-  export type RoadMapUpdateManyWithWhereWithoutProjectInput = {
-    where: RoadMapScalarWhereInput
-    data: XOR<RoadMapUpdateManyMutationInput, RoadMapUncheckedUpdateManyWithoutProjectInput>
-  }
-
-  export type RoadMapScalarWhereInput = {
-    AND?: RoadMapScalarWhereInput | RoadMapScalarWhereInput[]
-    OR?: RoadMapScalarWhereInput[]
-    NOT?: RoadMapScalarWhereInput | RoadMapScalarWhereInput[]
-    id?: StringFilter<"RoadMap"> | string
-    projectId?: StringFilter<"RoadMap"> | string
-    createdAt?: DateTimeFilter<"RoadMap"> | Date | string
-    updatedAt?: DateTimeFilter<"RoadMap"> | Date | string
   }
 
   export type ProjectCreateWithoutChatHistoryInput = {
@@ -17606,10 +14818,10 @@ export namespace Prisma {
     name: string
     description: string
     systemPrompt?: string | null
+    status?: $Enums.ProjectStatus
     createdAt?: Date | string
     updatedAt?: Date | string
     user: UserCreateNestedOneWithoutProjectsInput
-    roadmap?: RoadMapCreateNestedManyWithoutProjectInput
   }
 
   export type ProjectUncheckedCreateWithoutChatHistoryInput = {
@@ -17618,9 +14830,9 @@ export namespace Prisma {
     description: string
     userId: string
     systemPrompt?: string | null
+    status?: $Enums.ProjectStatus
     createdAt?: Date | string
     updatedAt?: Date | string
-    roadmap?: RoadMapUncheckedCreateNestedManyWithoutProjectInput
   }
 
   export type ProjectCreateOrConnectWithoutChatHistoryInput = {
@@ -17654,6 +14866,32 @@ export namespace Prisma {
     skipDuplicates?: boolean
   }
 
+  export type RoadMapCreateWithoutChatHistoryInput = {
+    id?: string
+    content: string
+    version?: number
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type RoadMapUncheckedCreateWithoutChatHistoryInput = {
+    id?: string
+    content: string
+    version?: number
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type RoadMapCreateOrConnectWithoutChatHistoryInput = {
+    where: RoadMapWhereUniqueInput
+    create: XOR<RoadMapCreateWithoutChatHistoryInput, RoadMapUncheckedCreateWithoutChatHistoryInput>
+  }
+
+  export type RoadMapCreateManyChatHistoryInputEnvelope = {
+    data: RoadMapCreateManyChatHistoryInput | RoadMapCreateManyChatHistoryInput[]
+    skipDuplicates?: boolean
+  }
+
   export type ProjectUpsertWithoutChatHistoryInput = {
     update: XOR<ProjectUpdateWithoutChatHistoryInput, ProjectUncheckedUpdateWithoutChatHistoryInput>
     create: XOR<ProjectCreateWithoutChatHistoryInput, ProjectUncheckedCreateWithoutChatHistoryInput>
@@ -17670,10 +14908,10 @@ export namespace Prisma {
     name?: StringFieldUpdateOperationsInput | string
     description?: StringFieldUpdateOperationsInput | string
     systemPrompt?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: EnumProjectStatusFieldUpdateOperationsInput | $Enums.ProjectStatus
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     user?: UserUpdateOneRequiredWithoutProjectsNestedInput
-    roadmap?: RoadMapUpdateManyWithoutProjectNestedInput
   }
 
   export type ProjectUncheckedUpdateWithoutChatHistoryInput = {
@@ -17682,9 +14920,9 @@ export namespace Prisma {
     description?: StringFieldUpdateOperationsInput | string
     userId?: StringFieldUpdateOperationsInput | string
     systemPrompt?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: EnumProjectStatusFieldUpdateOperationsInput | $Enums.ProjectStatus
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    roadmap?: RoadMapUncheckedUpdateManyWithoutProjectNestedInput
   }
 
   export type MessageUpsertWithWhereUniqueWithoutChatHistoryInput = {
@@ -17715,18 +14953,52 @@ export namespace Prisma {
     updatedAt?: DateTimeFilter<"Message"> | Date | string
   }
 
+  export type RoadMapUpsertWithWhereUniqueWithoutChatHistoryInput = {
+    where: RoadMapWhereUniqueInput
+    update: XOR<RoadMapUpdateWithoutChatHistoryInput, RoadMapUncheckedUpdateWithoutChatHistoryInput>
+    create: XOR<RoadMapCreateWithoutChatHistoryInput, RoadMapUncheckedCreateWithoutChatHistoryInput>
+  }
+
+  export type RoadMapUpdateWithWhereUniqueWithoutChatHistoryInput = {
+    where: RoadMapWhereUniqueInput
+    data: XOR<RoadMapUpdateWithoutChatHistoryInput, RoadMapUncheckedUpdateWithoutChatHistoryInput>
+  }
+
+  export type RoadMapUpdateManyWithWhereWithoutChatHistoryInput = {
+    where: RoadMapScalarWhereInput
+    data: XOR<RoadMapUpdateManyMutationInput, RoadMapUncheckedUpdateManyWithoutChatHistoryInput>
+  }
+
+  export type RoadMapScalarWhereInput = {
+    AND?: RoadMapScalarWhereInput | RoadMapScalarWhereInput[]
+    OR?: RoadMapScalarWhereInput[]
+    NOT?: RoadMapScalarWhereInput | RoadMapScalarWhereInput[]
+    id?: StringFilter<"RoadMap"> | string
+    chatHistoryId?: StringFilter<"RoadMap"> | string
+    content?: StringFilter<"RoadMap"> | string
+    version?: IntFilter<"RoadMap"> | number
+    createdAt?: DateTimeFilter<"RoadMap"> | Date | string
+    updatedAt?: DateTimeFilter<"RoadMap"> | Date | string
+  }
+
   export type ChatHistoryCreateWithoutMessagesInput = {
     id?: string
+    visibility?: $Enums.ChatHistoryVisibility
+    status?: $Enums.ChatHistoryStatus
     createdAt?: Date | string
     updatedAt?: Date | string
     project: ProjectCreateNestedOneWithoutChatHistoryInput
+    roadMap?: RoadMapCreateNestedManyWithoutChatHistoryInput
   }
 
   export type ChatHistoryUncheckedCreateWithoutMessagesInput = {
     id?: string
     projectId: string
+    visibility?: $Enums.ChatHistoryVisibility
+    status?: $Enums.ChatHistoryStatus
     createdAt?: Date | string
     updatedAt?: Date | string
+    roadMap?: RoadMapUncheckedCreateNestedManyWithoutChatHistoryInput
   }
 
   export type ChatHistoryCreateOrConnectWithoutMessagesInput = {
@@ -17747,428 +15019,78 @@ export namespace Prisma {
 
   export type ChatHistoryUpdateWithoutMessagesInput = {
     id?: StringFieldUpdateOperationsInput | string
+    visibility?: EnumChatHistoryVisibilityFieldUpdateOperationsInput | $Enums.ChatHistoryVisibility
+    status?: EnumChatHistoryStatusFieldUpdateOperationsInput | $Enums.ChatHistoryStatus
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     project?: ProjectUpdateOneRequiredWithoutChatHistoryNestedInput
+    roadMap?: RoadMapUpdateManyWithoutChatHistoryNestedInput
   }
 
   export type ChatHistoryUncheckedUpdateWithoutMessagesInput = {
     id?: StringFieldUpdateOperationsInput | string
     projectId?: StringFieldUpdateOperationsInput | string
+    visibility?: EnumChatHistoryVisibilityFieldUpdateOperationsInput | $Enums.ChatHistoryVisibility
+    status?: EnumChatHistoryStatusFieldUpdateOperationsInput | $Enums.ChatHistoryStatus
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    roadMap?: RoadMapUncheckedUpdateManyWithoutChatHistoryNestedInput
   }
 
-  export type ProjectCreateWithoutRoadmapInput = {
+  export type ChatHistoryCreateWithoutRoadMapInput = {
     id?: string
-    name: string
-    description: string
-    systemPrompt?: string | null
+    visibility?: $Enums.ChatHistoryVisibility
+    status?: $Enums.ChatHistoryStatus
     createdAt?: Date | string
     updatedAt?: Date | string
-    user: UserCreateNestedOneWithoutProjectsInput
-    chatHistory?: ChatHistoryCreateNestedManyWithoutProjectInput
+    project: ProjectCreateNestedOneWithoutChatHistoryInput
+    messages?: MessageCreateNestedManyWithoutChatHistoryInput
   }
 
-  export type ProjectUncheckedCreateWithoutRoadmapInput = {
-    id?: string
-    name: string
-    description: string
-    userId: string
-    systemPrompt?: string | null
-    createdAt?: Date | string
-    updatedAt?: Date | string
-    chatHistory?: ChatHistoryUncheckedCreateNestedManyWithoutProjectInput
-  }
-
-  export type ProjectCreateOrConnectWithoutRoadmapInput = {
-    where: ProjectWhereUniqueInput
-    create: XOR<ProjectCreateWithoutRoadmapInput, ProjectUncheckedCreateWithoutRoadmapInput>
-  }
-
-  export type NodeCreateWithoutRoadMapInput = {
-    id?: string
-    title: string
-    description?: string | null
-    positionX: number
-    positionY: number
-    positionZ: number
-    createdAt?: Date | string
-    updatedAt?: Date | string
-    parent?: NodeCreateNestedOneWithoutChildrenInput
-    children?: NodeCreateNestedManyWithoutParentInput
-    codeBlock?: CodeSnippetCreateNestedOneWithoutNodeInput
-  }
-
-  export type NodeUncheckedCreateWithoutRoadMapInput = {
-    id?: string
-    title: string
-    description?: string | null
-    positionX: number
-    positionY: number
-    positionZ: number
-    parentId?: string | null
-    createdAt?: Date | string
-    updatedAt?: Date | string
-    children?: NodeUncheckedCreateNestedManyWithoutParentInput
-    codeBlock?: CodeSnippetUncheckedCreateNestedOneWithoutNodeInput
-  }
-
-  export type NodeCreateOrConnectWithoutRoadMapInput = {
-    where: NodeWhereUniqueInput
-    create: XOR<NodeCreateWithoutRoadMapInput, NodeUncheckedCreateWithoutRoadMapInput>
-  }
-
-  export type NodeCreateManyRoadMapInputEnvelope = {
-    data: NodeCreateManyRoadMapInput | NodeCreateManyRoadMapInput[]
-    skipDuplicates?: boolean
-  }
-
-  export type ProjectUpsertWithoutRoadmapInput = {
-    update: XOR<ProjectUpdateWithoutRoadmapInput, ProjectUncheckedUpdateWithoutRoadmapInput>
-    create: XOR<ProjectCreateWithoutRoadmapInput, ProjectUncheckedCreateWithoutRoadmapInput>
-    where?: ProjectWhereInput
-  }
-
-  export type ProjectUpdateToOneWithWhereWithoutRoadmapInput = {
-    where?: ProjectWhereInput
-    data: XOR<ProjectUpdateWithoutRoadmapInput, ProjectUncheckedUpdateWithoutRoadmapInput>
-  }
-
-  export type ProjectUpdateWithoutRoadmapInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    name?: StringFieldUpdateOperationsInput | string
-    description?: StringFieldUpdateOperationsInput | string
-    systemPrompt?: NullableStringFieldUpdateOperationsInput | string | null
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    user?: UserUpdateOneRequiredWithoutProjectsNestedInput
-    chatHistory?: ChatHistoryUpdateManyWithoutProjectNestedInput
-  }
-
-  export type ProjectUncheckedUpdateWithoutRoadmapInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    name?: StringFieldUpdateOperationsInput | string
-    description?: StringFieldUpdateOperationsInput | string
-    userId?: StringFieldUpdateOperationsInput | string
-    systemPrompt?: NullableStringFieldUpdateOperationsInput | string | null
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    chatHistory?: ChatHistoryUncheckedUpdateManyWithoutProjectNestedInput
-  }
-
-  export type NodeUpsertWithWhereUniqueWithoutRoadMapInput = {
-    where: NodeWhereUniqueInput
-    update: XOR<NodeUpdateWithoutRoadMapInput, NodeUncheckedUpdateWithoutRoadMapInput>
-    create: XOR<NodeCreateWithoutRoadMapInput, NodeUncheckedCreateWithoutRoadMapInput>
-  }
-
-  export type NodeUpdateWithWhereUniqueWithoutRoadMapInput = {
-    where: NodeWhereUniqueInput
-    data: XOR<NodeUpdateWithoutRoadMapInput, NodeUncheckedUpdateWithoutRoadMapInput>
-  }
-
-  export type NodeUpdateManyWithWhereWithoutRoadMapInput = {
-    where: NodeScalarWhereInput
-    data: XOR<NodeUpdateManyMutationInput, NodeUncheckedUpdateManyWithoutRoadMapInput>
-  }
-
-  export type NodeScalarWhereInput = {
-    AND?: NodeScalarWhereInput | NodeScalarWhereInput[]
-    OR?: NodeScalarWhereInput[]
-    NOT?: NodeScalarWhereInput | NodeScalarWhereInput[]
-    id?: StringFilter<"Node"> | string
-    roadMapId?: StringFilter<"Node"> | string
-    title?: StringFilter<"Node"> | string
-    description?: StringNullableFilter<"Node"> | string | null
-    positionX?: FloatFilter<"Node"> | number
-    positionY?: FloatFilter<"Node"> | number
-    positionZ?: FloatFilter<"Node"> | number
-    parentId?: StringNullableFilter<"Node"> | string | null
-    createdAt?: DateTimeFilter<"Node"> | Date | string
-    updatedAt?: DateTimeFilter<"Node"> | Date | string
-  }
-
-  export type RoadMapCreateWithoutNodesInput = {
-    id?: string
-    createdAt?: Date | string
-    updatedAt?: Date | string
-    project: ProjectCreateNestedOneWithoutRoadmapInput
-  }
-
-  export type RoadMapUncheckedCreateWithoutNodesInput = {
+  export type ChatHistoryUncheckedCreateWithoutRoadMapInput = {
     id?: string
     projectId: string
+    visibility?: $Enums.ChatHistoryVisibility
+    status?: $Enums.ChatHistoryStatus
     createdAt?: Date | string
     updatedAt?: Date | string
+    messages?: MessageUncheckedCreateNestedManyWithoutChatHistoryInput
   }
 
-  export type RoadMapCreateOrConnectWithoutNodesInput = {
-    where: RoadMapWhereUniqueInput
-    create: XOR<RoadMapCreateWithoutNodesInput, RoadMapUncheckedCreateWithoutNodesInput>
+  export type ChatHistoryCreateOrConnectWithoutRoadMapInput = {
+    where: ChatHistoryWhereUniqueInput
+    create: XOR<ChatHistoryCreateWithoutRoadMapInput, ChatHistoryUncheckedCreateWithoutRoadMapInput>
   }
 
-  export type NodeCreateWithoutChildrenInput = {
-    id?: string
-    title: string
-    description?: string | null
-    positionX: number
-    positionY: number
-    positionZ: number
-    createdAt?: Date | string
-    updatedAt?: Date | string
-    roadMap: RoadMapCreateNestedOneWithoutNodesInput
-    parent?: NodeCreateNestedOneWithoutChildrenInput
-    codeBlock?: CodeSnippetCreateNestedOneWithoutNodeInput
+  export type ChatHistoryUpsertWithoutRoadMapInput = {
+    update: XOR<ChatHistoryUpdateWithoutRoadMapInput, ChatHistoryUncheckedUpdateWithoutRoadMapInput>
+    create: XOR<ChatHistoryCreateWithoutRoadMapInput, ChatHistoryUncheckedCreateWithoutRoadMapInput>
+    where?: ChatHistoryWhereInput
   }
 
-  export type NodeUncheckedCreateWithoutChildrenInput = {
-    id?: string
-    roadMapId: string
-    title: string
-    description?: string | null
-    positionX: number
-    positionY: number
-    positionZ: number
-    parentId?: string | null
-    createdAt?: Date | string
-    updatedAt?: Date | string
-    codeBlock?: CodeSnippetUncheckedCreateNestedOneWithoutNodeInput
+  export type ChatHistoryUpdateToOneWithWhereWithoutRoadMapInput = {
+    where?: ChatHistoryWhereInput
+    data: XOR<ChatHistoryUpdateWithoutRoadMapInput, ChatHistoryUncheckedUpdateWithoutRoadMapInput>
   }
 
-  export type NodeCreateOrConnectWithoutChildrenInput = {
-    where: NodeWhereUniqueInput
-    create: XOR<NodeCreateWithoutChildrenInput, NodeUncheckedCreateWithoutChildrenInput>
-  }
-
-  export type NodeCreateWithoutParentInput = {
-    id?: string
-    title: string
-    description?: string | null
-    positionX: number
-    positionY: number
-    positionZ: number
-    createdAt?: Date | string
-    updatedAt?: Date | string
-    roadMap: RoadMapCreateNestedOneWithoutNodesInput
-    children?: NodeCreateNestedManyWithoutParentInput
-    codeBlock?: CodeSnippetCreateNestedOneWithoutNodeInput
-  }
-
-  export type NodeUncheckedCreateWithoutParentInput = {
-    id?: string
-    roadMapId: string
-    title: string
-    description?: string | null
-    positionX: number
-    positionY: number
-    positionZ: number
-    createdAt?: Date | string
-    updatedAt?: Date | string
-    children?: NodeUncheckedCreateNestedManyWithoutParentInput
-    codeBlock?: CodeSnippetUncheckedCreateNestedOneWithoutNodeInput
-  }
-
-  export type NodeCreateOrConnectWithoutParentInput = {
-    where: NodeWhereUniqueInput
-    create: XOR<NodeCreateWithoutParentInput, NodeUncheckedCreateWithoutParentInput>
-  }
-
-  export type NodeCreateManyParentInputEnvelope = {
-    data: NodeCreateManyParentInput | NodeCreateManyParentInput[]
-    skipDuplicates?: boolean
-  }
-
-  export type CodeSnippetCreateWithoutNodeInput = {
-    id?: string
-    content: string
-    createdAt?: Date | string
-  }
-
-  export type CodeSnippetUncheckedCreateWithoutNodeInput = {
-    id?: string
-    content: string
-    createdAt?: Date | string
-  }
-
-  export type CodeSnippetCreateOrConnectWithoutNodeInput = {
-    where: CodeSnippetWhereUniqueInput
-    create: XOR<CodeSnippetCreateWithoutNodeInput, CodeSnippetUncheckedCreateWithoutNodeInput>
-  }
-
-  export type RoadMapUpsertWithoutNodesInput = {
-    update: XOR<RoadMapUpdateWithoutNodesInput, RoadMapUncheckedUpdateWithoutNodesInput>
-    create: XOR<RoadMapCreateWithoutNodesInput, RoadMapUncheckedCreateWithoutNodesInput>
-    where?: RoadMapWhereInput
-  }
-
-  export type RoadMapUpdateToOneWithWhereWithoutNodesInput = {
-    where?: RoadMapWhereInput
-    data: XOR<RoadMapUpdateWithoutNodesInput, RoadMapUncheckedUpdateWithoutNodesInput>
-  }
-
-  export type RoadMapUpdateWithoutNodesInput = {
+  export type ChatHistoryUpdateWithoutRoadMapInput = {
     id?: StringFieldUpdateOperationsInput | string
+    visibility?: EnumChatHistoryVisibilityFieldUpdateOperationsInput | $Enums.ChatHistoryVisibility
+    status?: EnumChatHistoryStatusFieldUpdateOperationsInput | $Enums.ChatHistoryStatus
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    project?: ProjectUpdateOneRequiredWithoutRoadmapNestedInput
+    project?: ProjectUpdateOneRequiredWithoutChatHistoryNestedInput
+    messages?: MessageUpdateManyWithoutChatHistoryNestedInput
   }
 
-  export type RoadMapUncheckedUpdateWithoutNodesInput = {
+  export type ChatHistoryUncheckedUpdateWithoutRoadMapInput = {
     id?: StringFieldUpdateOperationsInput | string
     projectId?: StringFieldUpdateOperationsInput | string
+    visibility?: EnumChatHistoryVisibilityFieldUpdateOperationsInput | $Enums.ChatHistoryVisibility
+    status?: EnumChatHistoryStatusFieldUpdateOperationsInput | $Enums.ChatHistoryStatus
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-  }
-
-  export type NodeUpsertWithoutChildrenInput = {
-    update: XOR<NodeUpdateWithoutChildrenInput, NodeUncheckedUpdateWithoutChildrenInput>
-    create: XOR<NodeCreateWithoutChildrenInput, NodeUncheckedCreateWithoutChildrenInput>
-    where?: NodeWhereInput
-  }
-
-  export type NodeUpdateToOneWithWhereWithoutChildrenInput = {
-    where?: NodeWhereInput
-    data: XOR<NodeUpdateWithoutChildrenInput, NodeUncheckedUpdateWithoutChildrenInput>
-  }
-
-  export type NodeUpdateWithoutChildrenInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    title?: StringFieldUpdateOperationsInput | string
-    description?: NullableStringFieldUpdateOperationsInput | string | null
-    positionX?: FloatFieldUpdateOperationsInput | number
-    positionY?: FloatFieldUpdateOperationsInput | number
-    positionZ?: FloatFieldUpdateOperationsInput | number
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    roadMap?: RoadMapUpdateOneRequiredWithoutNodesNestedInput
-    parent?: NodeUpdateOneWithoutChildrenNestedInput
-    codeBlock?: CodeSnippetUpdateOneWithoutNodeNestedInput
-  }
-
-  export type NodeUncheckedUpdateWithoutChildrenInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    roadMapId?: StringFieldUpdateOperationsInput | string
-    title?: StringFieldUpdateOperationsInput | string
-    description?: NullableStringFieldUpdateOperationsInput | string | null
-    positionX?: FloatFieldUpdateOperationsInput | number
-    positionY?: FloatFieldUpdateOperationsInput | number
-    positionZ?: FloatFieldUpdateOperationsInput | number
-    parentId?: NullableStringFieldUpdateOperationsInput | string | null
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    codeBlock?: CodeSnippetUncheckedUpdateOneWithoutNodeNestedInput
-  }
-
-  export type NodeUpsertWithWhereUniqueWithoutParentInput = {
-    where: NodeWhereUniqueInput
-    update: XOR<NodeUpdateWithoutParentInput, NodeUncheckedUpdateWithoutParentInput>
-    create: XOR<NodeCreateWithoutParentInput, NodeUncheckedCreateWithoutParentInput>
-  }
-
-  export type NodeUpdateWithWhereUniqueWithoutParentInput = {
-    where: NodeWhereUniqueInput
-    data: XOR<NodeUpdateWithoutParentInput, NodeUncheckedUpdateWithoutParentInput>
-  }
-
-  export type NodeUpdateManyWithWhereWithoutParentInput = {
-    where: NodeScalarWhereInput
-    data: XOR<NodeUpdateManyMutationInput, NodeUncheckedUpdateManyWithoutParentInput>
-  }
-
-  export type CodeSnippetUpsertWithoutNodeInput = {
-    update: XOR<CodeSnippetUpdateWithoutNodeInput, CodeSnippetUncheckedUpdateWithoutNodeInput>
-    create: XOR<CodeSnippetCreateWithoutNodeInput, CodeSnippetUncheckedCreateWithoutNodeInput>
-    where?: CodeSnippetWhereInput
-  }
-
-  export type CodeSnippetUpdateToOneWithWhereWithoutNodeInput = {
-    where?: CodeSnippetWhereInput
-    data: XOR<CodeSnippetUpdateWithoutNodeInput, CodeSnippetUncheckedUpdateWithoutNodeInput>
-  }
-
-  export type CodeSnippetUpdateWithoutNodeInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    content?: StringFieldUpdateOperationsInput | string
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-  }
-
-  export type CodeSnippetUncheckedUpdateWithoutNodeInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    content?: StringFieldUpdateOperationsInput | string
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-  }
-
-  export type NodeCreateWithoutCodeBlockInput = {
-    id?: string
-    title: string
-    description?: string | null
-    positionX: number
-    positionY: number
-    positionZ: number
-    createdAt?: Date | string
-    updatedAt?: Date | string
-    roadMap: RoadMapCreateNestedOneWithoutNodesInput
-    parent?: NodeCreateNestedOneWithoutChildrenInput
-    children?: NodeCreateNestedManyWithoutParentInput
-  }
-
-  export type NodeUncheckedCreateWithoutCodeBlockInput = {
-    id?: string
-    roadMapId: string
-    title: string
-    description?: string | null
-    positionX: number
-    positionY: number
-    positionZ: number
-    parentId?: string | null
-    createdAt?: Date | string
-    updatedAt?: Date | string
-    children?: NodeUncheckedCreateNestedManyWithoutParentInput
-  }
-
-  export type NodeCreateOrConnectWithoutCodeBlockInput = {
-    where: NodeWhereUniqueInput
-    create: XOR<NodeCreateWithoutCodeBlockInput, NodeUncheckedCreateWithoutCodeBlockInput>
-  }
-
-  export type NodeUpsertWithoutCodeBlockInput = {
-    update: XOR<NodeUpdateWithoutCodeBlockInput, NodeUncheckedUpdateWithoutCodeBlockInput>
-    create: XOR<NodeCreateWithoutCodeBlockInput, NodeUncheckedCreateWithoutCodeBlockInput>
-    where?: NodeWhereInput
-  }
-
-  export type NodeUpdateToOneWithWhereWithoutCodeBlockInput = {
-    where?: NodeWhereInput
-    data: XOR<NodeUpdateWithoutCodeBlockInput, NodeUncheckedUpdateWithoutCodeBlockInput>
-  }
-
-  export type NodeUpdateWithoutCodeBlockInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    title?: StringFieldUpdateOperationsInput | string
-    description?: NullableStringFieldUpdateOperationsInput | string | null
-    positionX?: FloatFieldUpdateOperationsInput | number
-    positionY?: FloatFieldUpdateOperationsInput | number
-    positionZ?: FloatFieldUpdateOperationsInput | number
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    roadMap?: RoadMapUpdateOneRequiredWithoutNodesNestedInput
-    parent?: NodeUpdateOneWithoutChildrenNestedInput
-    children?: NodeUpdateManyWithoutParentNestedInput
-  }
-
-  export type NodeUncheckedUpdateWithoutCodeBlockInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    roadMapId?: StringFieldUpdateOperationsInput | string
-    title?: StringFieldUpdateOperationsInput | string
-    description?: NullableStringFieldUpdateOperationsInput | string | null
-    positionX?: FloatFieldUpdateOperationsInput | number
-    positionY?: FloatFieldUpdateOperationsInput | number
-    positionZ?: FloatFieldUpdateOperationsInput | number
-    parentId?: NullableStringFieldUpdateOperationsInput | string | null
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    children?: NodeUncheckedUpdateManyWithoutParentNestedInput
+    messages?: MessageUncheckedUpdateManyWithoutChatHistoryNestedInput
   }
 
   export type ProjectCreateManyUserInput = {
@@ -18176,6 +15098,7 @@ export namespace Prisma {
     name: string
     description: string
     systemPrompt?: string | null
+    status?: $Enums.ProjectStatus
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -18210,10 +15133,10 @@ export namespace Prisma {
     name?: StringFieldUpdateOperationsInput | string
     description?: StringFieldUpdateOperationsInput | string
     systemPrompt?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: EnumProjectStatusFieldUpdateOperationsInput | $Enums.ProjectStatus
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     chatHistory?: ChatHistoryUpdateManyWithoutProjectNestedInput
-    roadmap?: RoadMapUpdateManyWithoutProjectNestedInput
   }
 
   export type ProjectUncheckedUpdateWithoutUserInput = {
@@ -18221,10 +15144,10 @@ export namespace Prisma {
     name?: StringFieldUpdateOperationsInput | string
     description?: StringFieldUpdateOperationsInput | string
     systemPrompt?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: EnumProjectStatusFieldUpdateOperationsInput | $Enums.ProjectStatus
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     chatHistory?: ChatHistoryUncheckedUpdateManyWithoutProjectNestedInput
-    roadmap?: RoadMapUncheckedUpdateManyWithoutProjectNestedInput
   }
 
   export type ProjectUncheckedUpdateManyWithoutUserInput = {
@@ -18232,6 +15155,7 @@ export namespace Prisma {
     name?: StringFieldUpdateOperationsInput | string
     description?: StringFieldUpdateOperationsInput | string
     systemPrompt?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: EnumProjectStatusFieldUpdateOperationsInput | $Enums.ProjectStatus
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -18313,52 +15237,36 @@ export namespace Prisma {
 
   export type ChatHistoryCreateManyProjectInput = {
     id?: string
-    createdAt?: Date | string
-    updatedAt?: Date | string
-  }
-
-  export type RoadMapCreateManyProjectInput = {
-    id?: string
+    visibility?: $Enums.ChatHistoryVisibility
+    status?: $Enums.ChatHistoryStatus
     createdAt?: Date | string
     updatedAt?: Date | string
   }
 
   export type ChatHistoryUpdateWithoutProjectInput = {
     id?: StringFieldUpdateOperationsInput | string
+    visibility?: EnumChatHistoryVisibilityFieldUpdateOperationsInput | $Enums.ChatHistoryVisibility
+    status?: EnumChatHistoryStatusFieldUpdateOperationsInput | $Enums.ChatHistoryStatus
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     messages?: MessageUpdateManyWithoutChatHistoryNestedInput
+    roadMap?: RoadMapUpdateManyWithoutChatHistoryNestedInput
   }
 
   export type ChatHistoryUncheckedUpdateWithoutProjectInput = {
     id?: StringFieldUpdateOperationsInput | string
+    visibility?: EnumChatHistoryVisibilityFieldUpdateOperationsInput | $Enums.ChatHistoryVisibility
+    status?: EnumChatHistoryStatusFieldUpdateOperationsInput | $Enums.ChatHistoryStatus
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     messages?: MessageUncheckedUpdateManyWithoutChatHistoryNestedInput
+    roadMap?: RoadMapUncheckedUpdateManyWithoutChatHistoryNestedInput
   }
 
   export type ChatHistoryUncheckedUpdateManyWithoutProjectInput = {
     id?: StringFieldUpdateOperationsInput | string
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-  }
-
-  export type RoadMapUpdateWithoutProjectInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    nodes?: NodeUpdateManyWithoutRoadMapNestedInput
-  }
-
-  export type RoadMapUncheckedUpdateWithoutProjectInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    nodes?: NodeUncheckedUpdateManyWithoutRoadMapNestedInput
-  }
-
-  export type RoadMapUncheckedUpdateManyWithoutProjectInput = {
-    id?: StringFieldUpdateOperationsInput | string
+    visibility?: EnumChatHistoryVisibilityFieldUpdateOperationsInput | $Enums.ChatHistoryVisibility
+    status?: EnumChatHistoryStatusFieldUpdateOperationsInput | $Enums.ChatHistoryStatus
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -18367,6 +15275,14 @@ export namespace Prisma {
     id?: string
     input: string
     output: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type RoadMapCreateManyChatHistoryInput = {
+    id?: string
+    content: string
+    version?: number
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -18395,106 +15311,26 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
-  export type NodeCreateManyRoadMapInput = {
-    id?: string
-    title: string
-    description?: string | null
-    positionX: number
-    positionY: number
-    positionZ: number
-    parentId?: string | null
-    createdAt?: Date | string
-    updatedAt?: Date | string
-  }
-
-  export type NodeUpdateWithoutRoadMapInput = {
+  export type RoadMapUpdateWithoutChatHistoryInput = {
     id?: StringFieldUpdateOperationsInput | string
-    title?: StringFieldUpdateOperationsInput | string
-    description?: NullableStringFieldUpdateOperationsInput | string | null
-    positionX?: FloatFieldUpdateOperationsInput | number
-    positionY?: FloatFieldUpdateOperationsInput | number
-    positionZ?: FloatFieldUpdateOperationsInput | number
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    parent?: NodeUpdateOneWithoutChildrenNestedInput
-    children?: NodeUpdateManyWithoutParentNestedInput
-    codeBlock?: CodeSnippetUpdateOneWithoutNodeNestedInput
-  }
-
-  export type NodeUncheckedUpdateWithoutRoadMapInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    title?: StringFieldUpdateOperationsInput | string
-    description?: NullableStringFieldUpdateOperationsInput | string | null
-    positionX?: FloatFieldUpdateOperationsInput | number
-    positionY?: FloatFieldUpdateOperationsInput | number
-    positionZ?: FloatFieldUpdateOperationsInput | number
-    parentId?: NullableStringFieldUpdateOperationsInput | string | null
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    children?: NodeUncheckedUpdateManyWithoutParentNestedInput
-    codeBlock?: CodeSnippetUncheckedUpdateOneWithoutNodeNestedInput
-  }
-
-  export type NodeUncheckedUpdateManyWithoutRoadMapInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    title?: StringFieldUpdateOperationsInput | string
-    description?: NullableStringFieldUpdateOperationsInput | string | null
-    positionX?: FloatFieldUpdateOperationsInput | number
-    positionY?: FloatFieldUpdateOperationsInput | number
-    positionZ?: FloatFieldUpdateOperationsInput | number
-    parentId?: NullableStringFieldUpdateOperationsInput | string | null
+    content?: StringFieldUpdateOperationsInput | string
+    version?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
-  export type NodeCreateManyParentInput = {
-    id?: string
-    roadMapId: string
-    title: string
-    description?: string | null
-    positionX: number
-    positionY: number
-    positionZ: number
-    createdAt?: Date | string
-    updatedAt?: Date | string
-  }
-
-  export type NodeUpdateWithoutParentInput = {
+  export type RoadMapUncheckedUpdateWithoutChatHistoryInput = {
     id?: StringFieldUpdateOperationsInput | string
-    title?: StringFieldUpdateOperationsInput | string
-    description?: NullableStringFieldUpdateOperationsInput | string | null
-    positionX?: FloatFieldUpdateOperationsInput | number
-    positionY?: FloatFieldUpdateOperationsInput | number
-    positionZ?: FloatFieldUpdateOperationsInput | number
+    content?: StringFieldUpdateOperationsInput | string
+    version?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    roadMap?: RoadMapUpdateOneRequiredWithoutNodesNestedInput
-    children?: NodeUpdateManyWithoutParentNestedInput
-    codeBlock?: CodeSnippetUpdateOneWithoutNodeNestedInput
   }
 
-  export type NodeUncheckedUpdateWithoutParentInput = {
+  export type RoadMapUncheckedUpdateManyWithoutChatHistoryInput = {
     id?: StringFieldUpdateOperationsInput | string
-    roadMapId?: StringFieldUpdateOperationsInput | string
-    title?: StringFieldUpdateOperationsInput | string
-    description?: NullableStringFieldUpdateOperationsInput | string | null
-    positionX?: FloatFieldUpdateOperationsInput | number
-    positionY?: FloatFieldUpdateOperationsInput | number
-    positionZ?: FloatFieldUpdateOperationsInput | number
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    children?: NodeUncheckedUpdateManyWithoutParentNestedInput
-    codeBlock?: CodeSnippetUncheckedUpdateOneWithoutNodeNestedInput
-  }
-
-  export type NodeUncheckedUpdateManyWithoutParentInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    roadMapId?: StringFieldUpdateOperationsInput | string
-    title?: StringFieldUpdateOperationsInput | string
-    description?: NullableStringFieldUpdateOperationsInput | string | null
-    positionX?: FloatFieldUpdateOperationsInput | number
-    positionY?: FloatFieldUpdateOperationsInput | number
-    positionZ?: FloatFieldUpdateOperationsInput | number
+    content?: StringFieldUpdateOperationsInput | string
+    version?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }

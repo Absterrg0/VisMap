@@ -84,18 +84,42 @@ model Project {
   userId       String
   systemPrompt String?
   chatHistory  ChatHistory[]
-  roadmap      RoadMap[]
-  createdAt    DateTime      @default(now())
-  updatedAt    DateTime      @updatedAt
+
+  status    ProjectStatus @default(ACTIVE)
+  createdAt DateTime      @default(now())
+  updatedAt DateTime      @updatedAt
+}
+
+enum ProjectStatus {
+  ACTIVE
+  DELETED
+}
+
+enum ChatHistoryStatus {
+  ACTIVE
+  DELETED
+}
+
+enum MessageStatus {
+  ACTIVE
+  DELETED
+}
+
+enum ChatHistoryVisibility {
+  PUBLIC
+  PRIVATE
 }
 
 model ChatHistory {
-  id        String    @id @default(uuid())
-  projectId String
-  project   Project   @relation(fields: [projectId], references: [id], onDelete: Cascade)
-  messages  Message[]
-  createdAt DateTime  @default(now())
-  updatedAt DateTime  @updatedAt
+  id         String                @id @default(uuid())
+  projectId  String
+  project    Project               @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  messages   Message[]
+  roadMap    RoadMap[]
+  visibility ChatHistoryVisibility @default(PUBLIC)
+  status     ChatHistoryStatus     @default(ACTIVE)
+  createdAt  DateTime              @default(now())
+  updatedAt  DateTime              @updatedAt
 }
 
 model Message {
@@ -109,38 +133,32 @@ model Message {
 }
 
 model RoadMap {
-  id        String   @id @default(uuid())
-  projectId String
-  project   Project  @relation(fields: [projectId], references: [id], onDelete: Cascade)
-  nodes     Node[]
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  id            String      @id @default(uuid())
+  chatHistoryId String
+  chatHistory   ChatHistory @relation(fields: [chatHistoryId], references: [id], onDelete: Cascade)
+  content       String
+  // nodes Node[]
+  version       Int         @default(autoincrement())
+  createdAt     DateTime    @default(now())
+  updatedAt     DateTime    @updatedAt
 }
 
-model Node {
-  id          String       @id @default(uuid())
-  roadMapId   String
-  roadMap     RoadMap      @relation(fields: [roadMapId], references: [id], onDelete: Cascade)
-  title       String
-  description String?
-  positionX   Float // For canvas layout (React Three Fiber)
-  positionY   Float
-  positionZ   Float
-  parentId    String? // For connecting nodes in a DAG
-  parent      Node?        @relation("NodeParent", fields: [parentId], references: [id])
-  children    Node[]       @relation("NodeParent")
-  codeBlock   CodeSnippet?
-  createdAt   DateTime     @default(now())
-  updatedAt   DateTime     @updatedAt
-}
-
-model CodeSnippet {
-  id        String   @id @default(cuid())
-  content   String // React Three Fiber code
-  nodeId    String   @unique
-  node      Node     @relation(fields: [nodeId], references: [id])
-  createdAt DateTime @default(now())
-}
+// model Node{
+//   id String @id @default(uuid())
+//   roadMapId String
+//   roadMap RoadMap @relation(fields: [roadMapId], references: [id], onDelete: Cascade)
+//    title      String
+//   description String?
+//   positionX  Float        // For canvas layout (React Three Fiber)
+//   positionY  Float
+//   positionZ  Float
+//   parentId   String?      // For connecting nodes in a DAG
+//   parent     Node? @relation("NodeParent", fields: [parentId], references: [id])
+//   children   Node[] @relation("NodeParent")
+//   content  String?
+//   createdAt DateTime @default(now())
+//   updatedAt DateTime @updatedAt
+// }
 
 model Model {
   id          String   @id @default(uuid())
