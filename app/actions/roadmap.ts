@@ -5,17 +5,10 @@ import prisma from "@/db";
 import { Anthropic } from "@anthropic-ai/sdk";
 import { GoogleGenerativeAI } from "@google/generative-ai";
 import OpenAI from "openai";
+import { getSystemPrompt } from "@/lib/prompts-llm";
 
 type ModelType = 'claude' | 'gemini' | 'openai';
 
-
-
-const adminSystemPrompt = `
-You are a project manager.
-You are responsible for creating a roadmap for a project.
-You are responsible for creating a roadmap for a project.
-You are responsible for creating a roadmap for a project.
-`
 
 export async function generateRoadmap(
   historyId: string,
@@ -24,36 +17,35 @@ export async function generateRoadmap(
   modelName?: string
 ) {
   try {
-    const { data: session } = await getSession();
-    if (!session) {
-      return { success: false, error: "Unauthorized" };
-    }
+    // const { data: session } = await getSession();
+    // if (!session) {
+    //   return { success: false, error: "Unauthorized" };
+    // }
 
-    // Verify the chat history exists and belongs to the user
-    const chatHistory = await prisma.chatHistory.findFirst({
-      where: {
-        id: historyId,
-        project: {
-          userId: session.user.id
-        }
-      },
-      include: {
-        project: {
-          include: {
-            user: true
-          }
-        }
-      }
-    });
+    // // Verify the chat history exists and belongs to the user
+    // const chatHistory = await prisma.chatHistory.findFirst({
+    //   where: {
+    //     id: historyId,
+    //     project: {
+    //       userId: session.user.id
+    //     }
+    //   },
+    //   include: {
+    //     project: {
+    //       include: {
+    //         user: true
+    //       }
+    //     }
+    //   }
+    // });
 
-    if (!chatHistory) {
-      return { success: false, error: "Chat history not found" };
-    }
+    // if (!chatHistory) {
+    //   return { success: false, error: "Chat history not found" };
+    // }
 
     // Combine prompts
     const combinedPrompt = [
-      adminSystemPrompt,
-      chatHistory.project.user.customPrompt,
+      
       prompt
     ].filter(Boolean).join('\n\n');
 
@@ -74,19 +66,20 @@ export async function generateRoadmap(
         return { success: false, error: "Invalid model type" };
     }
 
-    if (!generatedContent) {
-      return { success: false, error: "Failed to generate content" };
-    }
+    // if (!generatedContent) {
+    //   return { success: false, error: "Failed to generate content" };
+    // }
 
-    // Create a new roadmap entry
-    const roadmap = await prisma.roadMap.create({
-      data: {
-        chatHistoryId: historyId,
-        content: generatedContent
-      }
-    });
+    // // Create a new roadmap entry
+    // const roadmap = await prisma.roadMap.create({
+    //   data: {
+    //     chatHistoryId: historyId,
+    //     content: generatedContent
+    //   }
+    // });
 
-    return { success: true, roadmap };
+    // return { success: true, roadmap };
+    
   } catch (error) {
     console.error("Error generating roadmap:", error);
     return { success: false, error: "Failed to generate roadmap" };
@@ -99,18 +92,23 @@ async function generateWithClaude(prompt: string, model: string): Promise<string
       apiKey: process.env.ANTHROPIC_API_KEY
     });
 
-    const response = await anthropic.messages.create({
+    const stream = await anthropic.messages.create({
       model,
+      system: getSystemPrompt(),
       max_tokens: 4000,
-      messages: [{ role: 'user', content: prompt }]
+      messages: [{ role: 'user', content: prompt }],
+      stream: true
     });
 
-    return response.content.reduce((acc, item) => {
-      if (item.type === 'text') {
-        return acc + item.text;
+    let result = '';
+    for await (const chunk of stream) {
+      if (chunk.type === 'content_block_delta' && chunk.delta.type === 'text_delta') {
+        result += chunk.delta.text;
       }
-      return acc;
-    }, '');
+    }
+
+    console.log(result)
+    return result;
   } catch (error) {
     console.error("Claude API error:", error);
     throw new Error("Failed to generate with Claude");
@@ -119,12 +117,22 @@ async function generateWithClaude(prompt: string, model: string): Promise<string
 
 async function generateWithGemini(prompt: string, model: string): Promise<string> {
   try {
-    const genAI = new GoogleGenerativeAI(process.env.GOOGLE_API_KEY || '');
+    const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY || '');
     const geminiModel = genAI.getGenerativeModel({ model });
     
-    const result = await geminiModel.generateContent(prompt);
-    const response = result.response;
-    return response.text();
+    const response = await geminiModel.generateContentStream({
+      contents: [{ role: 'user', parts: [{ text: prompt }] }],
+      systemInstruction: getSystemPrompt()
+    });
+
+    let result = '';
+    for await (const chunk of response.stream) {
+      const chunkText = chunk.text();
+      result += chunkText;
+    }
+
+    console.log(result)
+    return result;
   } catch (error) {
     console.error("Gemini API error:", error);
     throw new Error("Failed to generate with Gemini");
@@ -137,13 +145,23 @@ async function generateWithOpenAI(prompt: string, model: string): Promise<string
       apiKey: process.env.OPENAI_API_KEY
     });
 
-    const response = await openai.chat.completions.create({
+    const stream = await openai.chat.completions.create({
       model,
-      messages: [{ role: 'user', content: prompt }],
-      max_tokens: 4000
+      messages: [
+        { role: 'system', content: getSystemPrompt() },
+        { role: 'user', content: prompt }
+      ],
+      max_tokens: 4000,
+      stream: true
     });
 
-    return response.choices[0]?.message.content || '';
+    let result = '';
+    for await (const chunk of stream) {
+      result += chunk.choices[0]?.delta?.content || '';
+    }
+
+    console.log(result)
+    return result;
   } catch (error) {
     console.error("OpenAI API error:", error);
     throw new Error("Failed to generate with OpenAI");
