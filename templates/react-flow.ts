@@ -1,5 +1,5 @@
-export const reactFlowPrompt = `<visMapArtifact id="project-import" title="Project Files">
-<visMapAction type="file" filePath="package.json">{
+export const reactFlowPrompt = `<visArtifact id="project-import" title="Project Files">
+<visAction type="file" filePath="package.json">{
   "name": "next-react-flow-app",
   "private": true,
   "scripts": {
@@ -21,9 +21,9 @@ export const reactFlowPrompt = `<visMapArtifact id="project-import" title="Proje
     "eslint": "^9.9.1"
   }
 }
-</visMapAction>
+</visAction>
 
-<visMapAction type="file" filePath="tsconfig.json">{
+<visAction type="file" filePath="tsconfig.json">{
   "compilerOptions": {
     "target": "ES2020",
     "lib": ["dom", "dom.iterable", "esnext"],
@@ -42,9 +42,9 @@ export const reactFlowPrompt = `<visMapArtifact id="project-import" title="Proje
   "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx"],
   "exclude": ["node_modules"]
 }
-</visMapAction>
+</visAction>
 
-<visMapAction type="file" filePath="app/page.tsx">"use client";
+<visAction type="file" filePath="app/page.tsx">"use client";
 
 import dynamic from "next/dynamic";
 
@@ -57,9 +57,9 @@ export default function HomePage() {
     </main>
   );
 }
-</visMapAction>
+</visAction>
 
-<visMapAction type="file" filePath="components/Flow.tsx">"use client";
+<visAction type="file" filePath="components/Flow.tsx">"use client";
 
 import ReactFlow, { Background, Controls } from "reactflow";
 import "reactflow/dist/style.css";
@@ -97,5 +97,5 @@ export default function Flow() {
     </div>
   );
 }
-</visMapAction>
-</visMapArtifact>`;
+</visAction>
+</visArtifact>`;

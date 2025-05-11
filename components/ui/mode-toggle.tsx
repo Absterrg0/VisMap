@@ -1,7 +1,7 @@
 "use client"
 
 import { useTheme } from "next-themes"
-import { Button } from "@nextui-org/react"
+import { Button } from "@/components/ui/button"
 import { Moon, Sun } from "lucide-react"
 
 export function ModeToggle() {
@@ -9,9 +9,8 @@ export function ModeToggle() {
 
   return (
     <Button
-      isIconOnly
-      variant="light"
-      onPress={() => setTheme(theme === "dark" ? "light" : "dark")}
+      variant="ghost"
+      onClick={() => setTheme(theme === "dark" ? "light" : "dark")}
       className="fixed top-4 right-4"
     >
       {theme === "dark" ? (

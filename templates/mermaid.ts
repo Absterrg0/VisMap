@@ -1,4 +1,4 @@
-export const mermaidPrompt = `<visMapArtifact id="project-import" title="Project Files"><visMapAction type="file" filePath="eslint.config.js">import js from '@eslint/js';
+export const mermaidPrompt = `<visArtifact id="project-import" title="Project Files"><visAction type="file" filePath="eslint.config.js">import js from '@eslint/js';
 import globals from 'globals';
 import tseslint from 'typescript-eslint';
 
@@ -14,7 +14,7 @@ export default tseslint.config(
     rules: {},
   }
 );
-</visMapAction><visMapAction type="file" filePath="package.json">{
+</visAction><visAction type="file" filePath="package.json">{
   "name": "next-mermaid-app",
   "private": true,
   "scripts": {
@@ -39,7 +39,7 @@ export default tseslint.config(
     "globals": "^15.9.0"
   }
 }
-</visMapAction><visMapAction type="file" filePath="tsconfig.json">{
+</visAction><visAction type="file" filePath="tsconfig.json">{
   "compilerOptions": {
     "target": "ES2020",
     "lib": ["dom", "dom.iterable", "esnext"],
@@ -58,7 +58,7 @@ export default tseslint.config(
   "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx"],
   "exclude": ["node_modules"]
 }
-</visMapAction><visMapAction type="file" filePath="app/page.tsx">import dynamic from 'next/dynamic';
+</visAction><visAction type="file" filePath="app/page.tsx">import dynamic from 'next/dynamic';
 
 const Mermaid = dynamic(() => import('../components/Mermaid'), { ssr: false });
 
@@ -74,7 +74,7 @@ export default function HomePage() {
     </main>
   );
 }
-</visMapAction><visMapAction type="file" filePath="components/Mermaid.tsx">"use client";
+</visAction><visAction type="file" filePath="components/Mermaid.tsx">"use client";
 import { useEffect } from 'react';
 import mermaid from 'mermaid';
 
@@ -90,4 +90,4 @@ export default function Mermaid({ chart }: MermaidProps) {
 
   return <div className="mermaid">{chart}</div>;
 }
-</visMapAction></visMapArtifact>`;
+</visAction></visArtifact>`;

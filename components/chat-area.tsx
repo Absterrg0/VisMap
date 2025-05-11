@@ -71,7 +71,7 @@ export function ChatArea({ activeChat, activeProject, showCodeEditor, onToggleCo
     <SidebarInset
       className={cn(
         "flex flex-col h-screen bg-background relative",
-        showCodeEditor ? "w-1/2 border-r border-border/40" : "w-full",
+        showCodeEditor ? "w-full border-r border-border/40" : "w-full",
       )}
     >
       <header className="border-b border-border/40 p-4 flex items-center justify-between bg-background/80 backdrop-blur-sm sticky top-0 z-10">
