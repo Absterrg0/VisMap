@@ -1,0 +1,36 @@
+import { generateRoadmap } from "@/app/actions/llms/roadmap";
+import prisma from "@/db";
+import { getSession } from "@/lib/client";
+import { NextResponse } from "next/server";
+
+
+
+
+
+export async function POST(req: Request) {
+    //         const { data: session } = await getSession();
+    //     if (!session) {
+    //       return NextResponse.json({ success: false, error: "Unauthorized" });
+    //     }
+
+
+    //     const body = await req.json();
+        
+    //     const { historyId, prompt, modelType, modelName, roadmapType } = body;
+
+    //     const chatHistory = await prisma.chatHistory.findFirst({
+    //       where: {
+    //         id: historyId,
+    //         project: {
+    //           userId: session.user.id
+    //         }
+    //       }
+    //     });
+
+    // if (!chatHistory) {
+    //   return NextResponse.json({ success: false, error: "Chat history not found" });
+    // }
+
+  const response = await generateRoadmap("123", "Please generate a roadmap for a project which is a simple todo list app", "gemini", "gemini-2.0-flash", "static");
+  return NextResponse.json(response);
+}   
