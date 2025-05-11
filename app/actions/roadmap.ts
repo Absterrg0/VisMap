@@ -3,8 +3,8 @@
 import { getSession } from "@/lib/client";
 import prisma from "@/db";
 import { Anthropic } from "@anthropic-ai/sdk";
-import { GoogleGenerativeAI } from "@google/generative-ai";
 import OpenAI from "openai";
+import {GoogleGenAI} from '@google/genai'
 import { getSystemPrompt } from "@/lib/prompts-llm";
 
 type ModelType = 'claude' | 'gemini' | 'openai';
@@ -57,7 +57,7 @@ export async function generateRoadmap(
         generatedContent = await generateWithClaude(combinedPrompt, modelName || 'claude-3-opus-20240229');
         break;
       case 'gemini':
-        generatedContent = await generateWithGemini(combinedPrompt, modelName || 'gemini-pro');
+        generatedContent = await generateWithGemini(combinedPrompt, modelName || 'gemini-2.0-flash');
         break;
       case 'openai':
         generatedContent = await generateWithOpenAI(combinedPrompt, modelName || 'gpt-4-turbo');
@@ -117,22 +117,22 @@ async function generateWithClaude(prompt: string, model: string): Promise<string
 
 async function generateWithGemini(prompt: string, model: string): Promise<string> {
   try {
-    const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY || '');
-    const geminiModel = genAI.getGenerativeModel({ model });
-    
-    const response = await geminiModel.generateContentStream({
-      contents: [{ role: 'user', parts: [{ text: prompt }] }],
-      systemInstruction: getSystemPrompt()
+
+    const genAI = new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY || '' });
+
+    const response = await genAI.models.generateContentStream({
+      model: `${model}`,
+      contents: [
+        { role: "model", parts: [{ text: getSystemPrompt() }] },
+        { role: "user", parts: [{ text: prompt }] }
+      ],
     });
-
-    let result = '';
-    for await (const chunk of response.stream) {
-      const chunkText = chunk.text();
-      result += chunkText;
+    let text = "";
+    for await (const chunk of response) {
+      console.log(chunk.text);
+      text += chunk.text;
     }
-
-    console.log(result)
-    return result;
+    return 'DONE';
   } catch (error) {
     console.error("Gemini API error:", error);
     throw new Error("Failed to generate with Gemini");

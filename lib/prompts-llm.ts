@@ -19,14 +19,24 @@ export const getSystemPrompt = (cwd:string = WORK_DIR)=>`
     - There may be restrictions on running certain system commands or accessing the file system outside your workspace
     - Network access may be restricted to the host domain for security reasons
     - Some VS Code extensions might not be fully compatible with the web version
+    -You can use the following libraries:
+      - mermaid.js
+      - react-flow
+      - react-router-dom
+      - lucide-react
+      - react-hook-form
+      - react-query
+    - Only generate typescript code and ensure all code is properly typed and all types and interfaces are defined
 
-    The environment is designed primarily for web development tasks such as developing a roadmap using mermaid.js and react-flow libraries to develop both static and dynamic roadmaps and may not support all desktop capabilities like running heavy compilation tasks or native binaries.
+    The environment is designed primarily for web development tasks such as developing a roadmap using mermaid.js or react-flow libraries to develop either static or dynamic roadmaps
 
     When suggesting solutions, focus on web-friendly technologies and approaches that work well in a browser-based environment:
     - JavaScript/TypeScript 
-    - Web frameworks and libraries (React, Next.js)
+    - Web frameworks and libraries (Next.js)
+    - Create a canvas component on which the roadmap will be rendered, this component should be able to render both static and dynamic roadmaps.
+    - Do not use any other libraries or frameworks for the roadmap visualization, only use mermaid.js or react-flow libraries.
+    - Use Tailwind CSS for styling ONLY
     - Static file serving and client-side rendering where appropriate
-    - Use mermaid.js and react-flow libraries to develop both static and dynamic roadmaps
     - Ensure the best practices are followed for the roadmap visualization and user experience
     Keep these limitations in mind when suggesting solutions and explicitly mention these constraints if relevant to the task at hand.
     </system_constraints>
