@@ -3,7 +3,7 @@
 import type React from "react"
 
 import { useState, useRef, useEffect } from "react"
-import { useChat } from "ai/react"
+import axios from "axios"
 import type { Project, Chat } from "@/types/types"
 import { Button } from "@/components/ui/button"
 import { Textarea } from "@/components/ui/textarea"
@@ -18,8 +18,16 @@ interface ChatAreaProps {
   onToggleCodeEditor: () => void
 }
 
+interface Message {
+  id: string
+  role: "user" | "assistant"
+  content: string
+}
+
 export function ChatArea({ activeChat, activeProject, showCodeEditor, onToggleCodeEditor }: ChatAreaProps) {
-  const { messages, input, handleInputChange, handleSubmit, isLoading } = useChat()
+  const [messages, setMessages] = useState<Message[]>([])
+  const [input, setInput] = useState("")
+  const [isLoading, setIsLoading] = useState(false)
   const [inputRows, setInputRows] = useState(1)
   const messagesEndRef = useRef<HTMLDivElement>(null)
   const formRef = useRef<HTMLFormElement>(null)
@@ -32,6 +40,45 @@ export function ChatArea({ activeChat, activeProject, showCodeEditor, onToggleCo
   useEffect(() => {
     scrollToBottom()
   }, [messages])
+
+  const handleInputChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
+    setInput(e.target.value)
+    adjustRows(e)
+  }
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault()
+    if (!input.trim() || isLoading) return
+
+    const userMessage: Message = {
+      id: Date.now().toString(),
+      role: "user",
+      content: input.trim()
+    }
+
+    setMessages(prev => [...prev, userMessage])
+    setInput("")
+    setIsLoading(true)
+
+    try {
+      const response = await axios.post("/api/chat", {
+        message: userMessage.content
+      })
+
+      const assistantMessage: Message = {
+        id: (Date.now() + 1).toString(),
+        role: "assistant",
+        content: response.data.message
+      }
+
+      setMessages(prev => [...prev, assistantMessage])
+    } catch (error) {
+      console.error("Error sending message:", error)
+      // Optionally add error handling UI here
+    } finally {
+      setIsLoading(false)
+    }
+  }
 
   const handleKeyDown = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
     if (e.key === "Enter" && !e.shiftKey) {
