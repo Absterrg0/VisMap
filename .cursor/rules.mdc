@@ -1,0 +1,7 @@
+---
+description: 
+globs: 
+alwaysApply: true
+---
+Only Use [globals.css](mdc:app/globals.css) for styling of any component on the frontend
+

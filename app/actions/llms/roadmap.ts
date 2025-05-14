@@ -35,6 +35,8 @@ export async function generateRoadmap(
         return { success: false, error: "Invalid model type" };
     }
 
+    return generatedContent;
+
     // if (!generatedContent) {
     //   return { success: false, error: "Failed to generate content" };
     // }

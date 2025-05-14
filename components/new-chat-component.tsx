@@ -1,21 +1,21 @@
-
-
-
 "use client"
 
 import { useState, useRef } from "react"
-import { useRouter } from "next/navigation"
-import { Textarea } from "@/components/ui/textarea"
-import { Button } from "@/components/ui/button"
-import { SendHorizontal, Sparkles } from "lucide-react"
-import { cn } from "@/lib/utils"
+import { useRouter, useParams } from "next/navigation"
+import { Paperclip, SendHorizontal, Sparkles } from "lucide-react"
 
-export function NewChatComponent() {
+export function NewChatComponent( ) {
   const [prompt, setPrompt] = useState("")
-  const [inputRows, setInputRows] = useState(1)
-  const router = useRouter()
+  const [inputRows, setInputRows] = useState(2)
   const textareaRef = useRef<HTMLTextAreaElement>(null)
   const formRef = useRef<HTMLFormElement>(null)
+  const router = useRouter()
+
+  const projectId = useParams().projectId;
+
+  const MIN_ROWS = 2
+  const MAX_ROWS = 6
+  const LINE_HEIGHT = 24
 
   const handleInputChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     setPrompt(e.target.value)
@@ -23,22 +23,16 @@ export function NewChatComponent() {
   }
 
   const adjustRows = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
-    const textareaLineHeight = 24
-    const minRows = 1
-    const maxRows = 5
-
-    const previousRows = e.target.rows
-    e.target.rows = minRows
-
-    const currentRows = Math.floor(e.target.scrollHeight / textareaLineHeight)
-
-    if (currentRows === previousRows) {
-      e.target.rows = currentRows
+    const textarea = e.target
+    textarea.rows = MIN_ROWS
+    const currentRows = Math.floor(textarea.scrollHeight / LINE_HEIGHT)
+    if (currentRows > MAX_ROWS) {
+      textarea.rows = MAX_ROWS
+      setInputRows(MAX_ROWS)
     } else {
-      e.target.rows = currentRows > maxRows ? maxRows : currentRows
+      textarea.rows = currentRows
+      setInputRows(currentRows)
     }
-
-    setInputRows(e.target.rows)
   }
 
   const handleKeyDown = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
@@ -52,54 +46,50 @@ export function NewChatComponent() {
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
     if (!prompt.trim()) return
-
-    // In a real app, you would create a new chat and get its ID
-    // For now, we'll just redirect to a mock chat ID
-    const mockChatId = Date.now().toString()
-    router.push(`/chat/${mockChatId}`)
-  }
-
-  const focusTextarea = () => {
-    textareaRef.current?.focus()
+    router.replace(`/${projectId}/chat/${'1-2'}`)
   }
 
   return (
-    <div className="flex flex-col items-center justify-center h-screen bg-background p-4">
+    <div className="flex flex-col items-center justify-center h-screen p-4 bg-background text-foreground">
       <div className="flex flex-col items-center justify-center w-full max-w-3xl mx-auto space-y-8 px-4">
         <div className="text-center space-y-4">
-          <Sparkles className="h-12 w-12 mx-auto" />
+          <Sparkles className="h-12 w-12 mx-auto text-primary drop-shadow-[0_2px_8px_var(--tw-shadow-color)]" />
           <h2 className="text-2xl font-semibold">Start a new conversation</h2>
           <p className="max-w-md text-muted-foreground">Type your message below to begin chatting</p>
         </div>
-
         <form ref={formRef} onSubmit={handleSubmit} className="w-full">
-          <div className="relative w-full metallic-accent rounded-lg p-1">
-            <Textarea
-              ref={textareaRef}
-              value={prompt}
-              onChange={handleInputChange}
-              onKeyDown={handleKeyDown}
-              placeholder="Ask me anything..."
-              className={cn(
-                "resize-none p-4 pr-12 rounded-md focus-visible:ring-0 focus-visible:ring-offset-0 border-0",
-                "bg-background/80 backdrop-blur-sm",
-                inputRows > 1 ? "pb-10" : ""
-              )}
-              rows={inputRows}
-            />
-            <Button
-              type="submit"
-              size="icon"
-              disabled={!prompt.trim()}
-              className={cn(
-                "absolute right-3",
-                inputRows > 1 ? "bottom-3" : "top-1/2 -translate-y-1/2",
-                "bg-transparent hover:bg-accent/50"
-              )}
-            >
-              <SendHorizontal className="h-5 w-5" />
-              <span className="sr-only">Send</span>
-            </Button>
+          <div className="relative w-full rounded-xl p-1 shadow-lg bg-card border border-border">
+            <div className="relative rounded-lg transition-all duration-200 bg-card focus-within:ring-1 focus-within:ring-primary/30 focus-within:shadow-[0_0_0_1px_var(--tw-ring-color)]">
+              <textarea
+                ref={textareaRef}
+                value={prompt}
+                onChange={handleInputChange}
+                onKeyDown={handleKeyDown}
+                placeholder="Ask me anything..."
+                className="w-full resize-none p-4 rounded-lg focus:outline-none text-foreground bg-transparent placeholder:text-muted-foreground text-base font-medium"
+                rows={inputRows}
+                style={{
+                  minHeight: `${MIN_ROWS * LINE_HEIGHT}px`,
+                  maxHeight: `${MAX_ROWS * LINE_HEIGHT}px`,
+                }}
+              />
+              <div className="flex items-center justify-between px-3 py-2 border-t border-border bg-muted rounded-b-lg">
+                <div className="flex items-center space-x-2">
+                  <button type="button" className="p-2 rounded-full hover:bg-accent/30 text-muted-foreground hover:text-foreground transition-colors">
+                    <Paperclip className="h-4 w-4" />
+                  </button>
+                </div>
+                <button
+                  type="submit"
+                  disabled={!prompt.trim()}
+                  className={`flex items-center justify-center h-9 w-9 rounded-full transition-all shadow-md
+                    ${prompt.trim() ? 'bg-primary hover:bg-primary/90 text-primary-foreground' : 'bg-muted/50 text-muted-foreground cursor-not-allowed'}`}
+                >
+                  <SendHorizontal className="h-4 w-4" />
+                  <span className="sr-only">Send</span>
+                </button>
+              </div>
+            </div>
           </div>
         </form>
       </div>

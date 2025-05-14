@@ -1,6 +1,7 @@
 import { generateRoadmap } from "@/app/actions/llms/roadmap";
 import prisma from "@/db";
 import { getSession } from "@/lib/client";
+import { TextBlock } from "@anthropic-ai/sdk/resources/messages.mjs";
 import { NextResponse } from "next/server";
 
 
@@ -8,6 +9,7 @@ import { NextResponse } from "next/server";
 
 
 export async function POST(req: Request) {
+
     //         const { data: session } = await getSession();
     //     if (!session) {
     //       return NextResponse.json({ success: false, error: "Unauthorized" });
@@ -17,6 +19,8 @@ export async function POST(req: Request) {
     //     const body = await req.json();
         
     //     const { historyId, prompt, modelType, modelName, roadmapType } = body;
+
+    const {prompt} = await req.json();
 
     //     const chatHistory = await prisma.chatHistory.findFirst({
     //       where: {
@@ -31,6 +35,8 @@ export async function POST(req: Request) {
     //   return NextResponse.json({ success: false, error: "Chat history not found" });
     // }
 
-  const response = await generateRoadmap("123", "Please generate a roadmap for a project which is a simple todo list app", "gemini", "gemini-2.0-flash", "static");
-  return NextResponse.json(response);
-}   
+  const response = await generateRoadmap("123", prompt, "gemini", "gemini-2.0-flash", "static")
+  return NextResponse.json({
+    response:response as string
+  });
+} 

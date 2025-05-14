@@ -22,7 +22,7 @@ export default async function generateWithGemini(prompt: string, templatePrompt:
         console.log(chunk.text);
         text += chunk.text;
       }
-      return 'DONE';
+      return text;
     } catch (error) {
       console.error("Gemini API error:", error);
       throw new Error("Failed to generate with Gemini");

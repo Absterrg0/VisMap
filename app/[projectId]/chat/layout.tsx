@@ -1,7 +1,7 @@
 "use client"
 
 import { ReactNode } from "react"
-import { ChatSidebar } from "@/components/chat-sidebar"
+import { ChatSidebar } from "@/components/sidebar/chat-sidebar"
 import { SidebarProvider } from "@/components/ui/sidebar"
 import { useState } from "react"
 import { Chat, Project } from "@/types/types"

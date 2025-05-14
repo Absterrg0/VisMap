@@ -1,214 +1,133 @@
 "use client"
 
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import { Check, Copy, Download, Play, Terminal } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { FileExplorer } from "@/components/file-explorer"
 import { cn } from "@/lib/utils"
 import Editor from "@monaco-editor/react"
+import { Step, StepType } from "@/types/stepType"
 
-// Sample file structure for demonstration
-const sampleFiles = [
-  {
-    id: "1",
-    name: "src",
-    type: "directory",
-    children: [
-      {
-        id: "2",
-        name: "components",
-        type: "directory",
-        children: [
-          {
-            id: "3",
-            name: "Button.tsx",
-            type: "file",
-            language: "tsx",
-            content: `import React from 'react';
-
-interface ButtonProps {
-  children: React.ReactNode;
-  variant?: 'primary' | 'secondary' | 'outline';
-  size?: 'sm' | 'md' | 'lg';
-  onClick?: () => void;
+interface CodeEditorProps {
+  steps: Step[]
+  onUpdate: (steps: Step[]) => void
 }
 
-export function Button({ 
-  children, 
-  variant = 'primary', 
-  size = 'md', 
-  onClick 
-}: ButtonProps) {
-  return (
-    <button 
-      className={\`btn btn-\${variant} btn-\${size}\`} 
-      onClick={onClick}
-    >
-      {children}
-    </button>
-  );
-}`,
-          },
-          {
-            id: "4",
-            name: "Card.tsx",
-            type: "file",
-            language: "tsx",
-            content: `import React from 'react';
-
-interface CardProps {
-  title: string;
-  children: React.ReactNode;
+export interface FileNode {
+  name: string
+  type: "file" | "directory"
+  content?: string
+  children?: FileNode[]
+  path?: string
 }
 
-export function Card({ title, children }: CardProps) {
-  return (
-    <div className="rounded-lg border p-4 shadow-sm">
-      <h3 className="text-lg font-medium">{title}</h3>
-      <div className="mt-2">{children}</div>
-    </div>
-  );
-}`,
-          },
-        ],
-      },
-      {
-        id: "5",
-        name: "pages",
-        type: "directory",
-        children: [
-          {
-            id: "6",
-            name: "index.tsx",
-            type: "file",
-            language: "tsx",
-            content: `import React from 'react';
-import { Button } from '../components/Button';
-import { Card } from '../components/Card';
-
-export default function Home() {
-  return (
-    <div className="container mx-auto p-4">
-      <h1 className="text-2xl font-bold mb-4">Welcome to My App</h1>
-      <Card title="Getting Started">
-        <p className="mb-4">This is a sample application.</p>
-        <Button>Learn More</Button>
-      </Card>
-    </div>
-  );
-}`,
-          },
-        ],
-      },
-      {
-        id: "7",
-        name: "styles",
-        type: "directory",
-        children: [
-          {
-            id: "8",
-            name: "globals.css",
-            type: "file",
-            language: "css",
-            content: `@tailwind base;
-@tailwind components;
-@tailwind utilities;
-
-@layer components {
-  .btn {
-    @apply px-4 py-2 rounded-md font-medium transition-colors;
-  }
-  
-  .btn-primary {
-    @apply bg-blue-500 text-white hover:bg-blue-600;
-  }
-  
-  .btn-secondary {
-    @apply bg-gray-200 text-gray-800 hover:bg-gray-300;
-  }
-  
-  .btn-outline {
-    @apply border border-gray-300 hover:bg-gray-100;
-  }
-  
-  .btn-sm {
-    @apply text-sm px-3 py-1;
-  }
-  
-  .btn-md {
-    @apply text-base px-4 py-2;
-  }
-  
-  .btn-lg {
-    @apply text-lg px-5 py-3;
-  }
-}`,
-          },
-        ],
-      },
-    ],
-  },
-  {
-    id: "9",
-    name: "package.json",
-    type: "file",
-    language: "json",
-    content: `{
-  "name": "my-app",
-  "version": "0.1.0",
-  "private": true,
-  "scripts": {
-    "dev": "next dev",
-    "build": "next build",
-    "start": "next start",
-    "lint": "next lint"
-  },
-  "dependencies": {
-    "next": "13.4.19",
-    "react": "18.2.0",
-    "react-dom": "18.2.0"
-  },
-  "devDependencies": {
-    "@types/node": "20.5.7",
-    "@types/react": "18.2.21",
-    "@types/react-dom": "18.2.7",
-    "autoprefixer": "10.4.15",
-    "postcss": "8.4.29",
-    "tailwindcss": "3.3.3",
-    "typescript": "5.2.2"
-  }
-}`,
-  },
-  {
-    id: "10",
-    name: "README.md",
-    type: "file",
-    language: "markdown",
-    content: `# My App
-
-This is a sample Next.js application with TypeScript and Tailwind CSS.
-
-## Getting Started
-
-First, run the development server:
-
-\`\`\`bash
-npm run dev
-# or
-yarn dev
-\`\`\`
-
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
-`,
-  },
-]
-
-export function CodeEditor() {
+export function CodeEditor({ steps, onUpdate }: CodeEditorProps) {
   const [copied, setCopied] = useState(false)
-  const [selectedFile, setSelectedFile] = useState(sampleFiles[0].children?.[1].children?.[0])
+  const [selectedFile, setSelectedFile] = useState<FileNode >()
   const [activeTab, setActiveTab] = useState("editor")
   const [editorContent, setEditorContent] = useState("")
+  const [files, setFiles] = useState<FileNode[]>([])
+
+
+  useEffect(() => {
+    let originalFiles = [...files];
+    let updateHappened = false;
+    steps.filter(step=> step.status === 'pending').map(step =>{
+      updateHappened = true;
+      if(step.type === StepType.CreateFile){
+        let parsedPath = step.path?.split('/') || [];
+        let currentFiles = [...originalFiles];
+        let finalAnswerRef = currentFiles;
+
+        let currentFolder = "";
+
+    
+        while(parsedPath.length){
+          currentFolder = `${currentFolder}/${parsedPath[0]}`;
+          let currentFolderName =  parsedPath[0];
+          parsedPath.shift();
+
+          if(!parsedPath.length){
+            let file = currentFiles.find(x=> x.path === currentFolder);
+            if(!file){
+              currentFiles.push({
+                name: currentFolderName,
+                type: "file",
+                path: currentFolder,
+                content: step.code || ""
+              })
+            }
+            else{
+              file.content = step.code || "";
+            }
+          }
+          else{
+            let folder = currentFiles.find(x=> x.path === currentFolder);
+            if(!folder){
+              currentFiles.push({
+                name: currentFolderName,
+                type: "directory",
+                path: currentFolder,
+                children: []
+              })
+            }
+            currentFiles = currentFiles.find(x=> x.path ===currentFolder)!.children!;
+          }
+        }
+        originalFiles = finalAnswerRef;
+      }
+    })
+
+    if(updateHappened){
+      console.log("originalFiles", originalFiles)
+      setFiles(originalFiles);
+      onUpdate(steps.map((s:Step)=>{
+        return{
+          ...s,
+          status: "completed"
+        }
+      }))
+    }
+  },[steps])
+
+
+
+
+  useEffect(()=>{
+    const createMountStructure = (files:FileNode[]):Record<string,any> =>{
+      const mountStructure:Record<string,any> = {};
+      const processFile = (file:FileNode, isRootFolder:boolean)=>{
+        if(file.type === "directory"){
+          mountStructure[file.name]={
+            directory:file.children ? Object.fromEntries(file.children.map(child=> [child.name,processFile(child,false)])) : {}
+          }}
+        else if(file.type === "file"){
+          if(isRootFolder){
+            mountStructure[file.name] = {
+              file:{
+                content:file.content || ""
+              }
+            }
+          }
+          else{
+            return{
+              file:{
+                content:file.content || ""
+              }
+            }
+          }
+        }
+        return mountStructure[file.name];
+      }
+      files.forEach(file=>processFile(file,true));
+      return mountStructure;
+    }
+
+    const mountStructure = createMountStructure(files);
+    console.log(mountStructure);
+
+  },[files])
 
   const copyToClipboard = () => {
     if (selectedFile && selectedFile.type === "file") {
@@ -218,11 +137,10 @@ export function CodeEditor() {
     }
   }
 
-  const handleFileSelect = (file: any) => {
+  const handleFileSelect = (file: FileNode) => {
     if (file.type === "file") {
       setSelectedFile(file)
-      setEditorContent(file.content)
-      setActiveTab("editor")
+      setEditorContent(file.content || "")
     }
   }
 
@@ -236,7 +154,7 @@ export function CodeEditor() {
   }
 
   return (
-    <div className="w-1/2 h-full flex flex-col border-l border-border/40 bg-background/95">
+    <div className="w-full h-full flex flex-col border-l border-border/40 bg-background/95">
       <div className="border-b border-border/40 p-4 flex items-center justify-between bg-background/80 backdrop-blur-sm">
         <h2 className="text-lg font-medium">Project Files</h2>
         <div className="flex items-center gap-2">
@@ -258,7 +176,7 @@ export function CodeEditor() {
       <div className="flex flex-1 overflow-hidden">
         {/* File Explorer */}
         <div className="w-64 border-r border-border/40 overflow-y-auto bg-background/30">
-          <FileExplorer files={sampleFiles} onSelectFile={handleFileSelect} selectedFile={selectedFile} />
+          <FileExplorer files={files} onSelectFile={handleFileSelect} selectedFile={selectedFile} />
         </div>
 
         {/* Code Editor / Terminal */}
@@ -286,7 +204,6 @@ export function CodeEditor() {
               {selectedFile && selectedFile.type === "file" ? (
                 <Editor
                   height="100%"
-                  defaultLanguage={selectedFile.language}
                   value={editorContent}
                   onChange={handleEditorChange}
                   theme="vs-dark"
@@ -309,22 +226,14 @@ export function CodeEditor() {
 
             <TabsContent value="terminal" className="flex-1 p-0 m-0">
               <div className="h-full bg-black/90 p-4 font-mono text-sm text-green-400 overflow-auto">
-                <div className="animate-pulse">$</div>
-                <div className="mt-2">
-                  <span className="text-blue-400">user@machine</span>:<span className="text-purple-400">~/project</span>
-                  $ npm run dev
+                <div className="space-y-2">
+                  <div className="animate-pulse">$</div>
+                  <div>
+                      <span className="text-blue-400">user@machine</span>:<span className="text-purple-400">~/project</span>
+                      $ npm run dev
+                    </div>
+                    <div className="text-gray-400">&gt; Ready to run the project</div>
                 </div>
-                <div className="mt-1">
-                  <span className="text-gray-400">&gt; my-app@0.1.0 dev</span>
-                </div>
-                <div className="mt-1">
-                  <span className="text-gray-400">&gt; next dev</span>
-                </div>
-                <div className="mt-2">- ready started server on 0.0.0.0:3000, url: http://localhost:3000</div>
-                <div className="mt-1">- event compiled client and server successfully in 188 ms (17 modules)</div>
-                <div className="mt-1">- wait compiling...</div>
-                <div className="mt-1">- event compiled client and server successfully in 157 ms (19 modules)</div>
-                <div className="mt-4 animate-pulse">$</div>
               </div>
             </TabsContent>
           </Tabs>
@@ -334,7 +243,6 @@ export function CodeEditor() {
             <div className="flex items-center gap-4">
               {selectedFile && selectedFile.type === "file" && (
                 <>
-                  <span>{selectedFile.language.toUpperCase()}</span>
                   <span>UTF-8</span>
                 </>
               )}

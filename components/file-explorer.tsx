@@ -5,11 +5,12 @@ import type React from "react"
 import { useState } from "react"
 import { ChevronDown, ChevronRight, File, Folder, FolderOpen } from "lucide-react"
 import { cn } from "@/lib/utils"
+import { FileNode } from "./code-editor"
 
 interface FileExplorerProps {
-  files: any[]
-  onSelectFile: (file: any) => void
-  selectedFile: any
+  files: FileNode[]
+  onSelectFile: (file: FileNode) => void
+  selectedFile?: FileNode
 }
 
 export function FileExplorer({ files, onSelectFile, selectedFile }: FileExplorerProps) {
@@ -18,7 +19,7 @@ export function FileExplorer({ files, onSelectFile, selectedFile }: FileExplorer
       <div className="text-sm font-medium px-2 py-1.5 text-muted-foreground">PROJECT</div>
       <div className="mt-1">
         {files.map((file) => (
-          <FileTreeItem key={file.id} file={file} level={0} onSelectFile={onSelectFile} selectedFile={selectedFile} />
+          <FileTreeItem key={file.name} file={file} level={0} onSelectFile={onSelectFile} selectedFile={selectedFile} />
         ))}
       </div>
     </div>
@@ -26,15 +27,15 @@ export function FileExplorer({ files, onSelectFile, selectedFile }: FileExplorer
 }
 
 interface FileTreeItemProps {
-  file: any
+  file: FileNode
   level: number
-  onSelectFile: (file: any) => void
-  selectedFile: any
+  onSelectFile: (file: FileNode) => void
+  selectedFile?: FileNode
 }
 
 function FileTreeItem({ file, level, onSelectFile, selectedFile }: FileTreeItemProps) {
   const [expanded, setExpanded] = useState(true)
-  const isSelected = selectedFile && selectedFile.id === file.id
+  const isSelected = selectedFile && selectedFile.path === file.path
 
   const toggleExpand = (e: React.MouseEvent) => {
     e.stopPropagation()
