@@ -8,9 +8,8 @@ import type { Project, Chat } from "@/types/types"
 import { Step } from "@/types/stepType"
 import { parseXml } from "@/lib/steps"
 import { sampleProjects } from "@/temp/second"
-import { prompt } from "@/temp/second"
 import axios from "axios"
-
+import { Message } from "@/types/types"
 export function ChatInterface() {
   const params = useParams()
   const chatId = params.chatId as string
@@ -19,22 +18,89 @@ export function ChatInterface() {
   const [activeProject, setActiveProject] = useState<Project | null>(null)
   const [selectedStep, setSelectedStep] = useState<Step | null>(null)
   const [steps, setSteps] = useState<Step[]>([])
+  const [messages, setMessages] = useState<Message[]>([])
 
-  const handleSendMessage = async (message: string) => {
-    setSteps([])
+  const handleSendMessage = async (message: Message) => {
+    // Add the user message to the messages array
+    const updatedMessages = [...messages, message];
+    setMessages(updatedMessages);
+    
+    // Reset steps before processing new message
+    setSteps([]);
     
     try {
-      const response = await axios.post("/api/chat", {
-        prompt: message
-      })
-
-      console.log("response", response)
+      // Call the API to get response from LLM
+      const response = await axios.post<{ roadmap: string }>("/api/chat", {
+        prompt: message.input
+      });
         
-      const parsedSteps = parseXml(response.data.response)
-      console.log("parsedSteps", parsedSteps)
-      setSteps(parsedSteps)
+      // Parse the XML response
+      const parsedResult = parseXml(response.data.roadmap);
+      console.log("parsedResult", parsedResult);
+      
+      // Set the steps from the parsed result
+      setSteps(parsedResult.steps);
+      
+      // Add the assistant's response as const handleSendMessage = async (message: Message) => {
+  // Add the user message to the messages array
+  const updatedMessages = [...messages, message];
+  setMessages(updatedMessages);
+  
+  // Reset steps before processing new message
+  setSteps([]);
+  
+  try {
+    // Call the API to get response from LLM
+    const response = await axios.post<{ roadmap: string }>("/api/chat", {
+      prompt: message.input
+    });
+      
+    // Parse the XML response
+    const parsedResult = parseXml(response.data.roadmap);
+    console.log("parsedResult", parsedResult);
+    
+    // Set the steps from the parsed result
+    setSteps(parsedResult.steps);
+    
+    // Add the assistant's response as a new message 
+    // (not replacing the previous messages array)
+    setMessages([
+      ...updatedMessages, 
+      { 
+        input: "", // Empty input means it's from the assistant
+        output: parsedResult.description 
+      }
+    ]);
+  } catch (error) {
+    console.error("Error processing response:", error);
+    // Add an error message to the chat
+    setMessages([
+      ...updatedMessages,
+      {
+        input: "",
+        output: "Sorry, there was an error processing your request."
+      }
+    ]);
+  }
+}
+      // (not replacing the previous messages array)
+      setMessages([
+        ...updatedMessages, 
+        { 
+          input: "", // Empty input means it's from the assistant
+          output: parsedResult.description 
+        }
+      ]);
     } catch (error) {
-      console.error("Error streaming response:", error)
+      console.error("Error processing response:", error);
+      // Add an error message to the chat
+      setMessages([
+        ...updatedMessages,
+        {
+          input: "",
+          output: "Sorry, there was an error processing your request."
+        }
+      ]);
     }
   }
 
@@ -74,6 +140,7 @@ export function ChatInterface() {
         <ChatArea
           activeChat={activeChat}
           activeProject={activeProject}
+          messages={messages}
           onSendMessage={handleSendMessage}
         />
       </div>

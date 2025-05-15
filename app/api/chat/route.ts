@@ -35,8 +35,8 @@ export async function POST(req: Request) {
     //   return NextResponse.json({ success: false, error: "Chat history not found" });
     // }
 
-  const response = await generateRoadmap("123", prompt, "gemini", "gemini-2.0-flash", "static")
+  const roadmap = await generateRoadmap("123", prompt, "gemini", "gemini-2.0-flash", "static")
   return NextResponse.json({
-    response:response as string
+    roadmap:roadmap as string
   });
 } 

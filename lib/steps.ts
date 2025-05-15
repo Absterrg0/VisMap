@@ -28,65 +28,78 @@ import { Step, StepType } from '@/types/stepType';
  * 
  * The input can have strings in the middle they need to be ignored
  */
-export function parseXml(response: string): Step[] {
-    // Extract the XML content between <visArtifact> tags
-    const xmlMatch = response.match(/<visArtifact[^>]*>([\s\S]*?)<\/visArtifact>/);
-    
-    if (!xmlMatch) {
-      return [];
-    }
+export interface ParsedXmlResult {
+  steps: Step[];
+  description: string;
+  artifactTitle: string;
+}
+
+export function parseXml(response: string): ParsedXmlResult {
+  // Extract the description text before the XML block
+  const descriptionMatch = response.match(/^([\s\S]*?)```xml/);
+  const description = descriptionMatch ? descriptionMatch[1].trim() : '';
   
-    const xmlContent = xmlMatch[1];
-    const steps: Step[] = [];
-    let stepId = 1;
+  // Extract the XML content between <visArtifact> tags
+  const xmlMatch = response.match(/<visArtifact[^>]*>([\s\S]*?)<\/visArtifact>/);
   
-    // Extract artifact title
-    const titleMatch = response.match(/title="([^"]*)"/);
-    const artifactTitle = titleMatch ? titleMatch[1] : 'Project Files';
-  
-    // Add initial artifact step
-    steps.push({
-      id: stepId++,
-      title: artifactTitle,
-      description: '',
-      type: StepType.CreateFolder,
-      status: 'pending'
-    });
-  
-    // Regular expression to find visAction elements
-    const actionRegex = /<visAction\s+type="([^"]*)"(?:\s+filePath="([^"]*)")?>([\s\S]*?)<\/visAction>/g;
-    
-    let match;
-    while ((match = actionRegex.exec(xmlContent)) !== null) {
-      const [, type, filePath, content] = match;
-  
-      if (type === 'file') {
-        // File creation step
-        steps.push({
-          id: stepId++,
-          title: `Create ${filePath || 'file'}`,
-          description: '',
-          type: StepType.CreateFile,
-          status: 'pending',
-          code: content.trim(),
-          path: filePath
-        });
-      } else if (type === 'shell') {
-        // Shell command step
-        steps.push({
-          id: stepId++,
-          title: 'Run command',
-          description: '',
-          type: StepType.RunScript,
-          status: 'pending',
-          code: content.trim()
-        });
-      }
-    }
-  
-    return steps;
+  if (!xmlMatch) {
+    return { steps: [], description: description, artifactTitle: 'Project Files' };
   }
 
+  const xmlContent = xmlMatch[1];
+  const steps: Step[] = [];
+  let stepId = 1;
+
+  // Extract artifact title
+  const titleMatch = response.match(/<visArtifact[^>]*title="([^"]*)"/);
+  const artifactTitle = titleMatch ? titleMatch[1] : 'Project Files';
+
+  // Add initial artifact step
+  steps.push({
+    id: stepId++,
+    title: artifactTitle,
+    description: description,
+    type: StepType.CreateFolder,
+    status: 'pending'
+  });
+
+  // Regular expression to find visAction elements
+  const actionRegex = /<visAction\s+type="([^"]*)"(?:\s+filePath="([^"]*)")?>([\s\S]*?)<\/visAction>/g;
+  
+  let match;
+  while ((match = actionRegex.exec(xmlContent)) !== null) {
+    const [, type, filePath, content] = match;
+
+    if (type === 'file') {
+      // File creation step
+      steps.push({
+        id: stepId++,
+        title: `Create ${filePath || 'file'}`,
+        description: '',
+        type: StepType.CreateFile,
+        status: 'pending',
+        code: content.trim(),
+        path: filePath
+      });
+    } else if (type === 'shell') {
+      // Shell command step
+      steps.push({
+        id: stepId++,
+        title: 'Run command',
+        description: '',
+        type: StepType.RunScript,
+        status: 'pending',
+        code: content.trim()
+      });
+    }
+  }
+
+  return { 
+    steps,
+    description,
+    artifactTitle
+  };
+}
 export const WORK_DIR_NAME = '/roadmap';
 export const WORK_DIR = `/home/${WORK_DIR_NAME}`;
 

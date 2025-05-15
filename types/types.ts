@@ -12,4 +12,9 @@ export interface Chat {
   
 
 
+  export interface Message{
+    input: string
+    output: string
+  }
+
  

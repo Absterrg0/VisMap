@@ -3,7 +3,7 @@
 import type React from "react"
 import { useState, useRef, useEffect } from "react"
 import axios from "axios"
-import type { Project, Chat } from "@/types/types"
+import type { Project, Chat, Message } from "@/types/types"
 import { Button } from "@/components/ui/button"
 import { Textarea } from "@/components/ui/textarea"
 import { SendHorizontal, Bot, User } from "lucide-react"
@@ -13,11 +13,11 @@ import { SidebarInset } from "@/components/ui/sidebar"
 interface ChatAreaProps {
   activeChat: Chat
   activeProject: Project | null
-  onSendMessage: (message: string) => void
+  onSendMessage: (message: Message) => void
+  messages: Message[]
 }
 
-export function ChatArea({ activeChat, activeProject,onSendMessage }: ChatAreaProps) {
-  const [messages, setMessages] = useState<string[]>([])
+export function ChatArea({ activeChat, activeProject,onSendMessage, messages }: ChatAreaProps) {
   const [input, setInput] = useState("")
   const [isLoading, setIsLoading] = useState(false)
   const [inputRows, setInputRows] = useState(1)
@@ -42,7 +42,10 @@ export function ChatArea({ activeChat, activeProject,onSendMessage }: ChatAreaPr
     e.preventDefault()
     if (!input.trim() || isLoading) return
 
-    onSendMessage(input)
+    onSendMessage({
+      input: input,
+      output: "",
+    })
     setInput("")
     setIsLoading(true)
 
@@ -88,31 +91,33 @@ export function ChatArea({ activeChat, activeProject,onSendMessage }: ChatAreaPr
       <header className="border-b border-border/40 p-4 flex items-center justify-between bg-background/80 backdrop-blur-sm sticky top-0 z-10">
         <div>
           <h1 className="text-xl font-semibold">{activeChat.name}</h1>
-          <p className="text-sm text-muted-foreground">{activeProject.name}</p>
+          <p className="text-sm text-muted-foreground">{activeProject?.name}</p>
         </div>
       </header>
 
       <div className="flex-1 overflow-y-auto p-4 space-y-6">
-        {messages.map((message) => (
+        {messages.map((message, index) => (
           <div
-            key={message.id}
+            key={index}
             className={cn(
               "flex gap-3 max-w-3xl mx-auto",
-              message.role === "user" ? "justify-end" : "justify-start",
+              message.input ? "justify-end" : "justify-start",
             )}
           >
             <div
               className={cn(
                 "flex gap-3 rounded-lg p-4 max-w-[85%]",
-                message.role === "user"
+                message.input
                   ? "bg-primary text-primary-foreground ml-auto"
                   : "bg-accent/40 text-accent-foreground border border-border/40",
               )}
             >
               <div className="flex-shrink-0 mt-1">
-                {message.role === "user" ? <User className="h-5 w-5" /> : <Bot className="h-5 w-5" />}
+                {message.input ? <User className="h-5 w-5" /> : <Bot className="h-5 w-5" />}
               </div>
-              <div className="prose dark:prose-invert prose-sm">{message.content}</div>
+              <div className="prose dark:prose-invert prose-sm">
+                {message.input}
+              </div>
             </div>
           </div>
         ))}
