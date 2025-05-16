@@ -1,16 +1,15 @@
 import { getSystemPrompt } from "@/lib/prompts-llm";
 import { GoogleGenAI } from "@google/genai";
 
-export default async function generateWithGemini(prompt: string, templatePrompt: string[], model: string): Promise<string> {
+export default async function generateWithGemini(prompt: string, BASE_PROMPT: string, model: string): Promise<string> {
     try {
   
       const genAI = new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY || '' });
-  
+
       const response = await genAI.models.generateContentStream({
         model: `${model}`,
         contents: [
-          { role: "user", parts: [{ text: templatePrompt[0] }] },
-          { role: "user", parts: [{ text: templatePrompt[1] }] },
+          { role: "user", parts: [{ text: BASE_PROMPT }] },
           { role: "user", parts: [{ text: prompt }] }
         ],
         config:{
@@ -19,8 +18,8 @@ export default async function generateWithGemini(prompt: string, templatePrompt:
       });
       let text = "";
       for await (const chunk of response) {
-        console.log(chunk.text);
         text += chunk.text;
+        console.log(chunk.text)
       }
       return text;
     } catch (error) {

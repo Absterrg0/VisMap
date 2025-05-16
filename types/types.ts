@@ -13,8 +13,9 @@ export interface Chat {
 
 
   export interface Message{
-    input: string
-    output: string
+    role:'user' | 'assistant'
+    content:string
   }
 
+ 
  

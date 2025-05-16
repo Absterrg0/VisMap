@@ -89,7 +89,7 @@ function FileTreeItem({ file, level, onSelectFile, selectedFile }: FileTreeItemP
         <div>
           {file.children.map((child: any) => (
             <FileTreeItem
-              key={child.id}
+              key={child}
               file={child}
               level={level + 1}
               onSelectFile={onSelectFile}

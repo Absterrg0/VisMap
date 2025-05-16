@@ -1,88 +1,73 @@
 import { Step, StepType } from '@/types/stepType';
-
-/*
- * Parse input XML and convert it into steps.
- * Eg: Input - 
- * <visArtifact id=\"project-import\" title=\"Project Files\">
- *  <visAction type=\"file\" filePath=\"eslint.config.js\">
- *      import js from '@eslint/js';\nimport globals from 'globals';\n
- *  </visAction>
- * <visAction type="shell">
- *      node index.js
- * </visAction>
- * </visArtifact>
- * 
- * Output - 
- * [{
- *      title: "Project Files",
- *      status: "Pending"
- * }, {
- *      title: "Create eslint.config.js",
- *      type: StepType.CreateFile,
- *      code: "import js from '@eslint/js';\nimport globals from 'globals';\n"
- * }, {
- *      title: "Run command",
- *      code: "node index.js",
- *      type: StepType.RunScript
- * }]
- * 
- * The input can have strings in the middle they need to be ignored
- */
 export interface ParsedXmlResult {
   steps: Step[];
   description: string;
   artifactTitle: string;
 }
 
-export function parseXml(response: string): ParsedXmlResult {
-  // Extract the description text before the XML block
-  const descriptionMatch = response.match(/^([\s\S]*?)```xml/);
-  const description = descriptionMatch ? descriptionMatch[1].trim() : '';
-  
-  // Extract the XML content between <visArtifact> tags
-  const xmlMatch = response.match(/<visArtifact[^>]*>([\s\S]*?)<\/visArtifact>/);
-  
-  if (!xmlMatch) {
-    return { steps: [], description: description, artifactTitle: 'Project Files' };
+export function parseXml(response: string): Step[] {
+  // Extract everything before <visArtifact ...> as intro
+  const artifactStartMatch = response.match(/<visArtifact[^>]*>/);
+  const artifactEndMatch = response.match(/<\/visArtifact>/);
+
+  let intro = "";
+  let outro = "";
+  let xmlContent = "";
+
+  if (artifactStartMatch && artifactEndMatch) {
+    const startIdx = artifactStartMatch.index!;
+    const endIdx = artifactEndMatch.index! + artifactEndMatch[0].length;
+
+    intro = response.slice(0, startIdx).trim();
+    xmlContent = response.slice(artifactStartMatch.index! + artifactStartMatch[0].length, artifactEndMatch.index!).trim();
+    outro = response.slice(endIdx).trim();
+  } else {
+    // If no visArtifact, treat whole response as intro
+    intro = response.trim();
+    return [
+      {
+        id: 1,
+        title: "Introduction",
+        description: intro,
+        type: StepType.CreateFolder,
+        status: "pending"
+      }
+    ];
   }
 
-  const xmlContent = xmlMatch[1];
   const steps: Step[] = [];
   let stepId = 1;
 
-  // Extract artifact title
-  const titleMatch = response.match(/<visArtifact[^>]*title="([^"]*)"/);
-  const artifactTitle = titleMatch ? titleMatch[1] : 'Project Files';
-
-  // Add initial artifact step
+  // Step 0: Introductory text
   steps.push({
     id: stepId++,
-    title: artifactTitle,
-    description: description,
+    title: "Introduction",
+    description: intro,
     type: StepType.CreateFolder,
-    status: 'pending'
+    status: "pending"
   });
 
+  // Extract artifact title
+  const titleMatch = response.match(/<visArtifact[^>]*title="([^"]*)"/);
   // Regular expression to find visAction elements
   const actionRegex = /<visAction\s+type="([^"]*)"(?:\s+filePath="([^"]*)")?>([\s\S]*?)<\/visAction>/g;
-  
   let match;
   while ((match = actionRegex.exec(xmlContent)) !== null) {
     const [, type, filePath, content] = match;
 
     if (type === 'file') {
-      // File creation step
+      // Check if this is an update or create operation
+      const isUpdate = response.includes(`<file path="${filePath}" type="modified">`);
       steps.push({
         id: stepId++,
-        title: `Create ${filePath || 'file'}`,
+        title: isUpdate ? `Update ${filePath || 'file'}` : `Create ${filePath || 'file'}`,
         description: '',
-        type: StepType.CreateFile,
+        type: isUpdate ? StepType.EditFile : StepType.CreateFile,
         status: 'pending',
         code: content.trim(),
         path: filePath
       });
     } else if (type === 'shell') {
-      // Shell command step
       steps.push({
         id: stepId++,
         title: 'Run command',
@@ -94,11 +79,18 @@ export function parseXml(response: string): ParsedXmlResult {
     }
   }
 
-  return { 
-    steps,
-    description,
-    artifactTitle
-  };
+  // Step N: Outro/closing text
+  if (outro) {
+    steps.push({
+      id: stepId++,
+      title: "Conclusion",
+      description: outro,
+      type: StepType.CreateFolder,
+      status: "pending"
+    });
+  }
+
+  return steps;
 }
 export const WORK_DIR_NAME = '/roadmap';
 export const WORK_DIR = `/home/${WORK_DIR_NAME}`;

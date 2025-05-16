@@ -132,10 +132,15 @@ model Message{
   id String @id @default(uuid())
   chatHistoryId String
   chatHistory ChatHistory @relation(fields: [chatHistoryId], references: [id], onDelete: Cascade)
-  input String
-  output String
+  role UserRole
+  content String
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+}
+
+enum UserRole{
+  USER
+  ASSISTANT
 }
 
 model RoadMap{
@@ -149,22 +154,6 @@ model RoadMap{
   updatedAt DateTime @updatedAt
 }
 
-// model Node{
-//   id String @id @default(uuid())
-//   roadMapId String
-//   roadMap RoadMap @relation(fields: [roadMapId], references: [id], onDelete: Cascade)
-//    title      String
-//   description String?
-//   positionX  Float        // For canvas layout (React Three Fiber)
-//   positionY  Float
-//   positionZ  Float
-//   parentId   String?      // For connecting nodes in a DAG
-//   parent     Node? @relation("NodeParent", fields: [parentId], references: [id])
-//   children   Node[] @relation("NodeParent")
-//   content  String?
-//   createdAt DateTime @default(now())
-//   updatedAt DateTime @updatedAt
-// }
 
 
 model Model{

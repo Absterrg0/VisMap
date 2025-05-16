@@ -1,21 +1,36 @@
 "use client"
 
-import { useState, useRef } from "react"
+import { useState, useRef, useEffect } from "react"
 import { useRouter, useParams } from "next/navigation"
 import { Paperclip, SendHorizontal, Sparkles } from "lucide-react"
+import { usePromptStore } from "@/zustand/store"
+import { Switch } from "./ui/switch"
 
-export function NewChatComponent( ) {
-  const [prompt, setPrompt] = useState("")
+
+export function NewChatComponent() {
+  const prompt = usePromptStore((state) => state.prompt)
+  const setPrompt = usePromptStore((state) => state.setPrompt)
+  const template = usePromptStore((state)=> state.template );
+  const setTemplate = usePromptStore((state)=> state.setTemplate);
   const [inputRows, setInputRows] = useState(2)
   const textareaRef = useRef<HTMLTextAreaElement>(null)
   const formRef = useRef<HTMLFormElement>(null)
   const router = useRouter()
 
-  const projectId = useParams().projectId;
+  const { projectId } = useParams() as { projectId: string }
 
   const MIN_ROWS = 2
   const MAX_ROWS = 6
   const LINE_HEIGHT = 24
+
+  // Sync textarea rows with prompt on mount
+  useEffect(() => {
+    if (textareaRef.current) {
+      textareaRef.current.value = prompt
+      adjustRows({ target: textareaRef.current } as React.ChangeEvent<HTMLTextAreaElement>)
+    }
+    // eslint-disable-next-line
+  }, [])
 
   const handleInputChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     setPrompt(e.target.value)
@@ -78,6 +93,14 @@ export function NewChatComponent( ) {
                   <button type="button" className="p-2 rounded-full hover:bg-accent/30 text-muted-foreground hover:text-foreground transition-colors">
                     <Paperclip className="h-4 w-4" />
                   </button>
+                  <Switch
+                    checked={template === "interactive"}
+                    onCheckedChange={(checked) => setTemplate(checked ? "interactive" : "static")}
+                    className="bg-background data-[state=checked]:bg-primary data-[state=checked]:text-primary-foreground data-[state=unchecked]:bg-muted data-[state=unchecked]:text-muted-foreground"
+                  />
+                  <span className="text-sm text-muted-foreground">
+                    {template === "interactive" ? "Interactive" : "Static"}
+                  </span>
                 </div>
                 <button
                   type="submit"

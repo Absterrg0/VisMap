@@ -5,32 +5,33 @@ type ModelType = 'claude' | 'gemini' | 'openai';
 import generateWithClaude from "@/app/actions/llms/claude";
 import generateWithGemini from "@/app/actions/llms/gemini";
 import generateWithOpenAI from "@/app/actions/llms/openai";  
-import { templatePrompt } from "@/lib/template-prompt";
+import { Message } from "@/types/types";
 
 export async function generateRoadmap(
   historyId: string,
-  prompt: string,
+  prompts: Message[],
   modelType: ModelType,
   modelName?: string,
-  roadmapType: 'static' | 'dynamic' = 'static'
+  roadmapType: 'static' | 'interactive' = 'static'
 ) {
   try {
-    const template = templatePrompt(roadmapType)
+    
 
     let generatedContent = '';
 
-    const userPrompt = `${DIFF_PROMPT}\n\n${prompt}`
+    
+    const userPrompt = `${DIFF_PROMPT}\n\n${prompts.map(x=>`${x.role}: ${x.content}`).join("\n")}`
     
     switch (modelType) {
-      case 'claude':
-        generatedContent = await generateWithClaude(userPrompt, template, modelName || 'claude-3-opus-20240229');
-        break;
+      // case 'claude':
+      //   generatedContent = await generateWithClaude(userPrompt, BASE_PROMPT, modelName || 'claude-3-opus-20240229');
+      //   break;
       case 'gemini':
-        generatedContent = await generateWithGemini(userPrompt,template, modelName || 'gemini-2.0-flash');
+        generatedContent = await generateWithGemini(userPrompt,BASE_PROMPT, modelName || 'gemini-2.0-flash');
         break;
-      case 'openai':
-        generatedContent = await generateWithOpenAI(userPrompt, template, modelName || 'gpt-4-turbo');
-        break;
+      // case 'openai':
+      //   generatedContent = await generateWithOpenAI(userPrompt, BASE_PROMPT, modelName || 'gpt-4-turbo');
+      //   break;
       default:
         return { success: false, error: "Invalid model type" };
     }

@@ -8,7 +8,8 @@ import { FileExplorer } from "@/components/file-explorer"
 import { cn } from "@/lib/utils"
 import Editor from "@monaco-editor/react"
 import { Step, StepType } from "@/types/stepType"
-
+import { parseXml } from "@/lib/steps"
+import axios from "axios"
 interface CodeEditorProps {
   steps: Step[]
   onUpdate: (steps: Step[]) => void
@@ -89,7 +90,7 @@ export function CodeEditor({ steps, onUpdate }: CodeEditorProps) {
         }
       }))
     }
-  },[steps])
+  },[steps,files])
 
 
 
@@ -128,6 +129,10 @@ export function CodeEditor({ steps, onUpdate }: CodeEditorProps) {
     console.log(mountStructure);
 
   },[files])
+
+
+
+
 
   const copyToClipboard = () => {
     if (selectedFile && selectedFile.type === "file") {
