@@ -1,4 +1,4 @@
-import { userSchema } from "@/consts/userSchema";
+import { userSchema } from "@/types/userSchema";
 import prisma from "@/db";
 import { auth } from "@/lib/auth";
 import { getSession } from "@/lib/client";

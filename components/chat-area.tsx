@@ -144,7 +144,6 @@ export function ChatArea({ activeChat, activeProject, onSendMessage, messages, s
 
           {/* Chat Tab Content */}
           <TabsContent value="chat" className="flex-1 flex flex-col overflow-hidden data-[state=inactive]:hidden">
-            <ScrollArea className="flex-1 p-4">
               <div className="space-y-6 max-w-3xl mx-auto pb-4">
                 {messages.map((message, index) => (
                   <div
@@ -207,7 +206,6 @@ export function ChatArea({ activeChat, activeProject, onSendMessage, messages, s
                 )}
                 <div ref={messagesEndRef} />
               </div>
-            </ScrollArea>
           </TabsContent>
 
           {/* Steps Tab Content */}

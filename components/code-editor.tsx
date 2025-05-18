@@ -12,7 +12,7 @@ import { parseXml } from "@/lib/steps"
 import axios from "axios"
 interface CodeEditorProps {
   steps: Step[]
-  onUpdate: (steps: Step[]) => void
+  files: FileNode[]
 }
 
 export interface FileNode {
@@ -23,112 +23,12 @@ export interface FileNode {
   path?: string
 }
 
-export function CodeEditor({ steps, onUpdate }: CodeEditorProps) {
+export function CodeEditor({ files }: CodeEditorProps) {
   const [copied, setCopied] = useState(false)
   const [selectedFile, setSelectedFile] = useState<FileNode >()
   const [activeTab, setActiveTab] = useState("editor")
   const [editorContent, setEditorContent] = useState("")
-  const [files, setFiles] = useState<FileNode[]>([])
 
-
-  useEffect(() => {
-    let originalFiles = [...files];
-    let updateHappened = false;
-    steps.filter(step=> step.status === 'pending').map(step =>{
-      updateHappened = true;
-      if(step.type === StepType.CreateFile){
-        let parsedPath = step.path?.split('/') || [];
-        let currentFiles = [...originalFiles];
-        let finalAnswerRef = currentFiles;
-
-        let currentFolder = "";
-
-    
-        while(parsedPath.length){
-          currentFolder = `${currentFolder}/${parsedPath[0]}`;
-          let currentFolderName =  parsedPath[0];
-          parsedPath.shift();
-
-          if(!parsedPath.length){
-            let file = currentFiles.find(x=> x.path === currentFolder);
-            if(!file){
-              currentFiles.push({
-                name: currentFolderName,
-                type: "file",
-                path: currentFolder,
-                content: step.code || ""
-              })
-            }
-            else{
-              file.content = step.code || "";
-            }
-          }
-          else{
-            let folder = currentFiles.find(x=> x.path === currentFolder);
-            if(!folder){
-              currentFiles.push({
-                name: currentFolderName,
-                type: "directory",
-                path: currentFolder,
-                children: []
-              })
-            }
-            currentFiles = currentFiles.find(x=> x.path ===currentFolder)!.children!;
-          }
-        }
-        originalFiles = finalAnswerRef;
-      }
-    })
-
-    if(updateHappened){
-      console.log("originalFiles", originalFiles)
-      setFiles(originalFiles);
-      onUpdate(steps.map((s:Step)=>{
-        return{
-          ...s,
-          status: "completed"
-        }
-      }))
-    }
-  },[steps,files])
-
-
-
-
-  useEffect(()=>{
-    const createMountStructure = (files:FileNode[]):Record<string,any> =>{
-      const mountStructure:Record<string,any> = {};
-      const processFile = (file:FileNode, isRootFolder:boolean)=>{
-        if(file.type === "directory"){
-          mountStructure[file.name]={
-            directory:file.children ? Object.fromEntries(file.children.map(child=> [child.name,processFile(child,false)])) : {}
-          }}
-        else if(file.type === "file"){
-          if(isRootFolder){
-            mountStructure[file.name] = {
-              file:{
-                content:file.content || ""
-              }
-            }
-          }
-          else{
-            return{
-              file:{
-                content:file.content || ""
-              }
-            }
-          }
-        }
-        return mountStructure[file.name];
-      }
-      files.forEach(file=>processFile(file,true));
-      return mountStructure;
-    }
-
-    const mountStructure = createMountStructure(files);
-    console.log(mountStructure);
-
-  },[files])
 
 
 

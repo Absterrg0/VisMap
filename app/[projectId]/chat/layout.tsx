@@ -6,14 +6,13 @@ import { SidebarProvider } from "@/components/ui/sidebar"
 import { useState } from "react"
 import { Chat, Project } from "@/types/types"
 import { ModeToggle } from "@/components/ui/mode-toggle"
-import { sampleProjects } from "@/temp/first"
 interface ChatLayoutProps {
   children: ReactNode
 }
 
 export default function ChatLayout({ children }: ChatLayoutProps) {
 
-  const [projects, setProjects] = useState<Project[]>(sampleProjects)
+  const [projects, setProjects] = useState<Project[]>([])
 
   const [activeChat, setActiveChat] = useState<Chat | null>(null)
 

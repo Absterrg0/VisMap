@@ -1,14 +1,15 @@
 import { z } from "zod";
 
 export const projectSchema = z.object({
-  id: z.string(),
   name: z.string(),
-  description: z.string(),
-  userId: z.string(),
-  status: z.enum(['ACTIVE','DELETED']),
   systemPrompt: z.string().optional(),
-  createdAt: z.date(),
-  updatedAt: z.date(),
 });
 
 export type Project = z.infer<typeof projectSchema>;
+
+
+
+const userId = "JQ3y5Day2sgOsyTJhZj2StQQIgf6aGMm"
+
+
+const projectId = "fa803cfa-8c40-406b-99f7-eeb865f93bc0"

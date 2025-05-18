@@ -1,6 +1,12 @@
 @import "tailwindcss";
 @import "tw-animate-css";
 
+
+
+html,body{
+  overflow-x: hidden;
+}
+
 :root {
   --background: #f1eff5;
   --foreground: #3d3c4f;
@@ -78,7 +84,7 @@
   --sidebar-primary: #a995c9;
   --sidebar-primary-foreground: #1a1823;
   --sidebar-accent: #372e3f;
-  --sidebar-accent-foreground: #f2b8c6;
+  --sidebar-accent-foreground: #ff6b8d;
   --sidebar-border: #201e28;
   --sidebar-ring: #a995c9;
   --font-sans: Geist, sans-serif;
