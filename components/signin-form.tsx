@@ -26,7 +26,7 @@ export default function SignInComponent() {
     setTimeout(() => {
       signIn.social({
         provider: provider.id as any,
-        callbackURL: "/signin",
+        callbackURL: "/project/new",
       })
     }, 300)
   }
@@ -77,32 +77,7 @@ export default function SignInComponent() {
           animate={containerControls}
           className="relative bg-background/30 backdrop-blur-xl border border-white/10 rounded-3xl overflow-hidden p-8 z-10"
         >
-          {/* Animated background elements */}
-          <div className="absolute inset-0 overflow-hidden">
-            {[...Array(3)].map((_, i) => (
-              <motion.div
-                key={i}
-                className="absolute rounded-full bg-gradient-to-br from-primary/10 to-accent/5"
-                style={{
-                  width: Math.random() * 100 + 50,
-                  height: Math.random() * 100 + 50,
-                  left: `${Math.random() * 100}%`,
-                  top: `${Math.random() * 100}%`,
-                }}
-                animate={{
-                  x: [0, Math.random() * 20 - 10],
-                  y: [0, Math.random() * 20 - 10],
-                  opacity: [0.1, 0.2, 0.1],
-                }}
-                transition={{
-                  duration: Math.random() * 8 + 8,
-                  repeat: Number.POSITIVE_INFINITY,
-                  repeatType: "reverse",
-                  ease: "easeInOut",
-                }}
-              />
-            ))}
-          </div>
+       
 
           {/* Glass reflection */}
           <div className="absolute top-0 left-0 right-0 h-24 bg-gradient-to-b from-white/10 to-transparent rounded-t-3xl" />

@@ -19,6 +19,13 @@ export async function GET(req:NextRequest){
         const projects = await prisma.project.findMany({
             where:{
                 userId:session.user.id
+            },
+            include:{
+                chatHistory:{
+                    include:{
+                        messages:true
+                    }
+                }
             }
         })
         

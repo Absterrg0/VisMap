@@ -39,17 +39,6 @@ export function SidebarContents({ projects, activeChat, onChatSelect, onNewChat 
   const { state } = useSidebar()
   const isCollapsed = state === "collapsed"
 
-  useEffect(() => {
-    const projectId = params?.projectId as string
-    if (projectId) {
-      const project = projects.find((p) => p.id === projectId)
-      if (project) {
-        setSelectedProject(project)
-      }
-    } else if (projects.length > 0) {
-      setSelectedProject(projects[0])
-    }
-  }, [params?.projectId, projects])
 
   const filteredChats = useMemo(() => {
     if (!selectedProject) return []

@@ -17,8 +17,6 @@ export function NewChatComponent() {
   const formRef = useRef<HTMLFormElement>(null)
   const router = useRouter()
 
-  const { projectId } = useParams() as { projectId: string }
-
   const MIN_ROWS = 2
   const MAX_ROWS = 6
   const LINE_HEIGHT = 24
@@ -61,7 +59,7 @@ export function NewChatComponent() {
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
     if (!prompt.trim()) return
-    router.replace(`/${projectId}/chat/${'1-2'}`)
+    router.replace(`/project/chat/${'1-2'}`)
   }
 
   return (
