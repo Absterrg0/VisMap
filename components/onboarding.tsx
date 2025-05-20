@@ -12,13 +12,13 @@ import {
   FileText, 
   Settings, 
   CheckCircle2,
-  Sparkles,
   RefreshCw,
   Shield,
   Lock
 } from "lucide-react"
 import { useRandomName } from "@/hooks/useRandomName"
 import axios from "axios"
+import Logo from "@/components/logo" // Import the Logo component
 
 interface OnboardingComponentProps {
   onProjectCreated: () => void
@@ -160,7 +160,7 @@ export default function OnboardingComponent({ onProjectCreated }: OnboardingComp
         />
 
         {/* Main card with premium glass effect */}
-        <div className="relative rounded-xl overflow-hidden backdrop-blur-md bg-card/30 border border-primary/20 shadow-2xl z-10">
+        <div className="relative rounded-xl overflow-hidden backdrop-blur-md bg-card/5GH0 border border-primary/20 shadow-2xl z-10">
           {/* Light effects */}
           <div className="absolute top-0 left-0 right-0 h-1/2 bg-gradient-to-b from-primary/5 to-transparent opacity-80 z-0 pointer-events-none" />
           <div className="absolute -top-40 -right-20 h-60 w-60 rounded-full bg-primary/10 blur-2xl opacity-50 pointer-events-none" />
@@ -169,16 +169,9 @@ export default function OnboardingComponent({ onProjectCreated }: OnboardingComp
           {/* Content container */}
           <div className="relative z-10 p-8">
             <div className="text-center flex flex-col space-y-4 mb-8">
-              <motion.div
-                initial={{ scale: 0.9, opacity: 0 }}
-                animate={{ scale: 1, opacity: 1 }}
-                transition={{ duration: 0.5, type: "spring" }}
-                className="flex justify-center mb-2"
-              >
-                <div className="h-14 w-14 rounded-2xl bg-gradient-to-br from-primary to-primary/50 flex items-center justify-center shadow-lg">
-                  <Sparkles className="h-7 w-7 text-primary-foreground" />
-                </div>
-              </motion.div>
+              <div className="flex justify-center">
+                <Logo className="h-14 w-14 text-primary-foreground" />
+              </div>
 
               <motion.div
                 initial={{ opacity: 0, y: -10 }}
@@ -186,27 +179,34 @@ export default function OnboardingComponent({ onProjectCreated }: OnboardingComp
                 transition={{ delay: 0.2, duration: 0.4 }}
               >
                 <h1 className="text-3xl font-bold tracking-tight">
-                  <span className="bg-clip-text text-transparent bg-gradient-to-r from-primary to-sidebar-accent">
+                  <span className="bg-clip-text text-transparent bg-gradient-to-r from-primary to-sidebar-accent-foreground">
                     Create Your Project
                   </span>
                 </h1>
-                <p className="text-muted-foreground text-sm mt-2 max-w-xs mx-auto">
+                <motion.p 
+                  className="text-muted-foreground text-sm mt-2 max-w-xs mx-auto"
+                  initial={{ opacity: 0, filter: "blur(10px)" }}
+                  animate={{ opacity: 1, filter: "blur(0px)" }}
+                  exit={{ opacity: 0, filter: "blur(10px)" }}
+                  transition={{ duration: 0.5 }}
+                  key={step}
+                >
                   {step === 1 
                     ? "Set up your project details to get started with powerful visualization tools."
                     : "Configure how your AI assistant should behave."
                   }
-                </p>
+                </motion.p>
               </motion.div>
             </div>
 
-            <AnimatePresence mode="wait">
+            <AnimatePresence mode="popLayout">
               {step === 1 ? (
                 <motion.div
                   key="step1"
-                  initial={{ opacity: 0, x: -20 }}
-                  animate={{ opacity: 1, x: 0 }}
-                  exit={{ opacity: 0, x: -30 }}
-                  transition={{ duration: 0.4, ease: "easeInOut" }}
+                  initial={{ opacity: 0, filter: "blur(50px)" }}
+                  animate={{ opacity: 1, filter: "blur(0px)" }}
+                  exit={{ opacity: 0, filter: "blur(100px)",transition:{duration:0.5,ease:"easeInOut"} }}
+                  transition={{ duration: 0.3, ease: "easeInOut" }}
                   className="space-y-6"
                 >
                   <div className="space-y-3">
@@ -247,7 +247,7 @@ export default function OnboardingComponent({ onProjectCreated }: OnboardingComp
                       <Button
                         onClick={handleContinue}
                         disabled={!projectName.trim()}
-                        className="h-12 w-full text-primary-foreground bg-gradient-to-r from-primary to-sidebar-accent hover:opacity-90 shadow-md font-medium transition-all duration-300 disabled:opacity-70 disabled:cursor-not-allowed rounded-md"
+                        className="h-12 w-full text-primary-foreground bg-gradient-to-r from-primary to-sidebar-accent-foreground hover:opacity-90 shadow-md font-medium transition-all duration-300 disabled:opacity-70 disabled:cursor-not-allowed rounded-md"
                       >
                         Continue
                         <ArrowRight className="ml-2 h-4 w-4" />
@@ -268,9 +268,9 @@ export default function OnboardingComponent({ onProjectCreated }: OnboardingComp
               ) : (
                 <motion.div
                   key="step2"
-                  initial={{ opacity: 0, x: 20 }}
-                  animate={{ opacity: 1, x: 0 }}
-                  exit={{ opacity: 0, x: 30 }}
+                  initial={{ opacity: 0, filter: "blur(50px)" }}
+                  animate={{ opacity: 1, filter: "blur(0px)" }}
+                  exit={{ opacity: 0, filter: "blur(100px)",transition:{duration:0.5,ease:"easeInOut"} }}
                   transition={{ duration: 0.4, ease: "easeInOut" }}
                   className="space-y-6"
                 >
@@ -290,22 +290,21 @@ export default function OnboardingComponent({ onProjectCreated }: OnboardingComp
                           placeholder="Customize how your AI assistant should behave"
                           value={systemPrompt}
                           onChange={(e) => setSystemPrompt(e.target.value)}
-                          className="min-h-[140px] resize-none bg-card/50 backdrop-blur-sm border-primary/20 focus-visible:ring-1 focus-visible:ring-primary/50 focus-visible:ring-offset-0 placeholder:text-muted-foreground/50 transition-all duration-300 rounded-md p-3"
+                          className="min-h-[80px] resize-none bg-card/50 backdrop-blur-sm border-primary/20 focus-visible:ring-1 focus-visible:ring-primary/50 focus-visible:ring-offset-0 placeholder:text-muted-foreground/50 transition-all duration-300 rounded-md p-3"
+                          rows={3}
                         />
                       </div>
                     </div>
                     
-                    <p className="text-xs text-muted-foreground italic pl-1">
-                      Define how your AI assistant should behave and what it should specialize in.
-                    </p>
+
                   </div>
 
-                  <div className="flex flex-col gap-4 pt-2">
+                  <div className="flex flex-col gap-2 pt-2">
                     <motion.div whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.98 }}>
                       <Button
                         onClick={handleCreateProject}
                         disabled={isLoading}
-                        className="h-12 w-full text-primary-foreground bg-gradient-to-r from-primary to-sidebar-accent hover:opacity-90 shadow-md font-medium transition-all duration-300 disabled:opacity-70 disabled:cursor-not-allowed rounded-md overflow-hidden relative"
+                        className="h-12 w-full text-primary-foreground bg-gradient-to-r from-primary to-sidebar-accent-foreground hover:opacity-90 shadow-md font-medium transition-all duration-300 disabled:opacity-70 disabled:cursor-not-allowed rounded-md overflow-hidden relative"
                       >
                         {isLoading ? (
                           <>
@@ -324,13 +323,11 @@ export default function OnboardingComponent({ onProjectCreated }: OnboardingComp
                     </motion.div>
 
                     <div className="flex justify-center mt-1">
-                      <Button
-                        variant="outline"
-                        onClick={() => setStep(1)}
-                        className="h-9 text-sm border-primary/20 bg-transparent hover:bg-primary/10 transition-all duration-200"
-                        disabled={isLoading}
+                    <Button
+                        variant="ghost"
+                        onClick={()=>setStep(1)}
+                        className="h-9 text-xs hover:bg-white/10 transition-all duration-200 text-muted-foreground hover:text-primary"
                       >
-                        <ArrowLeft className="mr-2 h-4 w-4" />
                         Back
                       </Button>
                     </div>
@@ -359,7 +356,7 @@ export default function OnboardingComponent({ onProjectCreated }: OnboardingComp
                   {step === 1 && (
                     <motion.span
                       layoutId="activeIndicator"
-                      className="absolute inset-0 rounded-full border-2 border-primary"
+                      className="absolute inset-0 rounded-full blur-[5px] border-2 border-primary"
                       initial={{ opacity: 0, scale: 1.2 }}
                       animate={{ opacity: 1, scale: 1 }}
                       transition={{ duration: 0.3 }}
@@ -384,13 +381,12 @@ export default function OnboardingComponent({ onProjectCreated }: OnboardingComp
                   className={`relative flex items-center justify-center h-9 w-9 rounded-full transition-all duration-300 ${step === 2 
                     ? 'bg-primary text-primary-foreground shadow-md' 
                     : 'bg-muted/80 text-muted-foreground hover:bg-muted/90'}`}
-                  animate={{ scale: step === 2 ? 1.05 : 1 }}
                 >
                   2
                   {step === 2 && (
                     <motion.span
                       layoutId="activeIndicator"
-                      className="absolute inset-0 rounded-full border-2 border-primary"
+                      className="absolute inset-0 rounded-full border-2 border-primary blur-[5px]"
                       initial={{ opacity: 0, scale: 1.2 }}
                       animate={{ opacity: 1, scale: 1 }}
                       transition={{ duration: 0.3 }}
@@ -399,8 +395,6 @@ export default function OnboardingComponent({ onProjectCreated }: OnboardingComp
                 </motion.button>
               </motion.div>
             </div>
-
-  
           </div>
         </div>
       </motion.div>
