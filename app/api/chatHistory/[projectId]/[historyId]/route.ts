@@ -1,11 +1,15 @@
 import prisma from "@/db";
 import { getSession } from "@/lib/client";
 import { NextRequest, NextResponse } from "next/server";
+import { headers } from "next/headers";
+import { auth } from "@/lib/auth";
 
 //UPDATE CHAT HISTORY
 export async function PUT(req:NextRequest,{params}:{params:Promise<{projectId:string,historyId:string}>}){
     try {
-        const {data:session} = await getSession();
+        const session = await auth.api.getSession({
+            headers:await headers()
+        })
         if(!session){
             return NextResponse.json({error:'Unauthorized'},{status:401})
         }

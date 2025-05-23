@@ -4,9 +4,11 @@ import { ReactNode, useEffect } from "react"
 import { ChatSidebar } from "@/components/sidebar/chat-sidebar"
 import { SidebarProvider } from "@/components/ui/sidebar"
 import { useState } from "react"
-import { Chat, Project } from "@/types/types"
+import { ChatHistory, Project } from "@/types/types"
 import OnboardingComponent from "@/components/onboarding"
 import axios from "axios"
+import { useRouter } from "next/navigation"
+
 interface ChatLayoutProps {
   children: ReactNode
 }
@@ -15,9 +17,7 @@ export default function ChatLayout({ children }: ChatLayoutProps) {
 
   const [projects, setProjects] = useState<Project[]>([])
   const [isOnboarding, setIsOnboarding] = useState(false)
-  const [activeChat, setActiveChat] = useState<Chat | null>(null)
-
-
+  const [activeChat, setActiveChat] = useState<ChatHistory | null>(null)
   useEffect(()=>{
     async function init(){
       const response = await axios.get<{projects:Project[]}>('/api/project')
@@ -31,54 +31,18 @@ export default function ChatLayout({ children }: ChatLayoutProps) {
     init()
   },[])
 
-  const handleChatSelect = (projectId: string, chatId: string) => {
-    const project = projects.find((p) => p.id === projectId)
-    if (project) {
-      const chat = project.chats.find((c) => c.id === chatId)
-      if (chat) {
-        setActiveChat(chat)
-      }
-    }
-  }
-
-  const handleNewChat = (projectId: string) => {
-    const project = projects.find((p) => p.id === projectId)
-    if (project) {
-      const newChat: Chat = {
-        id: `${projectId}-${project.chats.length + 1}`,
-        name: "New Chat",
-        lastUpdated: new Date(),
-      }
-
-      const updatedProjects = projects.map((p) => {
-        if (p.id === projectId) {
-          return {
-            ...p,
-            chats: [...p.chats, newChat],
-          }
-        }
-        return p
-      })
-
-      setProjects(updatedProjects)
-      setActiveChat(newChat)
-    }
-  }
 
   return (
     <div className="flex h-screen bg-background">
       <SidebarProvider>
         <ChatSidebar
           projects={projects}
-          onChatSelect={handleChatSelect}
-          onNewChat={handleNewChat}
-          activeChat={activeChat}
+          selectedProjectId={projects[0]?.id}
         />
         <div className="relative flex flex-1 flex-col h-screen">
-
           {children}
         </div>
-        {isOnboarding && <div className="absolute inset-0  z-50 backdrop-blur-sm bg-background/50 flex flex-col items-center justify-center h-full">
+        {isOnboarding && <div className="absolute inset-0 z-50 backdrop-blur-sm bg-background/50 flex flex-col items-center justify-center h-full">
             <OnboardingComponent onProjectCreated={()=>setIsOnboarding(false)} />
           </div>}
       </SidebarProvider>

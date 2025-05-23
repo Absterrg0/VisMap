@@ -1,12 +1,10 @@
 import { SidebarContents } from "./sidebar-content"
 import { Sidebar, SidebarRail } from "../ui/sidebar"
-import type { Project, Chat } from "@/types/types"
+import type { Project, ChatHistory } from "@/types/types"
 
 export interface ChatSidebarProps {
   projects: Project[]
-  activeChat: Chat | null
-  onChatSelect: (projectId: string, chatId: string) => void
-  onNewChat: (projectId: string) => void
+  selectedProjectId: string
 }
 
 export function ChatSidebar(props: ChatSidebarProps) {

@@ -1,17 +1,22 @@
 import { getSession } from "@/lib/client";
 import { NextRequest, NextResponse } from "next/server";
 import prisma from "@/db";
-import { messageSchema } from "@/consts/messageSchema";
+import { messageSchema } from "@/types/messageSchema";
+import { auth } from "@/lib/auth";
+import { headers } from "next/headers";
 
 
 
 //GET CHAT HISTORY
 export async function GET(req:NextRequest,{params}:{params:Promise<{projectId:string}>}){
     try {
-        const {data:session} = await getSession();
+        const session = await auth.api.getSession({
+            headers:await headers()
+        })
         if(!session){
             return NextResponse.json({error:'Unauthorized'},{status:401})
         }
+
 
         const {projectId} = await params;
         if(!projectId){
@@ -25,7 +30,6 @@ export async function GET(req:NextRequest,{params}:{params:Promise<{projectId:st
         if(!project){
             return NextResponse.json({error:'Project not found'},{status:404})
         }
-
         if(project.userId !== session.user.id){
             return NextResponse.json({error:'Unauthorized'},{status:401})
         }   

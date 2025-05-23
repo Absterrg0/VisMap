@@ -8,17 +8,14 @@ import { Textarea } from "@/components/ui/textarea"
 import { motion, AnimatePresence } from "motion/react"
 import { 
   ArrowRight, 
-  ArrowLeft, 
   FileText, 
   Settings, 
   CheckCircle2,
   RefreshCw,
-  Shield,
-  Lock
 } from "lucide-react"
 import { useRandomName } from "@/hooks/useRandomName"
 import axios from "axios"
-import Logo from "@/components/logo" // Import the Logo component
+import Logo from "@/components/logo" 
 
 interface OnboardingComponentProps {
   onProjectCreated: () => void
@@ -28,15 +25,10 @@ export default function OnboardingComponent({ onProjectCreated }: OnboardingComp
   const [step, setStep] = useState(1)
   const generateName = useRandomName()
   const [projectName, setProjectName] = useState(generateName())
-  const [systemPrompt, setSystemPrompt] = useState("")
+  const [systemPrompt, setSystemPrompt] = useState("You are a helpful AI assistant that specializes in data visualization. You help users create beautiful and informative charts and graphs.")
   const [isLoading, setIsLoading] = useState(false)
   const [showSuccessAnimation, setShowSuccessAnimation] = useState(false)
   const router = useRouter()
-
-  // Set default system prompt on component mount
-  useEffect(() => {
-    setSystemPrompt("You are a helpful AI assistant that specializes in data visualization. You help users create beautiful and informative charts and graphs.")
-  }, [])
 
   const handleRandomName = () => {
     setProjectName(generateName())
@@ -66,7 +58,7 @@ export default function OnboardingComponent({ onProjectCreated }: OnboardingComp
       
       // Delay navigation to show success animation
       setTimeout(() => {
-        router.push(`/${response.data.projectId}/chat/new`)
+        router.push(`/project/${response.data.projectId}/chat/new`)
       }, 1000)
     } catch (error) {
       console.error("Error creating project:", error)

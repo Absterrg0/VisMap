@@ -1,13 +1,14 @@
-export interface Chat {
+export interface ChatHistory {
     id: string
     name: string
+    messages: Message[]
     lastUpdated: Date
   }
   
   export interface Project {
     id: string
     name: string
-    chats: Chat[]
+    chatHistory: ChatHistory[]
   }
   
 

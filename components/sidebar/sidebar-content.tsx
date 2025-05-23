@@ -10,9 +10,9 @@ import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/comp
 import { ScrollArea } from "@/components/ui/scroll-area"
 
 import { MessageSquare, Search, Plus } from "lucide-react"
-import { useRouter, useParams } from "next/navigation"
-import { useState, useEffect, useMemo } from "react"
-import type { Project } from "@/types/types"
+import { useRouter } from "next/navigation"
+import { useState, useEffect } from "react"
+import type { ChatHistory, Project } from "@/types/types"
 
 import {
   SidebarContent,
@@ -26,35 +26,31 @@ import {
   SidebarTrigger,
   useSidebar,
 } from "@/components/ui/sidebar"
-
 import { ProjectSelector } from "@/components/sidebar/project-selector"
 import { SearchInput } from "@/components/sidebar/search-input"
 import { ChatItem } from "@/components/sidebar/chat-item"
+import axios from 'axios'
 
-export function SidebarContents({ projects, activeChat, onChatSelect, onNewChat }: ChatSidebarProps) {
+export function SidebarContents({ projects, selectedProjectId }: ChatSidebarProps) {
   const router = useRouter()
-  const params = useParams()
   const [selectedProject, setSelectedProject] = useState<Project | null>(null)
   const [searchQuery, setSearchQuery] = useState("")
   const { state } = useSidebar()
   const isCollapsed = state === "collapsed"
 
+  const fetchProjectDetails = async ()=>{
+    const response = await axios.get<{project:Project}>(`/api/project/${selectedProjectId}`)
+    setSelectedProject(response.data.project)
+  }
 
-  const filteredChats = useMemo(() => {
-    if (!selectedProject) return []
-    if (!searchQuery.trim()) return selectedProject.chats
-
-    return selectedProject.chats.filter((chat) => chat.name.toLowerCase().includes(searchQuery.toLowerCase()))
-  }, [selectedProject, searchQuery])
-
-  // Sort chats by last updated (most recent first)
-  const sortedChats = useMemo(() => {
-    return [...filteredChats].sort((a, b) => new Date(b.lastUpdated).getTime() - new Date(a.lastUpdated).getTime())
-  }, [filteredChats])
+  useEffect(()=>{
+    if(selectedProjectId){
+      fetchProjectDetails()
+    }
+  },[projects])
 
   const handleChatSelect = (projectId: string, chatId: string) => {
-    onChatSelect(projectId, chatId)
-    router.push(`/${projectId}/chat/${chatId}`)
+    router.push(`/project/${projectId}/chat/${chatId}`)
   }
 
   const handleNewChat = () => {
@@ -66,7 +62,6 @@ export function SidebarContents({ projects, activeChat, onChatSelect, onNewChat 
 
   const handleProjectSelect = (project: Project) => {
     setSelectedProject(project)
-    router.push(`/${project.id}/chat/new`)
   }
 
   const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -136,10 +131,10 @@ export function SidebarContents({ projects, activeChat, onChatSelect, onNewChat 
                 {!isCollapsed && (
                   <div className="flex items-center justify-between px-2 mb-2">
                     <SidebarGroupLabel className="text-xs font-medium text-muted-foreground/80">
-                      Chats {sortedChats.length > 0 && `(${sortedChats.length})`}
+                      Chats {selectedProject.chatHistory.length > 0 && `(${selectedProject.chatHistory.length})`}
                     </SidebarGroupLabel>
 
-                    {searchQuery && filteredChats.length > 0 && (
+                    {searchQuery && selectedProject.chatHistory.length > 0 && (
                       <Button
                         variant="ghost"
                         size="sm"
@@ -155,12 +150,12 @@ export function SidebarContents({ projects, activeChat, onChatSelect, onNewChat 
                 <SidebarGroupContent className="h-[calc(100%-2rem)]">
                   <ScrollArea className={cn("h-full", isCollapsed ? "pr-1" : "pr-3")}>
                     <SidebarMenu className={cn("space-y-2 pb-4", isCollapsed && "items-center")}>
-                      {sortedChats.length > 0 ? (
-                        sortedChats.map((chat) => (
+                      {selectedProject.chatHistory.length > 0 ? (
+                        selectedProject.chatHistory.map((chat:ChatHistory) => (
                           <ChatItem
                             key={chat.id}
                             chat={chat}
-                            isActive={activeChat?.id === chat.id}
+                            isActive={selectedProject.id === chat.id}
                             isCollapsed={isCollapsed}
                             onSelect={() => handleChatSelect(selectedProject.id, chat.id)}
                           />

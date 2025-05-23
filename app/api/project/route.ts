@@ -19,13 +19,6 @@ export async function GET(req:NextRequest){
         const projects = await prisma.project.findMany({
             where:{
                 userId:session.user.id
-            },
-            include:{
-                chatHistory:{
-                    include:{
-                        messages:true
-                    }
-                }
             }
         })
         
@@ -60,19 +53,6 @@ export async function POST(req:NextRequest){
                 userId:session.user.id
             }
         })      
-
-        const chatHistory = await prisma.chatHistory.create({
-            data:{
-                projectId:project.id
-            }
-        })
-
-        await prisma.roadMap.create({
-            data:{
-                chatHistoryId:chatHistory.id,
-                content:''
-            }
-        })
     
         return NextResponse.json({projectId:project.id},{status:201})
     }catch(error){

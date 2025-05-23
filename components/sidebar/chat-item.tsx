@@ -2,17 +2,16 @@ import { SidebarMenuItem, SidebarMenuButton } from "@/components/ui/sidebar"
 import { MessageSquare, Clock } from "lucide-react"
 import { format } from "date-fns"
 import { cn } from "@/lib/utils"
-import type { Chat } from "@/types/types"
+import type { ChatHistory } from "@/types/types"
 
 interface ChatItemProps {
-  chat: Chat
+  chat: ChatHistory
   isActive: boolean
   isCollapsed: boolean
   onSelect: () => void
 }
 
 export function ChatItem({ chat, isActive, isCollapsed, onSelect }: ChatItemProps) {
-  const lastUpdatedDate = new Date(chat.lastUpdated)
 
   return (
     <SidebarMenuItem>
@@ -52,9 +51,6 @@ export function ChatItem({ chat, isActive, isCollapsed, onSelect }: ChatItemProp
           {!isCollapsed && (
             <div className="flex flex-col flex-1 min-w-0">
               <span className="truncate text-sm font-medium">{chat.name}</span>
-              <span className="text-xs text-sidebar-foreground/50">
-                {format(lastUpdatedDate, "MMM d, h:mm a")}
-              </span>
             </div>
           )}
         </button>

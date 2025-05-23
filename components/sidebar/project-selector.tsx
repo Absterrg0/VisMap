@@ -55,12 +55,6 @@ export function ProjectSelector({
               <FolderOpen className="h-3.5 w-3.5 text-sidebar-primary" />
             </div>
             <span className="truncate">{project.name}</span>
-            <Badge
-              variant="outline"
-              className="ml-auto text-xs bg-sidebar-foreground/30 border-sidebar-border/40 text-sidebar-foreground/70 group-hover:bg-sidebar-primary/10 group-hover:text-sidebar-primary-foreground dark:group-hover:bg-sidebar-primary/100 dark:group-hover:text-sidebar-primary-foreground"
-            >
-              {project.chats.length}
-            </Badge>
           </DropdownMenuItem>
         ))}
       </DropdownMenuContent>
