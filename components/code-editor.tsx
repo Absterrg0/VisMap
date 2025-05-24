@@ -1,6 +1,6 @@
 "use client"
 
-import { useState, useEffect } from "react"
+import { useState, useEffect, useRef } from "react"
 import { Check, Copy, Download, Play, Eye } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
@@ -14,6 +14,13 @@ import { useWebContainer } from "@/hooks/useWebcontainer"
 interface CodeEditorProps {
   steps: Step[]
   files: FileNode[]
+  onStepComplete?: (stepId: string) => void // Add callback for step completion
+  onStreamingStart?: () => void // Add callback for when streaming starts
+  streamingConfig?: {
+    chunkSize?: number
+    delayMs?: number
+    enabled?: boolean
+  }
 }
 
 export interface FileNode {
@@ -24,13 +31,172 @@ export interface FileNode {
   path?: string
 }
 
-export function CodeEditor({ files }: CodeEditorProps) {
+export function CodeEditor({ steps, files, onStepComplete, onStreamingStart, streamingConfig }: CodeEditorProps) {
   const [copied, setCopied] = useState(false)
   const [selectedFile, setSelectedFile] = useState<FileNode>()
   const [activeTab, setActiveTab] = useState("editor")
   const [editorContent, setEditorContent] = useState("")  
+  const [isStreaming, setIsStreaming] = useState(false)
+  const [mountStructure, setMountStructure] = useState<Record<string, any>>({})
+  const streamingTimeoutRef = useRef<NodeJS.Timeout[]>([])
   const webContainer = useWebContainer()  
 
+  // Clear any ongoing streaming when component unmounts or file changes
+  const clearStreaming = () => {
+    streamingTimeoutRef.current.forEach(timeout => clearTimeout(timeout))
+    streamingTimeoutRef.current = []
+    setIsStreaming(false)
+  }
+
+  // Stream content with chunking effect
+  const streamContent = (content: string, onComplete?: () => void) => {
+    clearStreaming()
+    
+    setIsStreaming(true)
+    setEditorContent("") // Start with empty content
+
+    // Notify parent that streaming has started
+    if (onStreamingStart) {
+      onStreamingStart()
+    }
+
+    if (!content) {
+      setIsStreaming(false)
+      onComplete?.()
+      return
+    }
+
+    // Configuration for streaming speed - made more visible
+    const CHUNK_SIZE = streamingConfig?.chunkSize || 5 // Characters per chunk (increased)
+    const DELAY_MS = streamingConfig?.delayMs || 25 // Milliseconds between chunks (increased for visibility)
+
+    let currentIndex = 0
+    const chunks: string[] = []
+
+    // Split content into chunks
+    while (currentIndex < content.length) {
+      chunks.push(content.slice(currentIndex, currentIndex + CHUNK_SIZE))
+      currentIndex += CHUNK_SIZE
+    }
+
+    console.log(`Starting to stream ${content.length} characters in ${chunks.length} chunks`);
+
+    // Stream chunks
+    let streamedContent = ""
+    chunks.forEach((chunk, index) => {
+      const timeout = setTimeout(() => {
+        streamedContent += chunk
+        setEditorContent(streamedContent)
+
+        // If this is the last chunk, mark streaming as complete
+        if (index === chunks.length - 1) {
+          setIsStreaming(false)
+          console.log('Streaming completed for file');
+          // Add a small delay before calling onComplete to let the user see the final content
+          setTimeout(() => {
+            onComplete?.()
+          }, 500) // Increased delay
+        }
+      }, index * DELAY_MS)
+
+      streamingTimeoutRef.current.push(timeout)
+    })
+  }
+
+  const handlePreviewClick = () => {
+    
+      webContainer!.mount(mountStructure);
+      setActiveTab("preview");
+      console.log("Mounted structure", webContainer!);
+    
+  }
+
+  // Auto-open file that's currently being worked on
+  useEffect(() => {
+    const inProgressStep = steps.find(step => step.status === 'in-progress' && step.path);
+    if (inProgressStep && inProgressStep.path) {
+      console.log('Looking for in-progress step file:', inProgressStep.path, inProgressStep);
+      
+      // Find the corresponding file in the files array with improved matching
+      const findFileByPath = (files: FileNode[], targetPath: string): FileNode | null => {
+        // Normalize the target path
+        const normalizedTargetPath = targetPath.startsWith('/') ? targetPath.slice(1) : targetPath;
+        const targetFileName = targetPath.split('/').pop();
+        
+        for (const file of files) {
+          if (file.type === 'file') {
+            // Try exact path match first
+            if (file.path === targetPath) {
+              return file;
+            }
+            
+            // Try normalized path match
+            const normalizedFilePath = file.path?.startsWith('/') ? file.path.slice(1) : file.path;
+            if (normalizedFilePath === normalizedTargetPath) {
+              return file;
+            }
+            
+            // Try name-only match as fallback
+            if (file.name === targetFileName) {
+              return file;
+            }
+            
+            // Try path ending match
+            if (file.path?.endsWith(targetPath) || targetPath.endsWith(file.path || '')) {
+              return file;
+            }
+          }
+          
+          if (file.type === 'folder' && file.children) {
+            const found = findFileByPath(file.children, targetPath);
+            if (found) return found;
+          }
+        }
+        return null;
+      };
+
+      const targetFile = findFileByPath(files, inProgressStep.path);
+      console.log('Found target file:', targetFile);
+      
+      if (targetFile && targetFile.content) {
+        console.log('Auto-opening file with content:', targetFile.name, 'Content length:', targetFile.content.length);
+        setSelectedFile(targetFile);
+        setActiveTab("editor"); // Switch to editor tab
+        
+        // Notify parent that streaming is starting
+        if (onStreamingStart) {
+          onStreamingStart();
+        }
+        
+        // Stream the content instead of setting it immediately
+        streamContent(targetFile.content || "", () => {
+          // After streaming is complete, mark step as complete and move to next
+          if (onStepComplete && inProgressStep.id) {
+            console.log('Streaming complete, marking step as done:', inProgressStep.id);
+            onStepComplete(String(inProgressStep.id));
+          }
+        });
+      } else if (!targetFile) {
+        console.log('File not found in files array:', inProgressStep.path);
+        console.log('Available files:', files.map(f => ({ name: f.name, path: f.path, type: f.type, hasContent: !!f.content })));
+      } else {
+        console.log('File found but no content:', targetFile);
+        // Still mark as complete if no content
+        if (onStepComplete && inProgressStep.id) {
+          onStepComplete(String(inProgressStep.id));
+        }
+      }
+    } else {
+      console.log('No in-progress step with path found. Steps:', steps.map(s => ({ id: s.id, title: s.title, status: s.status, path: s.path })));
+    }
+  }, [steps, files, onStepComplete, onStreamingStart]);
+
+  // Update editor content when selected file content changes (only if not currently streaming)
+  useEffect(() => {
+    if (selectedFile && !isStreaming) {
+      setEditorContent(selectedFile.content || "");
+    }
+  }, [selectedFile?.content, selectedFile?.path, isStreaming]);
 
   useEffect(() => {
     const createMountStructure = (files: FileNode[]): Record<string, any> => {
@@ -73,13 +239,12 @@ export function CodeEditor({ files }: CodeEditorProps) {
     };
   
     const mountStructure = createMountStructure(files);
-  
-    // Mount the structure if WebContainer is available
     console.log("Mounting structure", mountStructure);
-    webContainer?.mount(mountStructure);
+    setMountStructure(mountStructure);
+    // Mount the structure if WebContainer is available
   }, [files, webContainer]);
 
-  
+
   const copyToClipboard = () => {
     if (selectedFile && selectedFile.type === "file") {
       navigator.clipboard.writeText(editorContent)
@@ -128,6 +293,13 @@ export function CodeEditor({ files }: CodeEditorProps) {
     }
   }
 
+  // Cleanup on unmount
+  useEffect(() => {
+    return () => {
+      clearStreaming()
+    }
+  }, [])
+
   return (
     <div className="w-full h-full flex flex-col border-l border-border/40 bg-background">
       <div className="border-b border-border/40 p-4 flex items-center justify-between bg-background/95 backdrop-blur-sm">
@@ -138,11 +310,17 @@ export function CodeEditor({ files }: CodeEditorProps) {
         <div className="flex items-center gap-2">
           {selectedFile && selectedFile.type === "file" && (
             <>
-              <Button variant="outline" size="sm" onClick={copyToClipboard} className="gap-2">
+              <Button 
+                variant="outline" 
+                size="sm" 
+                onClick={copyToClipboard} 
+                className="gap-2"
+                disabled={isStreaming}
+              >
                 {copied ? <Check className="h-4 w-4" /> : <Copy className="h-4 w-4" />}
                 {copied ? "Copied" : "Copy"}
               </Button>
-              <Button variant="outline" size="sm" className="gap-2">
+              <Button variant="outline" size="sm" className="gap-2" disabled={isStreaming}>
                 <Download className="h-4 w-4" />
                 Download
               </Button>
@@ -172,12 +350,15 @@ export function CodeEditor({ files }: CodeEditorProps) {
                   <div
                     className={cn(
                       "h-2 w-2 rounded-full",
+                      isStreaming ? "bg-blue-500 animate-pulse" : 
                       selectedFile && selectedFile.type === "file" ? "bg-green-500" : "bg-muted-foreground/30",
                     )}
                   />
-                  {selectedFile && selectedFile.type === "file" ? selectedFile.name : "Editor"}
+                  {selectedFile && selectedFile.type === "file" ? 
+                    `${selectedFile.name}${isStreaming ? " (populating...)" : ""}` : "Editor"}
                 </TabsTrigger>
                 <TabsTrigger
+                  onClick={() => handlePreviewClick()}
                   value="preview"
                   className="data-[state=active]:bg-background data-[state=active]:shadow-sm gap-2 px-4 disabled:opacity-50 disabled:cursor-not-allowed"
                 >
@@ -203,7 +384,7 @@ export function CodeEditor({ files }: CodeEditorProps) {
                       lineNumbers: "on",
                       roundedSelection: false,
                       scrollBeyondLastLine: false,
-                      readOnly: false,
+                      readOnly: isStreaming,
                       automaticLayout: true,
                       wordWrap: "on",
                       tabSize: 2,
@@ -212,6 +393,8 @@ export function CodeEditor({ files }: CodeEditorProps) {
                       lineDecorationsWidth: 10,
                       lineNumbersMinChars: 3,
                       glyphMargin: false,
+                      renderValidationDecorations: "off",
+                      
                     }}
                   />
                 </div>
@@ -232,7 +415,7 @@ export function CodeEditor({ files }: CodeEditorProps) {
 
             <TabsContent value="preview" className="flex-1 p-0 m-0 data-[state=inactive]:hidden">
               <div className="h-full w-full bg-background">
-              <PreviewFrame files={files} webContainer={webContainer!} />
+              <PreviewFrame webContainer={webContainer!} />
               </div>
             </TabsContent>
           </Tabs>
@@ -243,11 +426,18 @@ export function CodeEditor({ files }: CodeEditorProps) {
               {selectedFile && selectedFile.type === "file" && (
                 <>
                   <span className="flex items-center gap-1">
-                    <div className="w-2 h-2 rounded-full bg-green-500"></div>
-                    {getFileLanguage(selectedFile.name).toUpperCase()}
+                    <div className={cn(
+                      "w-2 h-2 rounded-full",
+                      isStreaming ? "bg-blue-500 animate-pulse" : "bg-green-500"
+                    )}></div>
+                    {isStreaming ? "STREAMING" : getFileLanguage(selectedFile.name).toUpperCase()}
                   </span>
-                  <span>UTF-8</span>
-                  <span>LF</span>
+                  {!isStreaming && (
+                    <>
+                      <span>UTF-8</span>
+                      <span>LF</span>
+                    </>
+                  )}
                 </>
               )}
               {activeTab === "preview" && (
@@ -262,7 +452,7 @@ export function CodeEditor({ files }: CodeEditorProps) {
                 variant={activeTab === "preview" ? "default" : "ghost"}
                 size="sm"
                 className="h-6 px-3 text-xs gap-1 disabled:opacity-50"
-                onClick={() => setActiveTab("preview")}
+                onClick={() => handlePreviewClick()}
                 disabled={!webContainer}
               >
                 <Play className="h-3 w-3" />

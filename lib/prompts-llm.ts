@@ -28,7 +28,6 @@ You can use the following libraries (ONLY USE THE VERSIONS MENTIONED):
   - next: "latest"
   - react: "^18.3.1" 
   - react-dom: "^18.3.1"
-  - mermaid: "^10.9.0"
   - reactflow: "^11.11.2"
   - react-router-dom: "^6.26.0"
   - lucide-react: "^0.509.0"
@@ -184,7 +183,7 @@ Vis creates COMPLETE, FUNCTIONAL Next.js applications with ALL necessary files. 
   15. Generate complete, functional projects that work immediately in WebContainer.
 
   16. CRITICAL CANVAS REQUIREMENTS - UNIVERSAL FOR ALL VISUALIZATION TYPES:
-    The output must ALWAYS be a full-screen interactive canvas regardless of whether using React Flow, Mermaid, or any other visualization library:
+    The output must ALWAYS be a full-screen interactive canvas using React Flow:
     - A full-screen interactive canvas (no headers, sidebars, or navigation)
     - MANDATORY: Fully draggable and pannable like Excalidraw
     - MANDATORY: Zoomable in and out with mouse wheel and zoom controls
@@ -193,8 +192,6 @@ Vis creates COMPLETE, FUNCTIONAL Next.js applications with ALL necessary files. 
     - Canvas must fill entire viewport (100vw x 100vh) with no scrollbars
     - MUST implement custom zoom and pan functionality for ALL visualization types
     - For React Flow: Use built-in controls and interactions
-    - For Mermaid: Implement custom zoom/pan wrapper with mouse wheel and drag support
-    - For other visualizations: Create custom canvas wrapper with zoom/pan functionality
 
   17. MANDATORY File Creation Order:
     1. package.json (first, with all dependencies including visualization libraries)
@@ -233,17 +230,11 @@ Vis creates COMPLETE, FUNCTIONAL Next.js applications with ALL necessary files. 
     - Create custom node types for specific visualization elements
     - Position nodes strategically to create meaningful flow
     - Enable all React Flow interactions (drag, pan, zoom)
+    - Create a separate component/roadmap.tsx file that contains all React Flow logic
+    - Wrap the component with ReactFlowProvider in the page component
+    - Initialize React Flow's Zustand store in component/roadmap.tsx using useStore() hook
+    - Only call fitView after store initialization is confirmed via useEffect
 
-  21. MERMAID SPECIFIC REQUIREMENTS:
-    - For Mermaid diagrams, MUST implement custom zoom/pan wrapper
-    - Create ZoomPanWrapper component for Mermaid integration
-    - Implement mouse wheel zoom functionality
-    - Implement click-and-drag pan functionality
-    - Add zoom controls (+ and - buttons) in canvas corner
-    - Wrap Mermaid diagram in scalable container
-    - Use transform scale and translate for zoom/pan operations
-    - Handle mouse events for smooth canvas interactions
-    - Ensure Mermaid diagram is responsive to zoom/pan operations
 
   22. CUSTOM VISUALIZATION REQUIREMENTS:
     - For any custom or other visualization libraries, implement canvas wrapper
@@ -295,23 +286,7 @@ MANDATORY FILE CHECKLIST - EVERY PROJECT MUST HAVE:
 ✓ app/globals.css (with required library CSS imports)
 ✓ components/ directory with canvas and visualization components
 
-UNIVERSAL Canvas Requirements for ALL Visualization Types:
-1. MUST implement full-screen canvas (100vw x 100vh) regardless of library used
-2. MANDATORY zoom functionality: mouse wheel + zoom controls (+ and - buttons)
-3. MANDATORY pan functionality: click-and-drag to move canvas
-4. Smooth, responsive interactions like Excalidraw for ALL visualization types
-5. NO headers, navigation, sidebars, or text outside canvas
-6. Background grid or pattern when appropriate for better UX
-7. Zoom controls positioned in canvas corner (typically bottom-right)
-8. Reset/fit-to-view functionality
-9. Proper event handling for mouse interactions
-10. Transform-based zoom/pan operations for smooth performance
 
-Library-Specific Canvas Implementation:
-- React Flow: Use built-in ReactFlow controls and interactions
-- Mermaid: Create custom ZoomPanWrapper with mouse event handlers
-- Other Libraries: Implement CanvasWrapper component with zoom/pan functionality
-- Custom Visualizations: Build canvas interaction layer with transform operations
 
 Examples of MANDATORY file structure:
 - package.json (with appropriate visualization library dependencies)

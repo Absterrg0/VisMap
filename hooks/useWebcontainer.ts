@@ -6,7 +6,9 @@ export function useWebContainer() {
 
     async function main() {
         const webcontainerInstance = await WebContainer.boot();
-        setWebcontainer(webcontainerInstance)
+        if (webcontainerInstance) {
+            setWebcontainer(webcontainerInstance)
+        }
     }
     useEffect(() => {
         main();

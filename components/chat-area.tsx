@@ -11,84 +11,124 @@ import { SidebarInset } from "@/components/ui/sidebar"
 import type { Step } from "@/types/stepType"
 import { Card, CardContent } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
-import { ScrollArea } from "@/components/ui/scroll-area"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { Progress } from "@/components/ui/progress"
 import { useActiveProjectStore } from "@/zustand/store"
 
 interface ChatAreaProps {
-  chatId: string
   onSendMessage: (message: Message) => void
   messages: Message[]
+  steps: Step[]
+  activeTab: "chat" | "steps"
+  setActiveTab: (tab: "chat" | "steps") => void
 }
 
-export function ChatArea({ chatId, onSendMessage, messages }: ChatAreaProps) {
+// Custom scrollbar styles
+const scrollbarStyles = `
+  .scrollbar-thin::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+  }
+  
+  .scrollbar-track-transparent::-webkit-scrollbar-track {
+    background: transparent;
+  }
+  
+  .scrollbar-thumb-border::-webkit-scrollbar-thumb {
+    background-color: hsl(var(--border));
+    border-radius: 3px;
+  }
+  
+  .scrollbar-thumb-border:hover::-webkit-scrollbar-thumb {
+    background-color: hsl(var(--border) / 0.8);
+  }
+  
+  .scrollbar-thin {
+    scrollbar-width: thin;
+    scrollbar-color: hsl(var(--border)) transparent;
+  }
+`
+
+export function ChatArea({  onSendMessage, messages, steps, activeTab, setActiveTab }: ChatAreaProps) {
   const [input, setInput] = useState("")
   const { activeProject } = useActiveProjectStore()
   const [isLoading, setIsLoading] = useState(false)
   const [inputRows, setInputRows] = useState(1)
-  const [activeTab, setActiveTab] = useState<"chat" | "steps">("chat")
+
   const messagesEndRef = useRef<HTMLDivElement>(null)
+  const chatContainerRef = useRef<HTMLDivElement>(null)
+  const stepsContainerRef = useRef<HTMLDivElement>(null)
   const formRef = useRef<HTMLFormElement>(null)
   const textareaRef = useRef<HTMLTextAreaElement>(null)
 
-  // Mock steps data - in a real app, this would come from the project or API
-  const displaySteps: Step[] = useMemo(
-    () => [
-      {
-        id: 1,
-        title: "Initialize Project",
-        description: "Set up project structure",
-        type: 0, // CreateFile
-        status: "completed",
-        path: "/src",
-      },
-      {
-        id: 2,
-        title: "Create Components",
-        description: "Build UI components",
-        type: 0, // CreateFile
-        status: "in-progress",
-        path: "/src/components",
-      },
-      {
-        id: 3,
-        title: "Setup Routing",
-        description: "Configure application routes",
-        type: 0, // CreateFile
-        status: "pending",
-        path: "/src/routes",
-      },
-      {
-        id: 4,
-        title: "Add Styling",
-        description: "Style the application",
-        type: 1, // CreateFolder
-        status: "pending",
-        path: "/src/styles",
-      },
-    ],
-    [],
-  )
 
   // Calculate progress metrics
   const completedSteps = useMemo(
-    () => displaySteps.filter((step) => step.status === "completed").length,
-    [displaySteps],
+    () => steps.filter((step) => step.status === "completed").length,
+    [steps],
   )
 
   const progressPercentage = useMemo(
-    () => (displaySteps.length > 0 ? Math.round((completedSteps / displaySteps.length) * 100) : 0),
-    [completedSteps, displaySteps.length],
+    () => (steps.length > 0 ? Math.round((completedSteps / steps.length) * 100) : 0),
+    [completedSteps, steps.length],
   )
 
-  const scrollToBottom = () => {
+  const scrollChatToBottom = () => {
+    if (chatContainerRef.current) {
+      const container = chatContainerRef.current
+      container.scrollTo({
+        top: container.scrollHeight,
+        behavior: 'smooth'
+      })
+    }
+    // Fallback to ref method
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" })
   }
 
+
+  // Handle keyboard navigation for accessibility
+  const handleContainerKeyDown = (e: React.KeyboardEvent<HTMLDivElement>, containerType: 'chat' | 'steps') => {
+    if (e.key === 'Home' && e.ctrlKey) {
+      e.preventDefault()
+      if (containerType === 'chat' && chatContainerRef.current) {
+        chatContainerRef.current.scrollTo({ top: 0, behavior: 'smooth' })
+      } else if (containerType === 'steps' && stepsContainerRef.current) {
+        stepsContainerRef.current.scrollTo({ top: 0, behavior: 'smooth' })
+      }
+    } else if (e.key === 'End' && e.ctrlKey) {
+      e.preventDefault()
+      if (containerType === 'chat') {
+        scrollChatToBottom()
+      } else if (containerType === 'steps' && stepsContainerRef.current) {
+        stepsContainerRef.current.scrollTo({ 
+          top: stepsContainerRef.current.scrollHeight, 
+          behavior: 'smooth' 
+        })
+      }
+    }
+  }
+
   useEffect(() => {
-    scrollToBottom()
+    scrollChatToBottom()
   }, [messages])
+
+  useEffect(() => {
+    if (activeTab === "steps" && stepsContainerRef.current) {
+      const inProgressStepIndex = steps.findIndex(step => step.status === 'in-progress')
+      if (inProgressStepIndex !== -1) {
+        // Small delay to ensure DOM is updated
+        setTimeout(() => {
+          const stepCards = stepsContainerRef.current?.querySelectorAll('[data-step-card]')
+          if (stepCards && stepCards[inProgressStepIndex]) {
+            stepCards[inProgressStepIndex].scrollIntoView({
+              behavior: 'smooth',
+              block: 'center'
+            })
+          }
+        }, 100)
+      }
+    }
+  }, [steps, activeTab])
 
   const handleInputChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     setInput(e.target.value)
@@ -144,6 +184,7 @@ export function ChatArea({ chatId, onSendMessage, messages }: ChatAreaProps) {
 
   return (
     <SidebarInset className="flex flex-col h-screen bg-background relative w-full border-r border-border/40">
+      <style dangerouslySetInnerHTML={{ __html: scrollbarStyles }} />
       <header className="border-b border-border/40 p-4 bg-background/95 backdrop-blur-sm sticky top-0 z-10">
         <div className="flex items-center justify-between">
           <div>
@@ -152,7 +193,7 @@ export function ChatArea({ chatId, onSendMessage, messages }: ChatAreaProps) {
           </div>
           <Badge variant="outline" className="bg-primary/10 border-primary/20 px-3 py-1.5">
             <CheckCircle2 className="h-4 w-4 mr-2 text-primary" />
-            {completedSteps}/{displaySteps.length} Steps
+            {completedSteps}/{steps.length} Steps
           </Badge>
         </div>
       </header>
@@ -173,7 +214,7 @@ export function ChatArea({ chatId, onSendMessage, messages }: ChatAreaProps) {
                 <ListTodo className="h-4 w-4" />
                 Steps
                 <Badge variant="secondary" className="ml-1">
-                  {completedSteps}/{displaySteps.length}
+                  {completedSteps}/{steps.length}
                 </Badge>
               </TabsTrigger>
             </TabsList>
@@ -181,8 +222,12 @@ export function ChatArea({ chatId, onSendMessage, messages }: ChatAreaProps) {
 
           {/* Chat Tab Content */}
           <TabsContent value="chat" className="flex-1 flex flex-col overflow-hidden data-[state=inactive]:hidden">
-            <ScrollArea className="flex-1 px-4 py-6">
-              <div className="space-y-4 max-w-4xl mx-auto">
+            <div 
+              ref={chatContainerRef}
+              className="flex-1 px-4 py-6 overflow-y-auto scroll-smooth scrollbar-thin scrollbar-track-transparent scrollbar-thumb-border hover:scrollbar-thumb-border/80"
+              onKeyDown={(e) => handleContainerKeyDown(e, 'chat')}
+            >
+              <div className="space-y-2 max-w-4xl mx-auto">
                 {messages.map((message, index) => (
                   <div
                     key={index}
@@ -190,34 +235,24 @@ export function ChatArea({ chatId, onSendMessage, messages }: ChatAreaProps) {
                   >
                     <div
                       className={cn(
-                        "flex gap-3 max-w-[80%] md:max-w-[70%]",
+                        "flex gap-1 max-w-[80%] md:max-w-[70%]",
                         message.role === "USER" ? "flex-row-reverse" : "flex-row",
                       )}
                     >
                       <div
                         className={cn(
-                          "flex-shrink-0 w-8 h-8 rounded-full flex items-center justify-center",
-                          message.role === "USER"
-                            ? "bg-primary text-primary-foreground"
-                            : "bg-muted border border-border",
-                        )}
-                      >
-                        {message.role === "USER" ? <User className="h-4 w-4" /> : <Bot className="h-4 w-4" />}
-                      </div>
-                      <Card
-                        className={cn(
-                          "shadow-sm border",
+                          "shadow-sm border rounded-2xl p-4",
                           message.role === "USER"
                             ? "bg-primary text-primary-foreground border-primary/20"
                             : "bg-card border-border/50",
                         )}
                       >
-                        <CardContent className="p-4">
+                        <div className="px-2">
                           <div className="prose prose-sm max-w-none dark:prose-invert">
-                            <p className="m-0 leading-relaxed">{message.content}</p>
+                            <p className="leading-relaxed">{message.content}</p>
                           </div>
-                        </CardContent>
-                      </Card>
+                        </div>
+                      </div>
                     </div>
                   </div>
                 ))}
@@ -242,7 +277,7 @@ export function ChatArea({ chatId, onSendMessage, messages }: ChatAreaProps) {
                 )}
                 <div ref={messagesEndRef} />
               </div>
-            </ScrollArea>
+            </div>
           </TabsContent>
 
           {/* Steps Tab Content */}
@@ -255,7 +290,7 @@ export function ChatArea({ chatId, onSendMessage, messages }: ChatAreaProps) {
                 </div>
                 <Badge variant="outline" className="bg-primary/10 border-primary/20 px-3 py-1.5">
                   <CheckCircle2 className="h-4 w-4 mr-2" />
-                  {completedSteps}/{displaySteps.length} Completed
+                  {completedSteps}/{steps.length} Completed
                 </Badge>
               </div>
 
@@ -267,11 +302,16 @@ export function ChatArea({ chatId, onSendMessage, messages }: ChatAreaProps) {
                 <Progress value={progressPercentage} className="h-2" />
               </div>
 
-              <ScrollArea className="flex-1">
+              <div 
+                ref={stepsContainerRef}
+                className="flex-1 overflow-y-auto scroll-smooth pr-2 scrollbar-thin scrollbar-track-transparent scrollbar-thumb-border hover:scrollbar-thumb-border/80"
+                onKeyDown={(e) => handleContainerKeyDown(e, 'steps')}
+              >
                 <div className="space-y-3 pr-4">
-                  {displaySteps.map((step, index) => (
+                  {steps.map((step, index) => (
                     <Card
                       key={step.id}
+                      data-step-card
                       className={cn(
                         "transition-all duration-200 hover:shadow-md border",
                         step.status === "completed"
@@ -340,7 +380,7 @@ export function ChatArea({ chatId, onSendMessage, messages }: ChatAreaProps) {
                     </Card>
                   ))}
                 </div>
-              </ScrollArea>
+              </div>
             </div>
           </TabsContent>
         </Tabs>

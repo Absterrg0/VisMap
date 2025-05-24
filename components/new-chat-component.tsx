@@ -4,16 +4,13 @@ import { useState, useRef, useEffect } from "react"
 import {  useParams, useRouter } from "next/navigation"
 import { Paperclip, SendHorizontal, Sparkles } from "lucide-react"
 import { usePromptStore } from "@/zustand/store"
-import { Switch } from "./ui/switch"
 import axios from 'axios'
-import { ChatHistory } from "@/types/types"
 
 
 export function NewChatComponent() {
   const prompt = usePromptStore((state) => state.prompt)
   const setPrompt = usePromptStore((state) => state.setPrompt)
-  const template = usePromptStore((state)=> state.template );
-  const setTemplate = usePromptStore((state)=> state.setTemplate);
+
   const [inputRows, setInputRows] = useState(2)
   const textareaRef = useRef<HTMLTextAreaElement>(null)
   const formRef = useRef<HTMLFormElement>(null)
@@ -95,14 +92,6 @@ export function NewChatComponent() {
                   <button type="button" className="p-2 rounded-full hover:bg-accent/30 text-muted-foreground hover:text-foreground transition-colors">
                     <Paperclip className="h-4 w-4" />
                   </button>
-                  <Switch
-                    checked={template === "interactive"}
-                    onCheckedChange={(checked) => setTemplate(checked ? "interactive" : "static")}
-                    className="bg-background data-[state=checked]:bg-primary data-[state=checked]:text-primary-foreground data-[state=unchecked]:bg-muted data-[state=unchecked]:text-muted-foreground"
-                  />
-                  <span className="text-sm text-muted-foreground">
-                    {template === "interactive" ? "Interactive" : "Static"}
-                  </span>
                 </div>
                 <button
                   type="submit"
