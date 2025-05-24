@@ -1,10 +1,12 @@
 "use client"
 
 import { useState, useRef, useEffect } from "react"
-import { useRouter, useParams } from "next/navigation"
+import {  useParams, useRouter } from "next/navigation"
 import { Paperclip, SendHorizontal, Sparkles } from "lucide-react"
 import { usePromptStore } from "@/zustand/store"
 import { Switch } from "./ui/switch"
+import axios from 'axios'
+import { ChatHistory } from "@/types/types"
 
 
 export function NewChatComponent() {
@@ -15,8 +17,8 @@ export function NewChatComponent() {
   const [inputRows, setInputRows] = useState(2)
   const textareaRef = useRef<HTMLTextAreaElement>(null)
   const formRef = useRef<HTMLFormElement>(null)
+  const projectId = useParams().projectId
   const router = useRouter()
-
   const MIN_ROWS = 2
   const MAX_ROWS = 6
   const LINE_HEIGHT = 24
@@ -27,7 +29,6 @@ export function NewChatComponent() {
       textareaRef.current.value = prompt
       adjustRows({ target: textareaRef.current } as React.ChangeEvent<HTMLTextAreaElement>)
     }
-    // eslint-disable-next-line
   }, [])
 
   const handleInputChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
@@ -56,10 +57,13 @@ export function NewChatComponent() {
     }
   }
 
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
     if (!prompt.trim()) return
-    router.replace(`/project/chat/${'1-2'}`)
+
+    const response = await axios.post<{chatHistoryId:string}>(`/api/chatHistory/${projectId}`, { prompt })
+
+    router.push(`/project/${projectId}/chat/${response.data.chatHistoryId}`)
   }
 
   return (

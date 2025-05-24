@@ -2,7 +2,7 @@
 
 import type React from "react"
 
-import { useState } from "react"
+import { useState, useMemo } from "react"
 import { ChevronDown, ChevronRight, File, Folder, FolderOpen } from "lucide-react"
 import { cn } from "@/lib/utils"
 import { FileNode } from "./code-editor"
@@ -13,13 +13,70 @@ interface FileExplorerProps {
   selectedFile?: FileNode
 }
 
+// Mount structure types
+interface MountFileItem {
+  file?: {
+    contents: string
+  }
+  directory?: Record<string, MountFileItem>
+}
+
+type MountStructure = Record<string, MountFileItem>
+
+// Convert FileNode to the mount structure format
+const createMountStructure = (files: FileNode[]): MountStructure => {
+  const mountStructure: MountStructure = {};
+
+  const processFile = (file: FileNode, isRootFolder: boolean): MountFileItem => {  
+    if (file.type === 'folder') {
+      // For directories, create a directory entry
+      const result = {
+        directory: file.children ? 
+          Object.fromEntries(
+            file.children.map(child => [child.name, processFile(child, false)])
+          ) 
+          : {}
+      };
+      
+      if (isRootFolder) {
+        mountStructure[file.name] = result;
+      }
+      return result;
+    } else if (file.type === 'file') {
+      const result = {
+        file: {
+          contents: file.content || ''
+        }
+      };
+      
+      if (isRootFolder) {
+        mountStructure[file.name] = result;
+      }
+      return result;
+    }
+
+    return { directory: {} };
+  };
+
+  // Process each top-level file/folder
+  files.forEach(file => processFile(file, true));
+
+  return mountStructure;
+};
+
 export function FileExplorer({ files, onSelectFile, selectedFile }: FileExplorerProps) {
   return (
     <div className="p-2">
       <div className="text-sm font-medium px-2 py-1.5 text-muted-foreground">PROJECT</div>
       <div className="mt-1">
         {files.map((file) => (
-          <FileTreeItem key={file.name} file={file} level={0} onSelectFile={onSelectFile} selectedFile={selectedFile} />
+          <FileTreeItem 
+            key={`${file.path || file.name}`} 
+            file={file} 
+            level={0} 
+            onSelectFile={onSelectFile} 
+            selectedFile={selectedFile} 
+          />
         ))}
       </div>
     </div>
@@ -46,7 +103,7 @@ function FileTreeItem({ file, level, onSelectFile, selectedFile }: FileTreeItemP
     onSelectFile(file)
   }
 
-  const isDirectory = file.type === "directory"
+  const isDirectory = file.type === "folder"
 
   return (
     <div>
@@ -85,11 +142,11 @@ function FileTreeItem({ file, level, onSelectFile, selectedFile }: FileTreeItemP
         <span className="truncate">{file.name}</span>
       </div>
 
-      {isDirectory && expanded && file.children && (
+      {isDirectory && expanded && file.children && file.children.length > 0 && (
         <div>
-          {file.children.map((child: any) => (
+          {file.children.map((child) => (
             <FileTreeItem
-              key={child}
+              key={`${child.path || child.name}`}
               file={child}
               level={level + 1}
               onSelectFile={onSelectFile}
@@ -124,6 +181,19 @@ function FileIcon({ fileName }: { fileName: string }) {
         return "text-yellow-300"
       case "md":
         return "text-gray-400"
+      case "py":
+        return "text-green-400"
+      case "java":
+        return "text-red-400"
+      case "php":
+        return "text-purple-400"
+      case "go":
+        return "text-cyan-400"
+      case "rs":
+        return "text-orange-500"
+      case "cpp":
+      case "c":
+        return "text-blue-500"
       default:
         return "text-gray-400"
     }
@@ -131,3 +201,7 @@ function FileIcon({ fileName }: { fileName: string }) {
 
   return <File className={`h-4 w-4 ${getIconColor()}`} />
 }
+
+// Export the mount structure creation function for use in other components
+export { createMountStructure }
+export type { MountStructure, MountFileItem }

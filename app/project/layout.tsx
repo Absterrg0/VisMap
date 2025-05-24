@@ -7,7 +7,7 @@ import { useState } from "react"
 import { ChatHistory, Project } from "@/types/types"
 import OnboardingComponent from "@/components/onboarding"
 import axios from "axios"
-import { useRouter } from "next/navigation"
+import { useUserProjectStore } from "@/zustand/store"
 
 interface ChatLayoutProps {
   children: ReactNode
@@ -15,7 +15,7 @@ interface ChatLayoutProps {
 
 export default function ChatLayout({ children }: ChatLayoutProps) {
 
-  const [projects, setProjects] = useState<Project[]>([])
+  const {projects, setProjects} = useUserProjectStore()
   const [isOnboarding, setIsOnboarding] = useState(false)
   const [activeChat, setActiveChat] = useState<ChatHistory | null>(null)
   useEffect(()=>{
@@ -25,6 +25,7 @@ export default function ChatLayout({ children }: ChatLayoutProps) {
         setIsOnboarding(true);  
       }
       if(response.status === 200){
+        console.log(response.data.projects)
         setProjects(response.data.projects)
       }
     }

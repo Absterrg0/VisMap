@@ -1,8 +1,8 @@
 "use client"
 
 import type React from "react"
-import { useState, useRef, useEffect } from "react"
-import type { Project, Chat, Message } from "@/types/types"
+import { useState, useRef, useEffect, useMemo } from "react"
+import type { Message } from "@/types/types"
 import { Button } from "@/components/ui/button"
 import { Textarea } from "@/components/ui/textarea"
 import { SendHorizontal, Bot, User, CheckCircle2, Clock, Circle, ListTodo } from "lucide-react"
@@ -14,24 +14,73 @@ import { Badge } from "@/components/ui/badge"
 import { ScrollArea } from "@/components/ui/scroll-area"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { Progress } from "@/components/ui/progress"
+import { useActiveProjectStore } from "@/zustand/store"
 
 interface ChatAreaProps {
-  activeChat: Chat
-  activeProject: Project | null
+  chatId: string
   onSendMessage: (message: Message) => void
   messages: Message[]
-  steps: Step[]
-  setSteps: React.Dispatch<React.SetStateAction<Step[]>>
 }
 
-export function ChatArea({ activeChat, activeProject, onSendMessage, messages, steps, setSteps }: ChatAreaProps) {
+export function ChatArea({ chatId, onSendMessage, messages }: ChatAreaProps) {
   const [input, setInput] = useState("")
+  const { activeProject } = useActiveProjectStore()
   const [isLoading, setIsLoading] = useState(false)
   const [inputRows, setInputRows] = useState(1)
   const [activeTab, setActiveTab] = useState<"chat" | "steps">("chat")
   const messagesEndRef = useRef<HTMLDivElement>(null)
   const formRef = useRef<HTMLFormElement>(null)
   const textareaRef = useRef<HTMLTextAreaElement>(null)
+
+  // Mock steps data - in a real app, this would come from the project or API
+  const displaySteps: Step[] = useMemo(
+    () => [
+      {
+        id: 1,
+        title: "Initialize Project",
+        description: "Set up project structure",
+        type: 0, // CreateFile
+        status: "completed",
+        path: "/src",
+      },
+      {
+        id: 2,
+        title: "Create Components",
+        description: "Build UI components",
+        type: 0, // CreateFile
+        status: "in-progress",
+        path: "/src/components",
+      },
+      {
+        id: 3,
+        title: "Setup Routing",
+        description: "Configure application routes",
+        type: 0, // CreateFile
+        status: "pending",
+        path: "/src/routes",
+      },
+      {
+        id: 4,
+        title: "Add Styling",
+        description: "Style the application",
+        type: 1, // CreateFolder
+        status: "pending",
+        path: "/src/styles",
+      },
+    ],
+    [],
+  )
+
+  // Calculate progress metrics
+  const completedSteps = useMemo(
+    () => displaySteps.filter((step) => step.status === "completed").length,
+    [displaySteps],
+  )
+
+  const progressPercentage = useMemo(
+    () => (displaySteps.length > 0 ? Math.round((completedSteps / displaySteps.length) * 100) : 0),
+    [completedSteps, displaySteps.length],
+  )
 
   const scrollToBottom = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" })
@@ -40,7 +89,6 @@ export function ChatArea({ activeChat, activeProject, onSendMessage, messages, s
   useEffect(() => {
     scrollToBottom()
   }, [messages])
-
 
   const handleInputChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     setInput(e.target.value)
@@ -52,7 +100,7 @@ export function ChatArea({ activeChat, activeProject, onSendMessage, messages, s
     if (!input.trim() || isLoading) return
 
     onSendMessage({
-      role: 'user',
+      role: "USER",
       content: input,
     })
     setInput("")
@@ -94,28 +142,17 @@ export function ChatArea({ activeChat, activeProject, onSendMessage, messages, s
     setInputRows(e.target.rows)
   }
 
-  // Filter out the 0th and last index as mentioned by the user
-  const displaySteps = steps.slice(1, -1)
-
-  // Calculate progress based on displaySteps only
-  const completedSteps = displaySteps.filter((step) => step.status === "completed").length
-  const progressPercentage = displaySteps.length > 0 ? (completedSteps / displaySteps.length) * 100 : 0
-
   return (
     <SidebarInset className="flex flex-col h-screen bg-background relative w-full border-r border-border/40">
-      <header className="border-b border-border/40 p-4 flex items-center justify-between bg-gradient-to-r from-background to-background/95 backdrop-blur-sm sticky top-0 z-10 shadow-sm">
-        <div>
-          <h1 className="text-xl font-semibold">{activeChat.name}</h1>
-          <p className="text-sm text-muted-foreground">{activeProject?.name}</p>
-        </div>
-        <div className="flex items-center gap-2">
-          <Badge variant="outline" className="bg-primary/10 px-3 py-1">
-            <div className="flex items-center gap-2">
-              <div className="w-4 h-4 rounded-full bg-primary/20 flex items-center justify-center">
-                <CheckCircle2 className="h-3 w-3 text-primary" />
-              </div>
-              {completedSteps}/{displaySteps.length} Steps
-            </div>
+      <header className="border-b border-border/40 p-4 bg-background/95 backdrop-blur-sm sticky top-0 z-10">
+        <div className="flex items-center justify-between">
+          <div>
+            <h1 className="font-semibold text-lg">{activeProject?.name || "No Project Selected"}</h1>
+            <p className="text-sm text-muted-foreground">Development Chat & Progress</p>
+          </div>
+          <Badge variant="outline" className="bg-primary/10 border-primary/20 px-3 py-1.5">
+            <CheckCircle2 className="h-4 w-4 mr-2 text-primary" />
+            {completedSteps}/{displaySteps.length} Steps
           </Badge>
         </div>
       </header>
@@ -135,7 +172,7 @@ export function ChatArea({ activeChat, activeProject, onSendMessage, messages, s
               <TabsTrigger value="steps" className="flex items-center gap-2">
                 <ListTodo className="h-4 w-4" />
                 Steps
-                <Badge variant="secondary"  className="ml-1">
+                <Badge variant="secondary" className="ml-1">
                   {completedSteps}/{displaySteps.length}
                 </Badge>
               </TabsTrigger>
@@ -144,143 +181,140 @@ export function ChatArea({ activeChat, activeProject, onSendMessage, messages, s
 
           {/* Chat Tab Content */}
           <TabsContent value="chat" className="flex-1 flex flex-col overflow-hidden data-[state=inactive]:hidden">
-              <div className="space-y-6 max-w-3xl mx-auto pb-4">
+            <ScrollArea className="flex-1 px-4 py-6">
+              <div className="space-y-4 max-w-4xl mx-auto">
                 {messages.map((message, index) => (
                   <div
                     key={index}
-                    className={cn("flex gap-3", message.role === 'user' ? "justify-end" : "justify-start")}
+                    className={cn("flex gap-3 w-full", message.role === "USER" ? "justify-end" : "justify-start")}
                   >
-                    <Card
+                    <div
                       className={cn(
-                        "max-w-[85%] shadow-sm",
-                        message.role === 'user'
-                          ? "bg-primary text-primary-foreground border-primary/50"
-                          : "bg-muted/50 border-border/40 hover:bg-muted/70 transition-colors",
+                        "flex gap-3 max-w-[80%] md:max-w-[70%]",
+                        message.role === "USER" ? "flex-row-reverse" : "flex-row",
                       )}
                     >
-                      <CardContent className="p-3">
-                        <div className="flex gap-3">
-                          <div
-                            className={cn(
-                              "flex-shrink-0 mt-1 flex items-center justify-center rounded-full w-8 h-8",
-                              message.role === 'user' ? "bg-primary-foreground/20" : "bg-background/70",
-                            )}
-                          >
-                            {message.role === 'user' ? (
-                              <User className="h-4 w-4" />
-                            ) : (
-                              <Bot className="h-4 w-4" />
-                            )}
+                      <div
+                        className={cn(
+                          "flex-shrink-0 w-8 h-8 rounded-full flex items-center justify-center",
+                          message.role === "USER"
+                            ? "bg-primary text-primary-foreground"
+                            : "bg-muted border border-border",
+                        )}
+                      >
+                        {message.role === "USER" ? <User className="h-4 w-4" /> : <Bot className="h-4 w-4" />}
+                      </div>
+                      <Card
+                        className={cn(
+                          "shadow-sm border",
+                          message.role === "USER"
+                            ? "bg-primary text-primary-foreground border-primary/20"
+                            : "bg-card border-border/50",
+                        )}
+                      >
+                        <CardContent className="p-4">
+                          <div className="prose prose-sm max-w-none dark:prose-invert">
+                            <p className="m-0 leading-relaxed">{message.content}</p>
                           </div>
-                          <div
-                            className={cn(
-                              "prose prose-sm max-w-none",
-                              message.role === 'user' ? "prose-invert" : "dark:prose-invert",
-                            )}
-                          >
-                            {message.content}
-                          </div>
-                        </div>
-                      </CardContent>
-                    </Card>
+                        </CardContent>
+                      </Card>
+                    </div>
                   </div>
                 ))}
 
                 {isLoading && (
-                  <div className="flex gap-3">
-                    <Card className="bg-muted border-border/40 max-w-[85%]">
-                      <CardContent className="p-3">
-                        <div className="flex gap-3">
-                          <div className="flex-shrink-0 mt-1 flex items-center justify-center rounded-full w-8 h-8 bg-background/50">
-                            <Bot className="h-4 w-4" />
-                          </div>
+                  <div className="flex gap-3 w-full justify-start">
+                    <div className="flex gap-3 max-w-[80%] md:max-w-[70%]">
+                      <div className="flex-shrink-0 w-8 h-8 rounded-full bg-muted border border-border flex items-center justify-center">
+                        <Bot className="h-4 w-4" />
+                      </div>
+                      <Card className="bg-card border-border/50 shadow-sm">
+                        <CardContent className="p-4">
                           <div className="flex items-center space-x-2">
                             <div className="h-2 w-2 rounded-full bg-muted-foreground/60 animate-bounce"></div>
                             <div className="h-2 w-2 rounded-full bg-muted-foreground/60 animate-bounce delay-75"></div>
                             <div className="h-2 w-2 rounded-full bg-muted-foreground/60 animate-bounce delay-150"></div>
                           </div>
-                        </div>
-                      </CardContent>
-                    </Card>
+                        </CardContent>
+                      </Card>
+                    </div>
                   </div>
                 )}
                 <div ref={messagesEndRef} />
               </div>
+            </ScrollArea>
           </TabsContent>
 
           {/* Steps Tab Content */}
           <TabsContent value="steps" className="flex-1 overflow-hidden data-[state=inactive]:hidden">
-            <div className="p-4 bg-muted/20">
-              <div className="flex items-center justify-between mb-4">
-                <h2 className="text-lg font-medium">Project Progress</h2>
-                <Badge variant="outline" className="bg-primary/10 px-3 py-1">
+            <div className="p-6 h-full flex flex-col">
+              <div className="flex items-center justify-between mb-6">
+                <div>
+                  <h2 className="text-xl font-semibold">Project Progress</h2>
+                  <p className="text-sm text-muted-foreground mt-1">Track your development milestones</p>
+                </div>
+                <Badge variant="outline" className="bg-primary/10 border-primary/20 px-3 py-1.5">
+                  <CheckCircle2 className="h-4 w-4 mr-2" />
                   {completedSteps}/{displaySteps.length} Completed
                 </Badge>
               </div>
 
-              <Progress value={progressPercentage} className="mb-6" />
+              <div className="mb-6">
+                <div className="flex items-center justify-between mb-2">
+                  <span className="text-sm font-medium">Overall Progress</span>
+                  <span className="text-sm text-muted-foreground">{progressPercentage}%</span>
+                </div>
+                <Progress value={progressPercentage} className="h-2" />
+              </div>
 
-              <ScrollArea className="h-[calc(100vh-250px)] overflow-y-auto">
-                <div className="space-y-4">
+              <ScrollArea className="flex-1">
+                <div className="space-y-3 pr-4">
                   {displaySteps.map((step, index) => (
                     <Card
                       key={step.id}
                       className={cn(
-                        "transition-all duration-200 hover:shadow-md",
+                        "transition-all duration-200 hover:shadow-md border",
                         step.status === "completed"
-                          ? "bg-green-500/10 border-green-500/30"
+                          ? "bg-green-50 border-green-200 dark:bg-green-950/20 dark:border-green-800/30"
                           : step.status === "in-progress"
-                            ? "bg-amber-500/10 border-amber-500/30"
-                            : "bg-card border-border/50",
+                            ? "bg-amber-50 border-amber-200 dark:bg-amber-950/20 dark:border-amber-800/30"
+                            : "bg-card border-border/50 hover:border-border/80",
                       )}
                     >
                       <CardContent className="p-4">
-                        <div className="flex items-start gap-3">
-                          <div className="flex-shrink-0 mt-1">
+                        <div className="flex items-start gap-4">
+                          <div className="flex-shrink-0">
                             {step.status === "completed" ? (
-                              <div className="w-8 h-8 rounded-full bg-green-500/20 flex items-center justify-center">
-                                <CheckCircle2 className="h-5 w-5 text-green-500" />
+                              <div className="w-10 h-10 rounded-full bg-green-100 dark:bg-green-900/30 flex items-center justify-center">
+                                <CheckCircle2 className="h-5 w-5 text-green-600 dark:text-green-400" />
                               </div>
                             ) : step.status === "in-progress" ? (
-                              <div className="w-8 h-8 rounded-full bg-amber-500/20 flex items-center justify-center">
-                                <Clock className="h-5 w-5 text-amber-500 animate-pulse" />
+                              <div className="w-10 h-10 rounded-full bg-amber-100 dark:bg-amber-900/30 flex items-center justify-center">
+                                <Clock className="h-5 w-5 text-amber-600 dark:text-amber-400 animate-pulse" />
                               </div>
                             ) : (
-                              <div className="w-8 h-8 rounded-full bg-muted flex items-center justify-center">
+                              <div className="w-10 h-10 rounded-full bg-muted flex items-center justify-center">
                                 <Circle className="h-5 w-5 text-muted-foreground" />
                               </div>
                             )}
                           </div>
 
-                          <div className="flex-1">
-                            <div className="flex items-center justify-between">
-                              <div className="font-medium flex items-center gap-2">
-                                <Badge variant="outline" className="bg-background/50 ">
+                          <div className="flex-1 min-w-0">
+                            <div className="flex items-start justify-between gap-3 mb-2">
+                              <div className="flex items-center gap-2 min-w-0">
+                                <Badge variant="outline" className="bg-background/80 text-xs px-2 py-1 flex-shrink-0">
                                   Step {index + 1}
                                 </Badge>
-                                {step.title.split(" ")[0]} 
-                            {step.path && (
-                              <div className=" flex items-center">
-                                <div className="text-xs bg-background px-3 py-1.5 rounded-md font-mono truncate max-w-full border border-border/30">
-                                  {step.path}
-                                </div>
-                              </div>
-                            )}
+                                <h3 className="font-medium text-sm truncate">{step.title}</h3>
                               </div>
                               <Badge
-                                variant={
-                                  step.status === "completed"
-                                    ? "default"
-                                    : step.status === "in-progress"
-                                      ? "default"
-                                      : "outline"
-                                }
+                                variant="secondary"
                                 className={cn(
-                                  "whitespace-nowrap",
+                                  "text-xs flex-shrink-0",
                                   step.status === "completed"
-                                    ? "bg-green-500/20 text-green-700 hover:bg-green-500/30"
+                                    ? "bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400"
                                     : step.status === "in-progress"
-                                      ? "bg-amber-500/20 text-amber-700 hover:bg-amber-500/30"
+                                      ? "bg-amber-100 text-amber-700 dark:bg-amber-900/30 dark:text-amber-400"
                                       : "bg-muted text-muted-foreground",
                                 )}
                               >
@@ -292,6 +326,14 @@ export function ChatArea({ activeChat, activeProject, onSendMessage, messages, s
                               </Badge>
                             </div>
 
+                            <p className="text-sm text-muted-foreground mb-3">{step.description}</p>
+
+                            {step.path && (
+                              <div className="flex items-center gap-2">
+                                <span className="text-xs text-muted-foreground">Path:</span>
+                                <code className="text-xs bg-muted px-2 py-1 rounded font-mono border">{step.path}</code>
+                              </div>
+                            )}
                           </div>
                         </div>
                       </CardContent>
@@ -304,27 +346,29 @@ export function ChatArea({ activeChat, activeProject, onSendMessage, messages, s
         </Tabs>
       </div>
 
-      <div className="border-t border-border/40 p-4 bg-gradient-to-b from-background/70 to-background backdrop-blur-sm">
-        <form ref={formRef} onSubmit={handleSubmit} className="flex items-end gap-2 max-w-3xl mx-auto relative">
-          <Textarea
-            ref={textareaRef}
-            value={input}
-            onChange={handleInputChange}
-            onKeyDown={handleKeyDown}
-            placeholder="Type your message..."
-            className="resize-none min-h-[2.5rem] py-3 pr-12 bg-background/80 border-border/40 rounded-xl shadow-sm focus:shadow-md transition-shadow"
-            rows={inputRows}
-            disabled={isLoading}
-          />
-          <Button
-            type="submit"
-            size="icon"
-            className="absolute right-3 bottom-3 h-8 w-8 rounded-full bg-primary hover:bg-primary/90 transition-colors shadow-sm"
-            disabled={isLoading || !input.trim()}
-          >
-            <SendHorizontal className="h-4 w-4" />
-            <span className="sr-only">Send message</span>
-          </Button>
+      <div className="border-t border-border/40 p-4 bg-background/95 backdrop-blur-sm">
+        <form ref={formRef} onSubmit={handleSubmit} className="max-w-4xl mx-auto">
+          <div className="relative">
+            <Textarea
+              ref={textareaRef}
+              value={input}
+              onChange={handleInputChange}
+              onKeyDown={handleKeyDown}
+              placeholder="Type your message..."
+              className="resize-none min-h-[3rem] py-3 pr-12 bg-background border-border/60 rounded-xl shadow-sm focus:shadow-md transition-all focus:border-primary/50"
+              rows={inputRows}
+              disabled={isLoading}
+            />
+            <Button
+              type="submit"
+              size="icon"
+              className="absolute right-2 bottom-2 h-8 w-8 rounded-lg bg-primary hover:bg-primary/90 transition-colors shadow-sm disabled:opacity-50"
+              disabled={isLoading || !input.trim()}
+            >
+              <SendHorizontal className="h-4 w-4" />
+              <span className="sr-only">Send message</span>
+            </Button>
+          </div>
         </form>
       </div>
     </SidebarInset>

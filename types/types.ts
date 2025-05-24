@@ -14,9 +14,19 @@ export interface ChatHistory {
 
 
   export interface Message{
-    role:'user' | 'assistant'
+    role:'USER' | 'ASSISTANT'
     content:string
   }
+
+  // Mount structure types for WebContainer
+  export interface MountStructureItem {
+    file?: {
+      content: string
+    }
+    directory?: Record<string, MountStructureItem>
+  }
+
+  export type MountStructure = Record<string, MountStructureItem>
 
  
  

@@ -1,93 +1,25 @@
-export const mermaidPrompt = `<visArtifact id="project-import" title="Project Files"><visAction type="file" filePath="eslint.config.js">import js from '@eslint/js';
-import globals from 'globals';
-import tseslint from 'typescript-eslint';
+export const mermaidPrompt = `
+Create a complete Next.js application with mermaid diagram visualization. 
 
-export default tseslint.config(
-  { ignores: ['.next', 'dist'] },
-  {
-    extends: [js.configs.recommended, ...tseslint.configs.recommended],
-    files: ['**/*.{ts,tsx}'],
-    languageOptions: {
-      ecmaVersion: 2020,
-      globals: globals.browser,
-    },
-    rules: {},
-  }
-);
-</visAction><visAction type="file" filePath="package.json">{
-  "name": "next-mermaid-app",
-  "private": true,
-  "scripts": {
-    "dev": "next dev",
-    "build": "next build",
-    "start": "next start",
-    "lint": "next lint"
-  },
-  "dependencies": {
-    "next": "latest",
-    "react": "^18.3.1",
-    "react-dom": "^18.3.1",
-    "mermaid": "^10.9.0"
-  },
-  "devDependencies": {
-    "@types/react": "^18.3.5",
-    "@types/node": "^20.4.2",
-    "typescript": "^5.5.3",
-    "@eslint/js": "^9.9.1",
-    "typescript-eslint": "^8.3.0",
-    "eslint": "^9.9.1",
-    "globals": "^15.9.0"
-  }
-}
-</visAction><visAction type="file" filePath="tsconfig.json">{
-  "compilerOptions": {
-    "target": "ES2020",
-    "lib": ["dom", "dom.iterable", "esnext"],
-    "allowJs": true,
-    "skipLibCheck": true,
-    "strict": true,
-    "forceConsistentCasingInFileNames": true,
-    "noEmit": true,
-    "esModuleInterop": true,
-    "module": "esnext",
-    "moduleResolution": "bundler",
-    "resolveJsonModule": true,
-    "isolatedModules": true,
-    "jsx": "preserve"
-  },
-  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx"],
-  "exclude": ["node_modules"]
-}
-</visAction><visAction type="file" filePath="app/page.tsx">import dynamic from 'next/dynamic';
+MANDATORY FILES TO INCLUDE:
+1. package.json - Complete with all dependencies
+2. next.config.js - Next.js configuration  
+3. tsconfig.json - TypeScript configuration
+4. tailwind.config.js - Tailwind CSS configuration
+5. postcss.config.js - PostCSS configuration
+6. eslint.config.js - ESLint configuration
+7. app/layout.tsx - Root layout with HTML structure
+8. app/page.tsx - Main page component
+9. app/globals.css - Global CSS with Tailwind imports (@tailwind base; @tailwind components; @tailwind utilities;)
+10. components/ - Directory with all components
 
-const Mermaid = dynamic(() => import('../components/Mermaid'), { ssr: false });
+REQUIRED STRUCTURE:
+- Use Next.js App Router (app directory)
+- Include proper TypeScript types
+- Use Tailwind for all styling
+- Implement mermaid with dynamic imports and ssr: false
+- Include proper error handling
+- Create functional, complete applications
 
-export default function HomePage() {
-  const diagram = \`graph TD;
-    A[Client] --> B[Next.js];
-    B --> C[MermaidJS];
-    C --> D[Diagram Rendered];\`;
-
-  return (
-    <main className="min-h-screen flex items-center justify-center bg-white p-6">
-      <Mermaid chart={diagram} />
-    </main>
-  );
-}
-</visAction><visAction type="file" filePath="components/Mermaid.tsx">"use client";
-import { useEffect } from 'react';
-import mermaid from 'mermaid';
-
-type MermaidProps = {
-  chart: string;
-};
-
-export default function Mermaid({ chart }: MermaidProps) {
-  useEffect(() => {
-    mermaid.initialize({ startOnLoad: true });
-    mermaid.contentLoaded();
-  }, []);
-
-  return <div className="mermaid">{chart}</div>;
-}
-</visAction></visArtifact>`;
+The application should focus on creating roadmap visualizations, not implementing the actual projects being visualized.
+`;

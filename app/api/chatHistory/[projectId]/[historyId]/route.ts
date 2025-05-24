@@ -58,7 +58,9 @@ export async function PUT(req:NextRequest,{params}:{params:Promise<{projectId:st
 
 export async function GET(req:NextRequest,{params}:{params:Promise<{projectId:string,historyId:string}>}){
     try {
-        const {data:session} = await getSession();
+        const session = await auth.api.getSession({
+            headers:await headers()
+        })
         if(!session){
             return NextResponse.json({error:'Unauthorized'},{status:401})
         }
@@ -79,18 +81,14 @@ export async function GET(req:NextRequest,{params}:{params:Promise<{projectId:st
         if(project.userId !== session.user.id){
             return NextResponse.json({error:'Unauthorized'},{status:401})
         }
-        
-        const chatHistory = await prisma.chatHistory.findUnique({
-            where:{id:historyId}
-        })  
-
-        if(!chatHistory){
-            return NextResponse.json({error:'Chat history not found'},{status:404})
-        }
 
         const messages = await prisma.message.findMany({
             where:{chatHistoryId:historyId}
         })
+
+        if(!messages || messages.length === 0){
+            return NextResponse.json({messages:[]},{status:200})
+        }
         
         return NextResponse.json({messages},{status:200})
         

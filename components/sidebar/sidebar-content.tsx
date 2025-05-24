@@ -30,17 +30,18 @@ import { ProjectSelector } from "@/components/sidebar/project-selector"
 import { SearchInput } from "@/components/sidebar/search-input"
 import { ChatItem } from "@/components/sidebar/chat-item"
 import axios from 'axios'
+import { useActiveProjectStore } from "@/zustand/store"
 
 export function SidebarContents({ projects, selectedProjectId }: ChatSidebarProps) {
   const router = useRouter()
-  const [selectedProject, setSelectedProject] = useState<Project | null>(null)
+  const {activeProject, setActiveProject} = useActiveProjectStore()
   const [searchQuery, setSearchQuery] = useState("")
   const { state } = useSidebar()
   const isCollapsed = state === "collapsed"
 
   const fetchProjectDetails = async ()=>{
     const response = await axios.get<{project:Project}>(`/api/project/${selectedProjectId}`)
-    setSelectedProject(response.data.project)
+    setActiveProject(response.data.project)
   }
 
   useEffect(()=>{
@@ -54,14 +55,13 @@ export function SidebarContents({ projects, selectedProjectId }: ChatSidebarProp
   }
 
   const handleNewChat = () => {
-    if (selectedProject) {
-
-      router.push(`/${selectedProject.id}/chat/new`)
+    if (activeProject) {
+      router.push(`/${activeProject.id}/chat/new`)
     }
   }
 
   const handleProjectSelect = (project: Project) => {
-    setSelectedProject(project)
+    setActiveProject(project)
   }
 
   const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -76,7 +76,7 @@ export function SidebarContents({ projects, selectedProjectId }: ChatSidebarProp
             <SidebarMenuItem>
               <ProjectSelector
                 projects={projects}
-                selectedProject={selectedProject}
+                selectedProject={activeProject}
                 isCollapsed={isCollapsed}
                 onProjectSelect={handleProjectSelect}
               />
@@ -126,15 +126,15 @@ export function SidebarContents({ projects, selectedProjectId }: ChatSidebarProp
       <div className="flex-1 overflow-hidden">
         <div className={cn("pt-3 h-full", isCollapsed ? "px-1" : "px-3")}>
           <SidebarContent className="h-full bg-sidebar-border/40 rounded-sm">
-            {selectedProject && (
-              <SidebarGroup key={selectedProject.id} className="h-full">
+            {activeProject && (
+              <SidebarGroup key={activeProject.id} className="h-full">
                 {!isCollapsed && (
                   <div className="flex items-center justify-between px-2 mb-2">
                     <SidebarGroupLabel className="text-xs font-medium text-muted-foreground/80">
-                      Chats {selectedProject.chatHistory.length > 0 && `(${selectedProject.chatHistory.length})`}
+                      Chats {activeProject.chatHistory.length > 0 && `(${activeProject.chatHistory.length})`}
                     </SidebarGroupLabel>
 
-                    {searchQuery && selectedProject.chatHistory.length > 0 && (
+                    {searchQuery && activeProject.chatHistory.length > 0 && (
                       <Button
                         variant="ghost"
                         size="sm"
@@ -150,14 +150,14 @@ export function SidebarContents({ projects, selectedProjectId }: ChatSidebarProp
                 <SidebarGroupContent className="h-[calc(100%-2rem)]">
                   <ScrollArea className={cn("h-full", isCollapsed ? "pr-1" : "pr-3")}>
                     <SidebarMenu className={cn("space-y-2 pb-4", isCollapsed && "items-center")}>
-                      {selectedProject.chatHistory.length > 0 ? (
-                        selectedProject.chatHistory.map((chat:ChatHistory) => (
+                      {activeProject.chatHistory.length > 0 ? (
+                        activeProject.chatHistory.map((chat:ChatHistory) => (
                           <ChatItem
                             key={chat.id}
                             chat={chat}
-                            isActive={selectedProject.id === chat.id}
+                            isActive={activeProject.id === chat.id}
                             isCollapsed={isCollapsed}
-                            onSelect={() => handleChatSelect(selectedProject.id, chat.id)}
+                            onSelect={() => handleChatSelect(activeProject.id, chat.id)}
                           />
                         ))
                       ) : (
@@ -204,7 +204,7 @@ export function SidebarContents({ projects, selectedProjectId }: ChatSidebarProp
                   "shadow-sm transition-all duration-200 font-medium",
                 )}
                 onClick={handleNewChat}
-                disabled={!selectedProject}
+                disabled={!activeProject}
                 aria-label="New Chat"
               >
                 <Plus className="h-4 w-4" />
