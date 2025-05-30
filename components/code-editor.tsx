@@ -39,6 +39,7 @@ export function CodeEditor({ steps, files, onStepComplete, onStreamingStart, str
   const [isStreaming, setIsStreaming] = useState(false)
   const [mountStructure, setMountStructure] = useState<Record<string, any>>({})
   const streamingTimeoutRef = useRef<NodeJS.Timeout[]>([])
+  const currentStreamingStepId = useRef<number | null>(null) // Track which step is currently streaming
   const webContainer = useWebContainer()  
 
   // Clear any ongoing streaming when component unmounts or file changes
@@ -46,6 +47,7 @@ export function CodeEditor({ steps, files, onStepComplete, onStreamingStart, str
     streamingTimeoutRef.current.forEach(timeout => clearTimeout(timeout))
     streamingTimeoutRef.current = []
     setIsStreaming(false)
+    // Don't reset currentStreamingStepId here as it should only be reset when step completes
   }
 
   // Stream content with chunking effect
@@ -114,80 +116,125 @@ export function CodeEditor({ steps, files, onStepComplete, onStreamingStart, str
   // Auto-open file that's currently being worked on
   useEffect(() => {
     const inProgressStep = steps.find(step => step.status === 'in-progress' && step.path);
+    
+    console.log('Steps updated in CodeEditor:', steps.map(s => ({ 
+      id: s.id, 
+      title: s.title, 
+      status: s.status, 
+      path: s.path,
+      hasContent: !!s.code 
+    })));
+    
     if (inProgressStep && inProgressStep.path) {
       console.log('Looking for in-progress step file:', inProgressStep.path, inProgressStep);
       
-      // Find the corresponding file in the files array with improved matching
-      const findFileByPath = (files: FileNode[], targetPath: string): FileNode | null => {
-        // Normalize the target path
-        const normalizedTargetPath = targetPath.startsWith('/') ? targetPath.slice(1) : targetPath;
-        const targetFileName = targetPath.split('/').pop();
-        
-        for (const file of files) {
-          if (file.type === 'file') {
-            // Try exact path match first
-            if (file.path === targetPath) {
-              return file;
-            }
-            
-            // Try normalized path match
-            const normalizedFilePath = file.path?.startsWith('/') ? file.path.slice(1) : file.path;
-            if (normalizedFilePath === normalizedTargetPath) {
-              return file;
-            }
-            
-            // Try name-only match as fallback
-            if (file.name === targetFileName) {
-              return file;
-            }
-            
-            // Try path ending match
-            if (file.path?.endsWith(targetPath) || targetPath.endsWith(file.path || '')) {
-              return file;
-            }
-          }
-          
-          if (file.type === 'folder' && file.children) {
-            const found = findFileByPath(file.children, targetPath);
-            if (found) return found;
-          }
-        }
-        return null;
-      };
-
-      const targetFile = findFileByPath(files, inProgressStep.path);
-      console.log('Found target file:', targetFile);
+      // Check if this is a different step than what's currently streaming
+      const isDifferentStep = currentStreamingStepId.current !== inProgressStep.id;
       
-      if (targetFile && targetFile.content) {
-        console.log('Auto-opening file with content:', targetFile.name, 'Content length:', targetFile.content.length);
-        setSelectedFile(targetFile);
-        setActiveTab("editor"); // Switch to editor tab
+      if (isDifferentStep) {
+        console.log('New step detected for streaming:', inProgressStep.id, 'Previous:', currentStreamingStepId.current);
         
-        // Notify parent that streaming is starting
-        if (onStreamingStart) {
-          onStreamingStart();
-        }
+        // Clear any ongoing streaming first
+        clearStreaming();
         
-        // Stream the content instead of setting it immediately
-        streamContent(targetFile.content || "", () => {
-          // After streaming is complete, mark step as complete and move to next
+        // Update the tracking reference
+        currentStreamingStepId.current = inProgressStep.id;
+        
+        // Find the corresponding file in the files array with improved matching
+        const findFileByPath = (files: FileNode[], targetPath: string): FileNode | null => {
+          // Normalize the target path
+          const normalizedTargetPath = targetPath.startsWith('/') ? targetPath.slice(1) : targetPath;
+          const targetFileName = targetPath.split('/').pop();
+          
+          for (const file of files) {
+            if (file.type === 'file') {
+              // Try exact path match first
+              if (file.path === targetPath) {
+                return file;
+              }
+              
+              // Try normalized path match
+              const normalizedFilePath = file.path?.startsWith('/') ? file.path.slice(1) : file.path;
+              if (normalizedFilePath === normalizedTargetPath) {
+                return file;
+              }
+              
+              // Try name-only match as fallback
+              if (file.name === targetFileName) {
+                return file;
+              }
+              
+              // Try path ending match
+              if (file.path?.endsWith(targetPath) || targetPath.endsWith(file.path || '')) {
+                return file;
+              }
+            }
+            
+            if (file.type === 'folder' && file.children) {
+              const found = findFileByPath(file.children, targetPath);
+              if (found) return found;
+            }
+          }
+          return null;
+        };
+
+        const targetFile = findFileByPath(files, inProgressStep.path!);
+        console.log('Found target file:', targetFile?.name, 'Content length:', targetFile?.content?.length);
+        
+        if (targetFile) {
+          console.log('Auto-opening file with content:', targetFile.name);
+          setSelectedFile(targetFile);
+          setActiveTab("editor"); // Switch to editor tab
+          
+          // Always stream the content if available, otherwise wait for content
+          if (targetFile.content) {
+            console.log('Starting stream for file:', targetFile.name, 'Content length:', targetFile.content.length);
+            streamContent(targetFile.content || "", () => {
+              // After streaming is complete, mark step as complete and move to next
+              if (onStepComplete && inProgressStep.id) {
+                console.log('Streaming complete, marking step as done:', inProgressStep.id);
+                currentStreamingStepId.current = null; // Reset tracking
+                onStepComplete(String(inProgressStep.id));
+              }
+            });
+          } else {
+            console.log('File found but no content yet, waiting...');
+            // Set empty content and wait for file to be populated
+            setEditorContent("");
+            // Check again in a short while for content
+            setTimeout(() => {
+              const updatedFile = findFileByPath(files, inProgressStep.path!);
+              if (updatedFile?.content) {
+                console.log('Content now available, starting stream');
+                streamContent(updatedFile.content, () => {
+                  if (onStepComplete && inProgressStep.id) {
+                    console.log('Delayed streaming complete, marking step as done:', inProgressStep.id);
+                    currentStreamingStepId.current = null;
+                    onStepComplete(String(inProgressStep.id));
+                  }
+                });
+              }
+            }, 100);
+          }
+        } else {
+          console.log('File not found in files array:', inProgressStep.path);
+          console.log('Available files:', files.map(f => ({ name: f.name, path: f.path, type: f.type, hasContent: !!f.content })));
+          // Reset tracking and mark as complete if file not found
+          currentStreamingStepId.current = null;
           if (onStepComplete && inProgressStep.id) {
-            console.log('Streaming complete, marking step as done:', inProgressStep.id);
             onStepComplete(String(inProgressStep.id));
           }
-        });
-      } else if (!targetFile) {
-        console.log('File not found in files array:', inProgressStep.path);
-        console.log('Available files:', files.map(f => ({ name: f.name, path: f.path, type: f.type, hasContent: !!f.content })));
-      } else {
-        console.log('File found but no content:', targetFile);
-        // Still mark as complete if no content
-        if (onStepComplete && inProgressStep.id) {
-          onStepComplete(String(inProgressStep.id));
         }
+      } else {
+        console.log('Same step still in progress:', inProgressStep.id);
       }
     } else {
-      console.log('No in-progress step with path found. Steps:', steps.map(s => ({ id: s.id, title: s.title, status: s.status, path: s.path })));
+      console.log('No in-progress step with path found');
+      // Reset tracking if no in-progress step
+      if (currentStreamingStepId.current !== null) {
+        console.log('Resetting tracking - no in-progress step');
+        currentStreamingStepId.current = null;
+      }
     }
   }, [steps, files, onStepComplete, onStreamingStart]);
 
@@ -297,6 +344,7 @@ export function CodeEditor({ steps, files, onStepComplete, onStreamingStart, str
   useEffect(() => {
     return () => {
       clearStreaming()
+      currentStreamingStepId.current = null // Reset step tracking on unmount
     }
   }, [])
 

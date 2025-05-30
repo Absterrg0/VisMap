@@ -4,9 +4,6 @@ import prisma from "@/db";
 import { messageSchema } from "@/types/messageSchema";
 import { auth } from "@/lib/auth";
 import { headers } from "next/headers";
-import { m } from "framer-motion";
-
-
 
 //GET CHAT HISTORY
 export async function GET(req:NextRequest,{params}:{params:Promise<{projectId:string}>}){

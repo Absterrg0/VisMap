@@ -64,9 +64,9 @@ export function parseXmlStreaming(
   // Process newly completed actions
   const newCompleteActions = completeActions.slice(lastProcessedActionCount);
   
-  // Mark all previous in-progress steps as completed
+  // Mark all previous in-progress steps as completed when new actions are available
   existingSteps.forEach(step => {
-    if (step.status === 'in-progress') {
+    if (step.status === 'in-progress' && newCompleteActions.length > 0) {
       updatedSteps.push({
         ...step,
         status: 'completed'
@@ -74,10 +74,13 @@ export function parseXmlStreaming(
     }
   });
 
-  // Create new steps for new complete actions
+  // Process new complete actions
   newCompleteActions.forEach((action, index) => {
-    const isLastAction = index === newCompleteActions.length - 1;
-    const status = isLastAction ? 'in-progress' : 'completed';
+    // Only create one new in-progress step at a time
+    const hasCurrentInProgress = newSteps.some(step => step.status === 'in-progress') || 
+                                 existingSteps.some(step => step.status === 'in-progress' && updatedSteps.every(us => us.id !== step.id));
+    
+    const status = hasCurrentInProgress ? 'pending' : (index === 0 ? 'in-progress' : 'pending');
 
     if (action.type === 'file') {
       const isUpdate = sanitizedContent.includes(`<file path="${action.filePath}" type="modified">`);
@@ -112,7 +115,9 @@ export function parseXmlStreaming(
       // Mark the last step as completed if outro exists
       if (newSteps.length > 0) {
         const lastStep = newSteps[newSteps.length - 1];
-        lastStep.status = 'completed';
+        if (lastStep.status === 'in-progress') {
+          lastStep.status = 'completed';
+        }
       }
       
       newSteps.push({

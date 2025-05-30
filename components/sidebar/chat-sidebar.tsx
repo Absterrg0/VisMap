@@ -12,7 +12,7 @@ export function ChatSidebar(props: ChatSidebarProps) {
     <Sidebar 
       variant="sidebar" 
       collapsible="icon" 
-      className="border-r border-border/40 h-full bg-gradient-to-b from-sidebar/95 to-sidebar/90 backdrop-blur-sm font-sans"
+      className="border-r border-border/40 h-full bg-gradient-to-b from-sidebar/95 to-sidebar/90 backdrop-blur-sm "
     >
       <div className="h-full flex flex-col bg-sidebar-accent/30 rounded-r-2xl">
         <SidebarContents {...props} />

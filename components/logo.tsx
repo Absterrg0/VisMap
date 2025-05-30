@@ -2,9 +2,9 @@ export default function Logo(props: { className?: string }) {
     return (
      
     <div className={`relative ${props.className}`}>
-    <div className="w-16 h-16 bg-gradient-to-br from-primary/30 to-accent/20 rounded-2xl flex items-center justify-center backdrop-blur-md border border-white/10 shadow-lg">
-      <div className="w-7 h-7 bg-gradient-to-br from-primary/40 to-sidebar-accent-foreground/90 rounded-lg transform rotate-12">
-        {/* Inner glow */}
+    <div className="w-16 h-16 bg-gradient-to-br from-primary/30 to-accent/20 rounded-xl flex items-center justify-center backdrop-blur-md border border-white/10 shadow-lg">
+      <div className="w-7 h-7  bg-gradient-to-br from-primary/40 to-sidebar-accent-foreground/90 rounded-sm transform rotate-16">
+        
         <div className="absolute inset-0 bg-white/30 rounded-md blur-sm"></div>
       </div>
     </div>

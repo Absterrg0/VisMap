@@ -4,9 +4,7 @@ import { useState, useEffect, useRef } from "react"
 import { useParams } from "next/navigation"
 import { ChatArea } from "@/components/chat-area"
 import { CodeEditor, FileNode } from "@/components/code-editor"
-import type { Project, ChatHistory, MountStructure } from "@/types/types"
-import { Step, StepType } from "@/types/stepType"
-import { parseXml } from "@/lib/steps"
+import { Step } from "@/types/stepType"
 import { Message } from "@/types/types"
 import { usePromptStore } from "@/zustand/store"
 import { generateRoadmap } from "@/app/actions/llms/roadmap"
@@ -18,44 +16,33 @@ export function ChatInterface() {
   const chatId = params.chatId as string
   const projectId = params.projectId as string
   const prompt = usePromptStore((state) => state.prompt)
-  
+  const setPrompt = usePromptStore((state) => state.setPrompt)
   const [steps, setSteps] = useState<Step[]>([])
   const [llmPrompt, setLlmPrompt] = useState<Message[]>([])
-  const [messages, setMessages] = useState<Message[]>([]);
+  const [messages, setMessages] = useState<Message[]>(prompt ? [{ role: 'USER', content: prompt }] : []);
   const [files, setFiles] = useState<FileNode[]>([])
   const [isInitialized, setIsInitialized] = useState(false)
   const [activeTab, setActiveTab] = useState<"chat" | "steps">("chat")
-  
-  // Track processed step IDs to prevent infinite updates
   const processedStepIds = useRef<Set<number>>(new Set())
-
-  // Fetch chat history on mount
   useEffect(() => {
-    const fetchChatHistory = async () => {
+    const init = async () => {
       try {
         const response = await axios.get<{messages: Message[]}>(`/api/chatHistory/${projectId}/${chatId}`)
-        setMessages(response.data.messages)
+  
+
+        if(prompt) {
+          await axios.post<{messages: Message[]}>(`/api/chatHistory/${projectId}`, { prompt })
+          setPrompt("") 
+        }
+        setMessages([{ role: 'USER', content: prompt }, ...response.data.messages])
+            await handleSendMessage({ role: 'USER', content: prompt });
       } catch (error) {
         console.error("Error fetching chat history:", error)
       }
     }
-    fetchChatHistory()
+    init()
+
   }, [chatId, projectId])
-
-  // Handle initial message with prompt
-  useEffect(() => {
-    const init = async () => {
-      if (prompt.length > 0 && !isInitialized) {
-        setIsInitialized(true)
-        // Reset processed steps for new conversation
-        processedStepIds.current.clear()
-        await handleInitialMessage({ role: 'USER', content: prompt });
-      }
-    }
-    init();
-  }, [prompt, isInitialized])
-
-
   // Handle streaming start - switch to steps tab
   const handleStreamingStart = () => {
     console.log('Streaming started, switching to steps tab')
@@ -71,16 +58,15 @@ export function ChatInterface() {
       console.error('Invalid step ID:', stepId);
       return;
     }
-    
-    // Update the step status to completed and find the next step
+  
     setSteps(prevSteps => {
-      // Check if step is already completed to prevent unnecessary updates
       const currentStep = prevSteps.find(step => step.id === stepIdNum);
-      if (!currentStep || currentStep.status === 'completed') {
-        console.log('Step already completed or not found:', stepIdNum);
-        return prevSteps; // No change needed
+      if (!currentStep) {
+        console.log('Step not found:', stepIdNum);
+        return prevSteps; 
       }
 
+      // Mark the current step as completed
       const updatedSteps = prevSteps.map(step => {
         if (step.id === stepIdNum) {
           return { ...step, status: 'completed' as const }
@@ -91,19 +77,22 @@ export function ChatInterface() {
       // Find the next pending step and mark it as in-progress
       const nextPendingStep = updatedSteps.find(step => 
         step.status === 'pending' && 
-        step.id > stepIdNum
+        step.id > stepIdNum &&
+        step.path // Only process steps with file paths for streaming
       )
 
       if (nextPendingStep) {
+        console.log('Starting next step:', nextPendingStep.id, nextPendingStep.path);
         return updatedSteps.map(step => {
           if (step.id === nextPendingStep.id) {
             return { ...step, status: 'in-progress' as const }
           }
           return step
         })
-      } 
-
-      return updatedSteps
+      } else {
+        console.log('No more pending steps with files to process');
+        return updatedSteps;
+      }
     })
   }
 
@@ -116,11 +105,12 @@ export function ChatInterface() {
         return;
       }
 
-      // Process ALL steps that have file content (not just unprocessed ones)
+      // Process ALL steps that have file content - including pending ones with content
+      // This ensures files are available even before they become in-progress
       const stepsToProcess = steps.filter(step => 
         step.code && 
         step.path && 
-        (step.status === 'completed' || step.status === 'in-progress')
+        (step.status === 'completed' || step.status === 'in-progress' || step.status === 'pending')
       );
 
       if (stepsToProcess.length === 0) {
@@ -131,8 +121,25 @@ export function ChatInterface() {
 
       setFiles(prevFiles => {
         try {
-          // Start fresh to ensure we have all the latest content
-          const updatedFiles: FileNode[] = [];
+          // Create a map of existing files for efficient lookup
+          const existingFilesMap = new Map<string, FileNode>();
+          
+          const buildFileMap = (files: FileNode[], parentPath = '') => {
+            files.forEach(file => {
+              const fullPath = parentPath ? `${parentPath}/${file.name}` : file.name;
+              if (file.type === 'file') {
+                existingFilesMap.set(file.path || fullPath, file);
+              }
+              if (file.type === 'folder' && file.children) {
+                buildFileMap(file.children, fullPath);
+              }
+            });
+          };
+          
+          buildFileMap(prevFiles);
+
+          // Start with existing files structure
+          const updatedFiles: FileNode[] = JSON.parse(JSON.stringify(prevFiles));
           const processedPaths = new Set<string>();
 
           stepsToProcess.forEach(step => {
@@ -179,7 +186,7 @@ export function ChatInterface() {
                 currentFiles.splice(existingIndex, 1);
               }
               
-              // Add the file with latest content
+              // Add the file with content from the step
               currentFiles.push({
                 name: fileName,
                 type: "file",
@@ -385,21 +392,6 @@ export function ChatInterface() {
     }
   };
 
-  const handleInitialMessage = async (message: Message) => {
-    try {
-      const stream = await generateRoadmap("123", [...llmPrompt, message], "gemini", "gemini-2.0-flash", "interactive");
-      
-      await processStreamingResponse(stream);
-      
-      setLlmPrompt(x => [...x, { role: 'USER', content: message.content }]);
-    } catch (error) {
-      console.error("Error in handleInitialMessage:", error);
-      setMessages(x => [...x, {
-        role: 'ASSISTANT',
-        content: "Sorry, there was an error generating the initial roadmap.",
-      }]);
-    }
-  }
 
   const handleSendMessage = async (message: Message) => {
     // Add the user message to the messages array

@@ -62,21 +62,14 @@ export default async function generateWithGemini(
         systemInstruction: getSystemPrompt()
       }
     });
-
-    // Create a ReadableStream that processes the Gemini stream
     const stream = new ReadableStream({
       async start(controller) {
         let accumulatedText = "";
-        let lastParsedActions = 0;
-        let lastParsedSteps = 0;
-        
         try {
           for await (const chunk of response) {
             const chunkText = chunk.text;
             accumulatedText += chunkText;
             console.log('Raw chunk:', chunkText);
-            
-            // Send raw chunk immediately for real-time display
             controller.enqueue(new TextEncoder().encode(
               JSON.stringify({
                 type: 'chunk',
@@ -88,16 +81,6 @@ export default async function generateWithGemini(
             
            
           }
-        
-          // Send final complete response
-          controller.enqueue(new TextEncoder().encode(
-            JSON.stringify({
-              type: 'complete',
-              fullContent: accumulatedText,
-              timestamp: Date.now()
-            }) + '\n'
-          ));
-
           controller.close();
         } catch (error) {
           console.error("Gemini streaming error:", error);

@@ -5,10 +5,6 @@ import { Project } from "@/types/types";
 export const usePromptStore = create<PromptStore>((set) => ({
     prompt: "",
     setPrompt: (prompt: string) => set({ prompt }),
-    finalFile: null,
-    setFinalFile: (finalFile: Record<string, any> | null) => set({ finalFile }),
-    template: "static",
-    setTemplate: (template: "static" | "interactive") => set({ template }),
   }))
 
 
@@ -18,9 +14,6 @@ export const usePromptStore = create<PromptStore>((set) => ({
     projects: [],
     setProjects: (projects: Project[]) => set({ projects }),
   }))
-
-
-
 
 
   export const useActiveProjectStore = create<ActiveProjectStore>((set) => ({

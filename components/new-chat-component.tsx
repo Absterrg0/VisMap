@@ -4,7 +4,7 @@ import { useState, useRef, useEffect } from "react"
 import {  useParams, useRouter } from "next/navigation"
 import { Paperclip, SendHorizontal, Sparkles } from "lucide-react"
 import { usePromptStore } from "@/zustand/store"
-import axios from 'axios'
+import { v4 as uuidv4 } from 'uuid'
 
 
 export function NewChatComponent() {
@@ -58,9 +58,8 @@ export function NewChatComponent() {
     e.preventDefault()
     if (!prompt.trim()) return
 
-    const response = await axios.post<{chatHistoryId:string}>(`/api/chatHistory/${projectId}`, { prompt })
-
-    router.push(`/project/${projectId}/chat/${response.data.chatHistoryId}`)
+    const chatId = uuidv4()
+    router.push(`/project/${projectId}/chat/${chatId}`)
   }
 
   return (
