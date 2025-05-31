@@ -1,5 +1,4 @@
 import { NextRequest } from "next/server";
-import { getSession } from "@/lib/client";
 import { NextResponse } from "next/server";
 import prisma from "@/db";
 import { projectSchema } from "@/types/projectSchema";
@@ -7,7 +6,7 @@ import { auth } from "@/lib/auth";
 import { headers } from "next/headers";
 
 //GET ALL PROJECTS
-export async function GET(req:NextRequest){
+export async function GET(){
     try{
         const session = await auth.api.getSession({
             headers:await headers()
@@ -24,6 +23,7 @@ export async function GET(req:NextRequest){
         
         return NextResponse.json({projects},{status:200})
     }catch(error){
+        console.log(error)
         return NextResponse.json({error:'Failed to get projects'},{status:500})
     }
 }       

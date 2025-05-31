@@ -4,6 +4,7 @@ import { BASE_PROMPT, DIFF_PROMPT } from "@/lib/prompts-llm";
 import { parseXml, parseXmlStreaming } from '@/lib/steps';
 import generateWithGemini from "@/app/actions/llms/gemini";
 import { Message } from "@/types/types";
+import { Step } from "@/types/stepType";
 
 type ModelType = 'claude' | 'gemini' | 'openai';
 
@@ -13,7 +14,6 @@ export async function generateRoadmap(
   prompts: Message[],
   modelType: ModelType,
   modelName?: string,
-  roadmapType: 'static' | 'interactive' = 'static'
 ): Promise<ReadableStream> {
   try {
     const userPrompt = `${DIFF_PROMPT}\n\n${prompts.map(x => `${x.role}: ${x.content}`).join("\n")}`;
@@ -36,8 +36,7 @@ export async function generateRoadmap(
         let fullContent = '';
         let processedActionCount = 0;
         let hasProcessedIntro = false;
-        let hasProcessedOutro = false;
-        let existingSteps: any[] = [];
+        let existingSteps: Step[] = [];
 
         try {
           while (true) {
@@ -87,7 +86,7 @@ export async function generateRoadmap(
                         ));
                         
                         // Add new steps to existing steps
-                        existingSteps = [...existingSteps, ...streamingResult.newSteps];
+                          existingSteps = [...existingSteps, ...streamingResult.newSteps];
                       }
                       
                       // Send updated steps if any were updated
@@ -112,7 +111,6 @@ export async function generateRoadmap(
                       // Update tracking variables
                       processedActionCount = streamingResult.processedActionCount;
                       hasProcessedIntro = streamingResult.hasIntro;
-                      hasProcessedOutro = streamingResult.hasOutro;
                     } catch (parseError) {
                       // Parsing not ready yet or incomplete, continue accumulating
                       console.log('Parsing not ready, continuing...', parseError);

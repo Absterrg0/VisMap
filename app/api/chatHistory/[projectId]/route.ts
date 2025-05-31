@@ -1,7 +1,5 @@
-import { getSession } from "@/lib/client";
 import { NextRequest, NextResponse } from "next/server";
 import prisma from "@/db";
-import { messageSchema } from "@/types/messageSchema";
 import { auth } from "@/lib/auth";
 import { headers } from "next/headers";
 
@@ -38,6 +36,7 @@ export async function GET(req:NextRequest,{params}:{params:Promise<{projectId:st
         
         return NextResponse.json({chatHistory},{status:200})
     } catch (error) {
+        console.log(error)
         return NextResponse.json({error:'Failed to get chat history'},{status:500})
     }
 }
@@ -52,7 +51,9 @@ export async function GET(req:NextRequest,{params}:{params:Promise<{projectId:st
 //DELETE CHAT HISTORY
 export async function DELETE(req:NextRequest,{params}:{params:Promise<{projectId:string}>}){
     try {
-        const {data:session} = await getSession();
+        const session = await auth.api.getSession({
+            headers:await headers()
+        })
         if(!session){
             return NextResponse.json({error:'Unauthorized'},{status:401})
         }
@@ -92,6 +93,7 @@ export async function DELETE(req:NextRequest,{params}:{params:Promise<{projectId
         return NextResponse.json({message:'Chat history deleted successfully'},{status:200})
         
     } catch (error) {
+        console.log(error)  
         return NextResponse.json({error:'Failed to delete chat history'},{status:500})
     }
 }

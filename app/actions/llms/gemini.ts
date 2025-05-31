@@ -4,44 +4,44 @@ import { GoogleGenAI } from '@google/genai';
 import { getSystemPrompt } from '@/lib/prompts-llm';
 
 // Helper function to extract complete visAction blocks
-function extractCompleteVisActions(text: string): any[] {
-  const visActionRegex = /<visAction\s+type="([^"]*)"(?:\s+filePath="([^"]*)")?>([\s\S]*?)<\/visAction>/g;
-  const actions: any[] = [];
-  let match;
-  let actionId = 1;
+// function extractCompleteVisActions(text: string): any[] {
+//   const visActionRegex = /<visAction\s+type="([^"]*)"(?:\s+filePath="([^"]*)")?>([\s\S]*?)<\/visAction>/g;
+//   const actions: any[] = [];
+//   let match;
+//   let actionId = 1;
 
-  while ((match = visActionRegex.exec(text)) !== null) {
-    const [, type, filePath, content] = match;
+//   while ((match = visActionRegex.exec(text)) !== null) {
+//     const [, type, filePath, content] = match;
     
-    actions.push({
-      id: actionId++,
-      type: type,
-      filePath: filePath || undefined,
-      content: content.trim(),
-      raw: match[0] // Include the full XML block
-    });
-  }
+//     actions.push({
+//       id: actionId++,
+//       type: type,
+//       filePath: filePath || undefined,
+//       content: content.trim(),
+//       raw: match[0] // Include the full XML block
+//     });
+//   }
 
-  return actions;
-}
+//   return actions;
+// }
 
 // Helper function to extract complete step blocks
-function extractCompleteSteps(text: string): any[] {
-  const stepRegex = /<step[^>]*>([\s\S]*?)<\/step>/g;
-  const steps: any[] = [];
-  let match;
-  let stepId = 1;
+// function extractCompleteSteps(text: string): any[] {
+//   const stepRegex = /<step[^>]*>([\s\S]*?)<\/step>/g;
+//   const steps: any[] = [];
+//   let match;
+//   let stepId = 1;
 
-  while ((match = stepRegex.exec(text)) !== null) {
-    steps.push({
-      id: stepId++,
-      content: match[1].trim(),
-      raw: match[0]
-    });
-  }
+//   while ((match = stepRegex.exec(text)) !== null) {
+//     steps.push({
+//       id: stepId++,
+//       content: match[1].trim(),
+//       raw: match[0]
+//     });
+//   }
 
-  return steps;
-}
+//   return steps;
+// }
 
 // Updated to return ReadableStream with incremental parsing
 export default async function generateWithGemini(
@@ -64,11 +64,11 @@ export default async function generateWithGemini(
     });
     const stream = new ReadableStream({
       async start(controller) {
-        let accumulatedText = "";
+        //let accumulatedText = "";
         try {
           for await (const chunk of response) {
             const chunkText = chunk.text;
-            accumulatedText += chunkText;
+
             console.log('Raw chunk:', chunkText);
             controller.enqueue(new TextEncoder().encode(
               JSON.stringify({

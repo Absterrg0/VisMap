@@ -1,14 +1,16 @@
+/* eslint-disable */
+
 "use client"
 
 import { useState, useEffect, useRef } from "react"
 import { Check, Copy, Download, Play, Eye } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
-import { createMountStructure, FileExplorer } from "@/components/file-explorer"
+import { FileExplorer } from "@/components/file-explorer"
 import { PreviewFrame } from "@/components/preview-frame"
 import { cn } from "@/lib/utils"
 import Editor from "@monaco-editor/react"
-import type { FileItem, Step } from "@/types/stepType"
+import type {  Step } from "@/types/stepType"
 import { useWebContainer } from "@/hooks/useWebcontainer"
 
 interface CodeEditorProps {
@@ -37,7 +39,7 @@ export function CodeEditor({ steps, files, onStepComplete, onStreamingStart, str
   const [activeTab, setActiveTab] = useState("editor")
   const [editorContent, setEditorContent] = useState("")  
   const [isStreaming, setIsStreaming] = useState(false)
-  const [mountStructure, setMountStructure] = useState<Record<string, any>>({})
+  const [mountStructure, setMountStructure] = useState<Record<string,any>>({})
   const streamingTimeoutRef = useRef<NodeJS.Timeout[]>([])
   const currentStreamingStepId = useRef<number | null>(null) // Track which step is currently streaming
   const webContainer = useWebContainer()  
@@ -81,7 +83,7 @@ export function CodeEditor({ steps, files, onStepComplete, onStreamingStart, str
       currentIndex += CHUNK_SIZE
     }
 
-    console.log(`Starting to stream ${content.length} characters in ${chunks.length} chunks`);
+    //console.log(`Starting to stream ${content.length} characters in ${chunks.length} chunks`);
 
     // Stream chunks
     let streamedContent = ""
@@ -93,7 +95,7 @@ export function CodeEditor({ steps, files, onStepComplete, onStreamingStart, str
         // If this is the last chunk, mark streaming as complete
         if (index === chunks.length - 1) {
           setIsStreaming(false)
-          console.log('Streaming completed for file');
+         // console.log('Streaming completed for file');
           // Add a small delay before calling onComplete to let the user see the final content
           setTimeout(() => {
             onComplete?.()
@@ -109,7 +111,7 @@ export function CodeEditor({ steps, files, onStepComplete, onStreamingStart, str
     
       webContainer!.mount(mountStructure);
       setActiveTab("preview");
-      console.log("Mounted structure", webContainer!);
+      //console.log("Mounted structure", webContainer!);
     
   }
 
@@ -117,22 +119,22 @@ export function CodeEditor({ steps, files, onStepComplete, onStreamingStart, str
   useEffect(() => {
     const inProgressStep = steps.find(step => step.status === 'in-progress' && step.path);
     
-    console.log('Steps updated in CodeEditor:', steps.map(s => ({ 
+    /*console.log('Steps updated in CodeEditor:', steps.map(s => ({ 
       id: s.id, 
       title: s.title, 
       status: s.status, 
       path: s.path,
       hasContent: !!s.code 
-    })));
+    })));*/
     
     if (inProgressStep && inProgressStep.path) {
-      console.log('Looking for in-progress step file:', inProgressStep.path, inProgressStep);
+      //console.log('Looking for in-progress step file:', inProgressStep.path, inProgressStep);
       
       // Check if this is a different step than what's currently streaming
       const isDifferentStep = currentStreamingStepId.current !== inProgressStep.id;
       
       if (isDifferentStep) {
-        console.log('New step detected for streaming:', inProgressStep.id, 'Previous:', currentStreamingStepId.current);
+        //console.log('New step detected for streaming:', inProgressStep.id, 'Previous:', currentStreamingStepId.current);
         
         // Clear any ongoing streaming first
         clearStreaming();
@@ -179,36 +181,36 @@ export function CodeEditor({ steps, files, onStepComplete, onStreamingStart, str
         };
 
         const targetFile = findFileByPath(files, inProgressStep.path!);
-        console.log('Found target file:', targetFile?.name, 'Content length:', targetFile?.content?.length);
+        //console.log('Found target file:', targetFile?.name, 'Content length:', targetFile?.content?.length);
         
         if (targetFile) {
-          console.log('Auto-opening file with content:', targetFile.name);
+          //console.log('Auto-opening file with content:', targetFile.name);
           setSelectedFile(targetFile);
           setActiveTab("editor"); // Switch to editor tab
           
           // Always stream the content if available, otherwise wait for content
           if (targetFile.content) {
-            console.log('Starting stream for file:', targetFile.name, 'Content length:', targetFile.content.length);
+            //console.log('Starting stream for file:', targetFile.name, 'Content length:', targetFile.content.length);
             streamContent(targetFile.content || "", () => {
               // After streaming is complete, mark step as complete and move to next
               if (onStepComplete && inProgressStep.id) {
-                console.log('Streaming complete, marking step as done:', inProgressStep.id);
+                //console.log('Streaming complete, marking step as done:', inProgressStep.id);
                 currentStreamingStepId.current = null; // Reset tracking
                 onStepComplete(String(inProgressStep.id));
               }
             });
           } else {
-            console.log('File found but no content yet, waiting...');
+            //console.log('File found but no content yet, waiting...');
             // Set empty content and wait for file to be populated
             setEditorContent("");
             // Check again in a short while for content
             setTimeout(() => {
               const updatedFile = findFileByPath(files, inProgressStep.path!);
               if (updatedFile?.content) {
-                console.log('Content now available, starting stream');
+                //console.log('Content now available, starting stream');
                 streamContent(updatedFile.content, () => {
                   if (onStepComplete && inProgressStep.id) {
-                    console.log('Delayed streaming complete, marking step as done:', inProgressStep.id);
+                    //console.log('Delayed streaming complete, marking step as done:', inProgressStep.id);
                     currentStreamingStepId.current = null;
                     onStepComplete(String(inProgressStep.id));
                   }
@@ -217,8 +219,7 @@ export function CodeEditor({ steps, files, onStepComplete, onStreamingStart, str
             }, 100);
           }
         } else {
-          console.log('File not found in files array:', inProgressStep.path);
-          console.log('Available files:', files.map(f => ({ name: f.name, path: f.path, type: f.type, hasContent: !!f.content })));
+            //console.log('File not found in files array:', inProgressStep.path);
           // Reset tracking and mark as complete if file not found
           currentStreamingStepId.current = null;
           if (onStepComplete && inProgressStep.id) {
@@ -226,13 +227,13 @@ export function CodeEditor({ steps, files, onStepComplete, onStreamingStart, str
           }
         }
       } else {
-        console.log('Same step still in progress:', inProgressStep.id);
+        //console.log('Same step still in progress:', inProgressStep.id);
       }
     } else {
-      console.log('No in-progress step with path found');
+      //console.log('No in-progress step with path found');
       // Reset tracking if no in-progress step
       if (currentStreamingStepId.current !== null) {
-        console.log('Resetting tracking - no in-progress step');
+        //console.log('Resetting tracking - no in-progress step');
         currentStreamingStepId.current = null;
       }
     }
@@ -286,7 +287,7 @@ export function CodeEditor({ steps, files, onStepComplete, onStreamingStart, str
     };
   
     const mountStructure = createMountStructure(files);
-    console.log("Mounting structure", mountStructure);
+    //  console.log("Mounting structure", mountStructure);
     setMountStructure(mountStructure);
     // Mount the structure if WebContainer is available
   }, [files, webContainer]);

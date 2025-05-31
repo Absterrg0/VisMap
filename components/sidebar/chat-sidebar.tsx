@@ -1,6 +1,6 @@
 import { SidebarContents } from "./sidebar-content"
 import { Sidebar, SidebarRail } from "../ui/sidebar"
-import type { Project, ChatHistory } from "@/types/types"
+import type { Project } from "@/types/types"
 
 export interface ChatSidebarProps {
   projects: Project[]

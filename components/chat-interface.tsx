@@ -1,68 +1,69 @@
 "use client"
 
 import { useState, useEffect, useRef } from "react"
-import { useParams } from "next/navigation"
+//import { useParams } from "next/navigation"
 import { ChatArea } from "@/components/chat-area"
 import { CodeEditor, FileNode } from "@/components/code-editor"
 import { Step } from "@/types/stepType"
 import { Message } from "@/types/types"
 import { usePromptStore } from "@/zustand/store"
 import { generateRoadmap } from "@/app/actions/llms/roadmap"
-import axios from "axios"
+//import axios from "axios"
 import Loader from "./ui/loader"
 
 export function ChatInterface() {
-  const params = useParams()
-  const chatId = params.chatId as string
-  const projectId = params.projectId as string
+  //const params = useParams()
+  //const chatId = params.chatId as string
+  //const projectId = params.projectId as string
   const prompt = usePromptStore((state) => state.prompt)
   const setPrompt = usePromptStore((state) => state.setPrompt)
   const [steps, setSteps] = useState<Step[]>([])
   const [llmPrompt, setLlmPrompt] = useState<Message[]>([])
-  const [messages, setMessages] = useState<Message[]>(prompt ? [{ role: 'USER', content: prompt }] : []);
+  const [messages, setMessages] = useState<Message[]>([]);
   const [files, setFiles] = useState<FileNode[]>([])
-  const [isInitialized, setIsInitialized] = useState(false)
   const [activeTab, setActiveTab] = useState<"chat" | "steps">("chat")
+  const [isInitialized, setIsInitialized] = useState(false)
   const processedStepIds = useRef<Set<number>>(new Set())
+  
   useEffect(() => {
     const init = async () => {
+      if (isInitialized) return;
+      
       try {
-        const response = await axios.get<{messages: Message[]}>(`/api/chatHistory/${projectId}/${chatId}`)
-  
-
-        if(prompt) {
-          await axios.post<{messages: Message[]}>(`/api/chatHistory/${projectId}`, { prompt })
-          setPrompt("") 
+        //const response = await axios.get<{messages: Message[]}>(`/api/chatHistory/${projectId}/${chatId}`)
+        
+        if(prompt && prompt.trim()) {
+          //await axios.post<{messages: Message[]}>(`/api/chatHistory/${projectId}`, { prompt })
+          const currentPrompt = prompt;
+          setPrompt(""); // Clear the prompt after saving it
+          await handleSendMessage({ role: 'USER', content: currentPrompt });
         }
-        setMessages([{ role: 'USER', content: prompt }, ...response.data.messages])
-            await handleSendMessage({ role: 'USER', content: prompt });
+        //setMessages([{ role: 'USER', content: prompt }, ...response.data.messages])
+        
+        setIsInitialized(true);
       } catch (error) {
         console.error("Error fetching chat history:", error)
+        setIsInitialized(true);
       }
     }
     init()
-
-  }, [chatId, projectId])
+  }, [prompt, isInitialized])
+  
   // Handle streaming start - switch to steps tab
   const handleStreamingStart = () => {
-    console.log('Streaming started, switching to steps tab')
     setActiveTab("steps")
   }
 
   // Handle step completion
   const handleStepComplete = (stepId: string) => {
-    console.log('Step completed:', stepId)
-    
     const stepIdNum = parseInt(stepId);
     if (isNaN(stepIdNum)) {
-      console.error('Invalid step ID:', stepId);
       return;
     }
   
     setSteps(prevSteps => {
       const currentStep = prevSteps.find(step => step.id === stepIdNum);
       if (!currentStep) {
-        console.log('Step not found:', stepIdNum);
         return prevSteps; 
       }
 
@@ -82,7 +83,6 @@ export function ChatInterface() {
       )
 
       if (nextPendingStep) {
-        console.log('Starting next step:', nextPendingStep.id, nextPendingStep.path);
         return updatedSteps.map(step => {
           if (step.id === nextPendingStep.id) {
             return { ...step, status: 'in-progress' as const }
@@ -90,7 +90,6 @@ export function ChatInterface() {
           return step
         })
       } else {
-        console.log('No more pending steps with files to process');
         return updatedSteps;
       }
     })
@@ -101,7 +100,6 @@ export function ChatInterface() {
     const processSteps = () => {
       // Safety check: prevent processing if we have too many steps (potential infinite loop)
       if (steps.length > 100) {
-        console.error('Too many steps detected, potential infinite loop prevented')
         return;
       }
 
@@ -116,8 +114,6 @@ export function ChatInterface() {
       if (stepsToProcess.length === 0) {
         return; // No steps to process
       }
-
-      console.log('Processing steps with file content:', stepsToProcess.map(s => ({ id: s.id, path: s.path, status: s.status })));
 
       setFiles(prevFiles => {
         try {
@@ -196,10 +192,9 @@ export function ChatInterface() {
             }
           });
 
-          console.log('Files updated from steps:', updatedFiles.length, 'files created');
           return updatedFiles;
         } catch (error) {
-          console.error('Error processing steps:', error);
+          console.log(error)
           return prevFiles; // Return previous state on error
         }
       });
@@ -232,14 +227,11 @@ export function ChatInterface() {
             switch (data.type) {
               case 'raw_chunk':
                 // Handle raw chunks for real-time display if needed
-                console.log('Raw chunk:', data.content);
                 break;
                 
               case 'new_steps':
                 // Add new steps as they become available
                 if (data.steps && data.steps.length > 0) {
-                  console.log('New steps received:', data.steps);
-                  
                   // If this is the first batch of new steps, clear processed IDs
                   if (accumulatedSteps.length === 0) {
                     processedStepIds.current.clear()
@@ -267,10 +259,7 @@ export function ChatInterface() {
                 break;
                 
               case 'updated_steps':
- 
                 if (data.steps && data.steps.length > 0) {
-                  console.log('Updated steps received:', data.steps);
-                  
                   // Update the accumulated steps
                   data.steps.forEach((updatedStep: Step) => {
                     const index = accumulatedSteps.findIndex(s => s.id === updatedStep.id);
@@ -285,12 +274,8 @@ export function ChatInterface() {
                 
               case 'final_result':
                 // Final validation and cleanup
-                console.log('Final result received, processing all accumulated steps');
-                
                 // Immediately update files from accumulated steps
                 if (accumulatedSteps.length > 0) {
-                  console.log('Processing accumulated steps into files:', accumulatedSteps.length);
-                  
                   // Process all file steps immediately
                   const fileSteps = accumulatedSteps.filter(step => 
                     step.code && 
@@ -298,11 +283,9 @@ export function ChatInterface() {
                     (step.status === 'completed' || step.status === 'in-progress' || step.status === 'pending')
                   );
                   
-                  console.log('File steps found:', fileSteps.length);
-                  
                   if (fileSteps.length > 0) {
                     // Force update files state with all accumulated file content
-                    setFiles(prevFiles => {
+                    setFiles(() => {
                       const updatedFiles: FileNode[] = [];
                       const processedPaths = new Set<string>();
                       
@@ -358,7 +341,6 @@ export function ChatInterface() {
                         }
                       });
                       
-                      console.log('Updated files with LLM content:', updatedFiles);
                       return updatedFiles;
                     });
                   }
@@ -366,7 +348,6 @@ export function ChatInterface() {
                 break;
                 
               case 'error':
-                console.error('Stream error:', data.message);
                 setMessages(prev => [...prev, {
                   role: 'ASSISTANT',
                   content: `Error: ${data.message}`,
@@ -374,16 +355,16 @@ export function ChatInterface() {
                 break;
                 
               case 'stream_complete':
-                console.log('Stream completed');
                 break;
             }
           } catch (parseError) {
-            console.error('Error parsing stream data:', parseError);
+            console.log(parseError)
+            // Silent error handling for malformed JSON
           }
         }
       }
     } catch (error) {
-      console.error('Error processing stream:', error);
+      console.log(error)
       setMessages(prev => [...prev, {
         role: 'ASSISTANT',
         content: "Sorry, there was an error processing the stream.",
@@ -398,13 +379,13 @@ export function ChatInterface() {
     setMessages(prev => [...prev, message]);
 
     try {
-      const stream = await generateRoadmap("123", [...llmPrompt, { role: 'USER', content: message.content }], "gemini", "gemini-2.0-flash", "interactive");
+      const stream = await generateRoadmap("123", [...llmPrompt, { role: 'USER', content: message.content }], "gemini", "gemini-2.0-flash");
       
       await processStreamingResponse(stream);
       
       setLlmPrompt(x => [...x, { role: 'USER', content: message.content }]);
-    } catch (error) {
-      console.error("Error processing response:", error);
+    } catch (e) {
+      console.log(e)
       setMessages(x => [...x, {
         role: 'ASSISTANT',
         content: "Sorry, there was an error processing your request.",
@@ -413,7 +394,7 @@ export function ChatInterface() {
   }
 
   return (
-    <div className="flex flex-1 h-full bg-background text-foreground">
+    <div className="flex flex-1 h-screen bg-background text-foreground">
       {/* Main Chat Area */}
       <div className="flex-1 flex flex-col border-r border-border/40 bg-background">
         <ChatArea

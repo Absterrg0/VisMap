@@ -1,6 +1,6 @@
 "use client"
 
-import { useState, useEffect } from "react"
+import { useState } from "react"
 import { useRouter } from "next/navigation"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
@@ -17,11 +17,11 @@ import { useRandomName } from "@/hooks/useRandomName"
 import axios from "axios"
 import Logo from "@/components/logo" 
 
-interface OnboardingComponentProps {
-  onProjectCreated: () => void
-}
+//interface OnboardingComponentProps {
+//  onProjectCreated: () => void
+//}
 
-export default function OnboardingComponent({ onProjectCreated }: OnboardingComponentProps) {
+export default function OnboardingComponent() {
   const [step, setStep] = useState(1)
   const generateName = useRandomName()
   const [projectName, setProjectName] = useState(generateName())

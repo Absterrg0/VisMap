@@ -25,7 +25,7 @@ export default function SignInComponent() {
     // Small delay before actual sign in
     setTimeout(() => {
       signIn.social({
-        provider: provider.id as any,
+        provider: provider.id as "google",
         callbackURL: "/project/new",
       })
     }, 300)

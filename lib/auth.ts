@@ -1,7 +1,7 @@
 import { betterAuth } from "better-auth";
 import { prismaAdapter } from "better-auth/adapters/prisma";
 import prisma from "@/db";
-import { customSession, genericOAuth, oAuthProxy } from "better-auth/plugins";
+import { oAuthProxy } from "better-auth/plugins";
 
 export const auth = betterAuth({
   appName: "Project-vis",

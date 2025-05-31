@@ -1,6 +1,6 @@
 import { SidebarMenuItem, SidebarMenuButton } from "@/components/ui/sidebar"
-import { MessageSquare, Clock } from "lucide-react"
-import { format } from "date-fns"
+import { MessageSquare } from "lucide-react"
+//import { format } from "date-fns"
 import { cn } from "@/lib/utils"
 import type { ChatHistory } from "@/types/types"
 

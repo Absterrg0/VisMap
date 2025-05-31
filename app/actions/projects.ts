@@ -1,11 +1,14 @@
 'use server'
 
 import prisma from "@/db";
-import { getSession } from "@/lib/client";
+import { auth } from "@/lib/auth";
+import { headers } from "next/headers";
 
 export async function updateSystemPrompt(projectId: string, systemPrompt: string) {
     try {
-        const {data:session} = await getSession();
+        const session = await auth.api.getSession({
+            headers:await headers()
+        });
         if(!session){
             return { success: false, error: "Unauthorized" };
         }
@@ -21,6 +24,7 @@ export async function updateSystemPrompt(projectId: string, systemPrompt: string
 
         return { success: true, project: updatedProject };
     } catch (error) {
+        console.log(error)
         return { success: false, error: "Failed to update system prompt" };
     }
 }

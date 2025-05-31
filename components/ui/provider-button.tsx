@@ -1,6 +1,6 @@
 import { motion } from "motion/react"
 import { ProviderConfig } from "@/lib/auth-providers"
-import { Github, Twitter, ArrowRight } from "lucide-react"
+import { Github, Twitter } from "lucide-react"
 import { FcGoogle } from "react-icons/fc"
 
 export default function ProviderButton({ 

@@ -2,7 +2,7 @@
 
 import type React from "react"
 
-import { useState, useMemo } from "react"
+import { useState } from "react"
 import { ChevronDown, ChevronRight, File, Folder, FolderOpen } from "lucide-react"
 import { cn } from "@/lib/utils"
 import { FileNode } from "./code-editor"

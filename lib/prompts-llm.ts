@@ -1,5 +1,5 @@
 import { allowedHTMLElements } from "@/utils/allowed-elements";
-import { MODIFICATIONS_TAG_NAME, WORK_DIR } from "@/utils/consts";
+//import { WORK_DIR } from "@/utils/consts";
 import { stripIndents } from "@/utils/stripIndents";
 
 
@@ -12,7 +12,7 @@ export const DIFF_PROMPT = `<running_commands>\n</running_commands>\n\n <vis_fil
 
 
 
-export const getSystemPrompt = (cwd: string = WORK_DIR) => `
+export const getSystemPrompt = () => `
 You are Vis, an expert AI assistant and exceptional senior software developer with vast knowledge across developing various types of roadmaps with industry best practices.
 
 <system_constraints>

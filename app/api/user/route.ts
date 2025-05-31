@@ -1,15 +1,16 @@
 import { userSchema } from "@/types/userSchema";
 import prisma from "@/db";
 import { auth } from "@/lib/auth";
-import { getSession } from "@/lib/client";
 import { NextRequest, NextResponse } from "next/server";
 import { headers } from "next/headers";
 
 
 //GET USER DETAILS
-export async function GET(req:Request){
+export async function GET(){
     try {
-        const {data:session} = await getSession();
+        const session = await auth.api.getSession({
+            headers:await headers()
+        });
         if(!session){
             return NextResponse.json({error:'Unauthorized'},{status:401})
         }
@@ -31,7 +32,9 @@ export async function GET(req:Request){
 //UPDATE USER DETAILS
 export async function PUT(req:NextRequest){
     try {
-        const {data:session} = await getSession();
+        const session = await auth.api.getSession({
+            headers:await headers()
+        });
         if(!session){
             return NextResponse.json({error:'Unauthorized'},{status:401})
         }
@@ -60,9 +63,11 @@ export async function PUT(req:NextRequest){
 }
 
 //DELETE USER
-export async function DELETE(req:NextRequest){
+export async function DELETE(){
     try {
-        const {data:session} = await getSession();
+        const session = await auth.api.getSession({
+            headers:await headers()
+        });
         const headersList = await headers();
         if(!session){
             return NextResponse.json({error:'Unauthorized'},{status:401})

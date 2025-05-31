@@ -1,7 +1,6 @@
 import type { Metadata } from "next";
 import { Architects_Daughter } from "next/font/google";
 import "./globals.css";
-import { DM_Sans } from "next/font/google";
 import { ThemeProvider } from "@/components/theme-provider";
 const architectsDaughter = Architects_Daughter({
   variable: "--font-architects-daughter",
@@ -10,8 +9,8 @@ const architectsDaughter = Architects_Daughter({
 });
 
 export const metadata: Metadata = {
-  title: "AI Chatbot",
-  description: "AI Chatbot",
+  title: "VisMind",
+  description: "VisMind",
 };
 
 export default function RootLayout({

@@ -1,3 +1,4 @@
+/* eslint-disable */
 'use client'
 
 import { useState } from 'react';
@@ -30,7 +31,7 @@ export default function StreamingRoadmap({
     setVisActions([]);
     setFinalResult(null);
 
-    try {
+  try {
       const response = await fetch('/api/streaming', {
         method: 'POST',
         headers: {

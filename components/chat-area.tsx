@@ -5,7 +5,7 @@ import { useState, useRef, useEffect, useMemo } from "react"
 import type { Message } from "@/types/types"
 import { Button } from "@/components/ui/button"
 import { Textarea } from "@/components/ui/textarea"
-import { SendHorizontal, Bot, User, CheckCircle2, Clock, Circle, ListTodo } from "lucide-react"
+import { SendHorizontal, Bot, CheckCircle2, Clock, Circle, ListTodo } from "lucide-react"
 import { cn } from "@/lib/utils"
 import { SidebarInset } from "@/components/ui/sidebar"
 import type { Step } from "@/types/stepType"
@@ -25,27 +25,47 @@ interface ChatAreaProps {
 
 // Custom scrollbar styles
 const scrollbarStyles = `
-  .scrollbar-thin::-webkit-scrollbar {
-    width: 6px;
-    height: 6px;
+  /* Webkit scrollbar styles */
+  .custom-scrollbar::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
   }
   
-  .scrollbar-track-transparent::-webkit-scrollbar-track {
+  .custom-scrollbar::-webkit-scrollbar-track {
     background: transparent;
+    border-radius: 4px;
   }
   
-  .scrollbar-thumb-border::-webkit-scrollbar-thumb {
+  .custom-scrollbar::-webkit-scrollbar-thumb {
     background-color: hsl(var(--border));
-    border-radius: 3px;
+    border-radius: 4px;
+    border: 1px solid transparent;
+    background-clip: content-box;
   }
   
-  .scrollbar-thumb-border:hover::-webkit-scrollbar-thumb {
+  .custom-scrollbar::-webkit-scrollbar-thumb:hover {
     background-color: hsl(var(--border) / 0.8);
   }
   
-  .scrollbar-thin {
+  .custom-scrollbar::-webkit-scrollbar-corner {
+    background: transparent;
+  }
+  
+  /* Firefox scrollbar styles */
+  .custom-scrollbar {
     scrollbar-width: thin;
     scrollbar-color: hsl(var(--border)) transparent;
+  }
+  
+  /* Ensure smooth scrolling */
+  .custom-scrollbar {
+    scroll-behavior: smooth;
+  }
+  
+  /* Force scrollbar visibility when needed */
+  .custom-scrollbar {
+    overflow-y: auto;
+    overflow-x: hidden;
   }
 `
 
@@ -203,6 +223,7 @@ export function ChatArea({  onSendMessage, messages, steps, activeTab, setActive
           value={activeTab}
           onValueChange={(value) => setActiveTab(value as "chat" | "steps")}
           className="flex-1 flex flex-col"
+          style={{ height: '100%' }}
         >
           <div className="border-b border-border/40 bg-muted/30 px-4">
             <TabsList className="grid grid-cols-2 w-full max-w-md mx-auto my-2">
@@ -221,10 +242,11 @@ export function ChatArea({  onSendMessage, messages, steps, activeTab, setActive
           </div>
 
           {/* Chat Tab Content */}
-          <TabsContent value="chat" className="flex-1 flex flex-col overflow-hidden data-[state=inactive]:hidden">
+          <TabsContent value="chat" className="flex-1 flex flex-col overflow-hidden data-[state=inactive]:hidden" style={{ height: '100%' }}>
             <div 
               ref={chatContainerRef}
-              className="flex-1 px-4 py-6 overflow-y-auto scroll-smooth scrollbar-thin scrollbar-track-transparent scrollbar-thumb-border hover:scrollbar-thumb-border/80"
+              className="flex-1 px-4 py-6 custom-scrollbar"
+              style={{ height: '100%', minHeight: 0 }}
               onKeyDown={(e) => handleContainerKeyDown(e, 'chat')}
             >
               <div className="space-y-2 max-w-4xl mx-auto">
@@ -281,7 +303,7 @@ export function ChatArea({  onSendMessage, messages, steps, activeTab, setActive
           </TabsContent>
 
           {/* Steps Tab Content */}
-          <TabsContent value="steps" className="flex-1 overflow-hidden data-[state=inactive]:hidden">
+          <TabsContent value="steps" className="flex-1 overflow-hidden data-[state=inactive]:hidden" style={{ height: '100%' }}>
             <div className="p-6 h-full flex flex-col">
               <div className="flex items-center justify-between mb-6">
                 <div>
@@ -304,7 +326,8 @@ export function ChatArea({  onSendMessage, messages, steps, activeTab, setActive
 
               <div 
                 ref={stepsContainerRef}
-                className="flex-1 overflow-y-auto scroll-smooth pr-2 scrollbar-thin scrollbar-track-transparent scrollbar-thumb-border hover:scrollbar-thumb-border/80"
+                className="flex-1 custom-scrollbar pr-2"
+                style={{ height: '100%', minHeight: 0 }}
                 onKeyDown={(e) => handleContainerKeyDown(e, 'steps')}
               >
                 <div className="space-y-3 pr-4">

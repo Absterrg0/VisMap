@@ -1,5 +1,4 @@
 import { NextRequest } from "next/server";
-import { getSession } from "@/lib/client";
 import { NextResponse } from "next/server";
 import { projectSchema } from "@/types/projectSchema";  
 import prisma from "@/db";
@@ -48,6 +47,7 @@ export async  function PUT(req:NextRequest,{params}:{params:Promise<{projectId:s
             msg:"Project updated successfully"
         },{status:200})
     }catch(error){
+        console.log(error)
         return NextResponse.json({error:'Failed to update project'},{status:500})
     }
 }
@@ -56,7 +56,9 @@ export async  function PUT(req:NextRequest,{params}:{params:Promise<{projectId:s
 //SET PROJECT STATUS TO DELETED
 export async function DELETE(req:NextRequest,{params}:{params:Promise<{projectId:string}>}){
     try{
-        const {data:session} = await getSession();
+        const session = await auth.api.getSession({
+            headers:await headers()
+        })
         if(!session){
             return NextResponse.json({error:'Unauthorized'},{status:401})
         }
@@ -94,6 +96,7 @@ export async function DELETE(req:NextRequest,{params}:{params:Promise<{projectId
             msg:"Project deleted successfully"
         },{status:200})
     }catch(error){
+        console.log(error)
         return NextResponse.json({error:'Failed to delete project'},{status:500})
     }
 }
@@ -125,6 +128,7 @@ export async function GET(req:NextRequest,{params}:{params:Promise<{projectId:st
 
         return NextResponse.json({project},{status:200})
     }catch(error){
+        console.log(error)
         return NextResponse.json({error:'Failed to get project'},{status:500})
     }
 }

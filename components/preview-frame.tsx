@@ -1,5 +1,4 @@
-import { usePromptStore } from '@/zustand/store';
-import { FileNode, WebContainer } from '@webcontainer/api';
+import { WebContainer, WebContainerProcess } from '@webcontainer/api';
 import React, { useEffect, useState, useRef } from 'react';
 
 interface PreviewFrameProps {
@@ -12,9 +11,8 @@ export function PreviewFrame({ webContainer }: PreviewFrameProps) {
   const [error, setError] = useState<string | null>(null);
   const [installLogs, setInstallLogs] = useState<string[]>([]);
   const [devLogs, setDevLogs] = useState<string[]>([]);
-  const processRef = useRef<any>(null);
+  const processRef = useRef<WebContainerProcess | null>(null);
   const hasInitialized = useRef(false);
-  const finalFile = usePromptStore((state) => state.finalFile);
 
   // Function to detect the correct dev command
   async function detectDevCommand(): Promise<string[]> {
@@ -26,15 +24,15 @@ export function PreviewFrame({ webContainer }: PreviewFrameProps) {
       console.log('Package.json scripts:', packageJson.scripts);
       
       // Check for common dev commands in order of preference
-      const possibleCommands = [
-        ['npm', 'run', 'dev'],
-        ['npm', 'run', 'start'],
-        ['npm', 'start'],
-        ['npm', 'run', 'serve'],
-        ['npx', 'vite'],
-        ['npx', 'next', 'dev'],
-        ['npx', 'react-scripts', 'start'],
-      ];
+      // const possibleCommands = [
+      //   ['npm', 'run', 'dev'],
+      //   ['npm', 'run', 'start'],
+      //   ['npm', 'start'],
+      //   ['npm', 'run', 'serve'],
+      //   ['npx', 'vite'],
+      //   ['npx', 'next', 'dev'],
+      //   ['npx', 'react-scripts', 'start'],
+      // ];
       
       // Check which commands exist in package.json scripts
       if (packageJson.scripts) {
@@ -121,7 +119,7 @@ export function PreviewFrame({ webContainer }: PreviewFrameProps) {
             setError(`Dev server crashed (exit code: ${exitCode}). Check logs for details.`);
             setIsLoading(false);
           }
-        }).catch((err: any) => {
+        }).catch((err: Error) => {
           console.error('Dev server process error:', err);
           setError(`Dev server error: ${err.message}`);
           setIsLoading(false);
@@ -193,14 +191,8 @@ export function PreviewFrame({ webContainer }: PreviewFrameProps) {
     return () => {
       cleanup();
     };
-  }, [webContainer, finalFile]);
+  }, [webContainer]);
 
-  // Restart server when files change significantly
-  useEffect(() => {
-    if (hasInitialized.current && finalFile) {
-      console.log('Files changed, consider restarting server if needed');
-    }
-  }, [finalFile]);
 
   if (error) {
     return (

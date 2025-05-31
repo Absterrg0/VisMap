@@ -193,7 +193,7 @@ export function parseXml(response: string): Step[] {
   }
 
   // Extract artifact title
-  const titleMatch = sanitizedResponse.match(/<visArtifact[^>]*title="([^"]*)"/);
+  //const titleMatch = sanitizedResponse.match(/<visArtifact[^>]*title="([^"]*)"/);
   // Regular expression to find visAction elements
   const actionRegex = /<visAction\s+type="([^"]*)"(?:\s+filePath="([^"]*)")?>([\s\S]*?)<\/visAction>/g;
   let match;
